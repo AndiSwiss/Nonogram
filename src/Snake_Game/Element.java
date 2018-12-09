@@ -2,9 +2,10 @@ package Snake_Game;
 
 import processing.core.PApplet;
 
-public class Element {
+@SuppressWarnings("CanBeFinal")
+class Element {
     int x, y;
-    int groesse;
+    private int groesse;
     PApplet p;
 
     Element(PApplet p, int x, int y, int g) {
@@ -19,10 +20,10 @@ public class Element {
     }
 
     void setX(int x) {
-        if (Snake_Abgabe.WALLS_ARE_PASSABLE) {
+        if (Snake.WALLS_ARE_PASSABLE) {
             this.x = x % p.width;
             if (this.x < 0) {
-                this.x = p.width - Snake_Abgabe.GROESSE;
+                this.x = p.width - Snake.GROESSE;
             }
         } else {
             this.x = x;
@@ -34,11 +35,11 @@ public class Element {
     }
 
     void setY(int y) {
-        if (Snake_Abgabe.WALLS_ARE_PASSABLE) {
+        if (Snake.WALLS_ARE_PASSABLE) {
 
             this.y = y % p.height;
             if (this.y < 0) {
-                this.y = p.height - Snake_Abgabe.GROESSE;
+                this.y = p.height - Snake.GROESSE;
             }
         } else {
             this.y = y;

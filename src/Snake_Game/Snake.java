@@ -43,10 +43,11 @@ import java.util.ArrayList;
  * bisherig: fill(..); <br>
  * neu:      p.fill(..);
  */
-public class Snake_Abgabe extends PApplet {
+@SuppressWarnings("CanBeFinal")
+public class Snake extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main("Snake_Game.Snake_Abgabe");
+        PApplet.main("Snake_Game.Snake");
     }
 
     /**
@@ -54,22 +55,22 @@ public class Snake_Abgabe extends PApplet {
      */
     static final boolean WALLS_ARE_PASSABLE = true;
     static final int GROESSE = 30;
-    static final int WIDTH = 600;
-    static final int HEIGHT = 600;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 600;
 
 
-    ArrayList<Element> snake = new ArrayList<>(); //<>//
-    ArrayList<Stopper> stopper = new ArrayList<>();
-    int dirX = 1;
-    int dirY = 0;
-    Element rot = null;
+    private ArrayList<Element> snake = new ArrayList<>(); //<>//
+    private ArrayList<Stopper> stopper = new ArrayList<>();
+    private int dirX = 1;
+    private int dirY = 0;
+    private Element rot = null;
 
     @Override
     public void setup() {
         size(WIDTH, HEIGHT);
         snake.add(0, new Element(this, GROESSE, GROESSE, GROESSE));
         fill(255);
-        frameRate(100 / GROESSE);
+        frameRate((float) (100 / GROESSE));  // since frameRate accepts a float, I convert it to float.
         rot = new RedElement(this, GROESSE);
     }
 
@@ -82,7 +83,7 @@ public class Snake_Abgabe extends PApplet {
         stopp();    // Es wird berechnet, ob das Spiel zu Ende ist
     }
 
-    void bewegen() {
+    private void bewegen() {
         Element kopf = snake.remove(0);
         if (snake.size() > 0) {
             kopf.setX(snake.get(snake.size() - 1).x + dirX * GROESSE);
@@ -94,7 +95,7 @@ public class Snake_Abgabe extends PApplet {
         snake.add(kopf);
     }
 
-    void zeichne() {
+    private void zeichne() {
         background(0);
         // Für alle Elemente in snake und rot soll die Methode paint aufgerufen werden
         for (Element e : snake) {
@@ -108,7 +109,7 @@ public class Snake_Abgabe extends PApplet {
         }
     }
 
-    void fressen() {
+    private void fressen() {
         if (snake.contains(rot)) {
             Element kopf = snake.get(snake.size() - 1);
             snake.add(new Element(this, kopf.x + dirX * GROESSE, kopf.y + dirY * GROESSE,
@@ -120,7 +121,7 @@ public class Snake_Abgabe extends PApplet {
         }
     }
 
-    void hindernisse() {
+    private void hindernisse() {
         /* Je länger das Programm läuft sollen Elemente in den Weg gestellt werden. */
         if (snake.size() == 2 && stopper.size() == 0) {
             stopperHinzufuegen();
@@ -129,7 +130,7 @@ public class Snake_Abgabe extends PApplet {
         }
     }
 
-    void stopperHinzufuegen() {
+    private void stopperHinzufuegen() {
         int x;
         int y;
 
@@ -163,7 +164,7 @@ public class Snake_Abgabe extends PApplet {
         stopper.add(new Stopper(this, x, y, GROESSE));
     }
 
-    void stopp() {
+    private void stopp() {
         // Falls die Schlange in sich selber reinfährt, soll gestoppt werden.
         Element kopf = snake.get(snake.size() - 1);
         for (int i = 0; i < snake.size() - 1; i++) {

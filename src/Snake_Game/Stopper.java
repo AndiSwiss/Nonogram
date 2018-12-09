@@ -2,8 +2,8 @@ package Snake_Game;
 
 import processing.core.PApplet;
 
-public class Stopper extends Element {
-    public Stopper(PApplet p, int x, int y, int groesse) {
+class Stopper extends Element {
+    Stopper(PApplet p, int x, int y, int groesse) {
         super(p, x, y, groesse);
     }
 
