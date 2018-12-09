@@ -7,6 +7,8 @@ public class Draw_Main extends PApplet {
     private static int width;
     private static int height;
     private static int boxSize;
+    private static int horizontalBoxes;
+    private static int verticalBoxes;
 
     //-----------------------------//
     // Processing specific methods //
@@ -20,7 +22,10 @@ public class Draw_Main extends PApplet {
         size(width, height);
         fill(255);
         frameRate(30);
-        rect(30, 20, 20 * boxSize, 20 * boxSize);
+        strokeWeight(3);
+        rect(30, 20, horizontalBoxes * boxSize, verticalBoxes * boxSize);
+        strokeWeight(2);
+
     }
 
     @Override
@@ -45,23 +50,10 @@ public class Draw_Main extends PApplet {
     // Getter and Setter //
     //-------------------//
 
-/*
-    @Override
-    public static int getWidth() {
-        return width;
-    }
-*/
 
     public static void setWidth(int width) {
         Draw_Main.width = width;
     }
-
-/*
-    @Override
-    public static int getHeight() {
-        return height;
-    }
-*/
 
     public static void setHeight(int height) {
         Draw_Main.height = height;
@@ -73,5 +65,21 @@ public class Draw_Main extends PApplet {
 
     public static void setBoxSize(int boxSize) {
         Draw_Main.boxSize = boxSize;
+    }
+
+    public static int getVerticalBoxes() {
+        return verticalBoxes;
+    }
+
+    public static void setVerticalBoxes(int verticalBoxes) {
+        Draw_Main.verticalBoxes = verticalBoxes;
+    }
+
+    public static int getHorizontalBoxes() {
+        return horizontalBoxes;
+    }
+
+    public static void setHorizontalBoxes(int horizontalBoxes) {
+        Draw_Main.horizontalBoxes = horizontalBoxes;
     }
 }

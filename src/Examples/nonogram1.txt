@@ -1,3 +1,6 @@
-width: 500
-height: 500
-boxSize: 10
+init: width, height, boxSize, horizontalBoxes, verticalBoxes:
+300
+500
+10
+20
+30

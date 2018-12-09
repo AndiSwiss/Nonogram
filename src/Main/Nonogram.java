@@ -2,53 +2,31 @@ package Main;
 
 import Draw.Draw_Main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import static Helpers.StringHelpers.*;
+import static Helpers.FileHelpers.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.1b
+ * @version 0.1c
  */
 public class Nonogram {
     public static void main(String[] args) {
-        // some initial value (in case the scanner would fail)
-        int width = 5;
-        int height = 5;
-        int boxSize = 5;
-        String fileName = "Examples/nonogram1.txt";
+        String fileName = "src/Examples/nonogram1.txt";
 
 
-        List<String> input = new ArrayList<>();
-        File file = new File("src/" + fileName);
-        try {
-            Scanner sc = new Scanner(file);
-            while (sc.hasNext()) {
-                input.add(sc.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        List<String> input;
+        input = getStringsFromAFile(fileName);
 
-//        System.out.println("Input so far:");
-//        input.forEach(System.out::println);
 
-        //
-        for (String s : input) {
-            if (s.toLowerCase().contains("width")) {
-                width = getLastIntegerFromString(s);
-            }
 
-        }
-
-        Draw_Main.setWidth(width);
-        Draw_Main.setHeight(500);
-        Draw_Main.setBoxSize(10);
-//        Draw_Main.main(args);
+        Draw_Main.setWidth(Integer.parseInt(input.get(1)));
+        Draw_Main.setHeight(Integer.parseInt(input.get(2)));
+        Draw_Main.setBoxSize(Integer.parseInt(input.get(3)));
+        Draw_Main.setHorizontalBoxes(Integer.parseInt(input.get(4)));
+        Draw_Main.setVerticalBoxes(Integer.parseInt(input.get(5)));
+        Draw_Main.main(args);
     }
+
 
 }
