@@ -8,7 +8,7 @@ import static Helpers.FileHelpers.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.1c
+ * @version 0.1d
  */
 public class Nonogram {
     public static void main(String[] args) {
@@ -18,15 +18,27 @@ public class Nonogram {
         List<String> input;
         input = getStringsFromAFile(fileName);
 
+        // calculate width and height of the window:
+        int boxSize = Integer.parseInt(input.get(1));
+        int horizontalBoxes = Integer.parseInt(input.get(2));
+        int verticalBoxes = Integer.parseInt(input.get(3));
+        int maxTopNumbers = Integer.parseInt(input.get(4));
+        int maxSideNumbers = Integer.parseInt(input.get(5));
 
 
-        Draw_Main.setWidth(Integer.parseInt(input.get(1)));
-        Draw_Main.setHeight(Integer.parseInt(input.get(2)));
-        Draw_Main.setBoxSize(Integer.parseInt(input.get(3)));
-        Draw_Main.setHorizontalBoxes(Integer.parseInt(input.get(4)));
-        Draw_Main.setVerticalBoxes(Integer.parseInt(input.get(5)));
+
+        int width = boxSize * (1 + maxSideNumbers + horizontalBoxes + 1);
+        int height = boxSize * (1 + maxTopNumbers + verticalBoxes + 1);
+
+
+        // giving the values to draw:
+        Draw_Main.setWidth(width);
+        Draw_Main.setHeight(height);
+        Draw_Main.setBoxSize(boxSize);
+        Draw_Main.setHorizontalBoxes(horizontalBoxes);
+        Draw_Main.setVerticalBoxes(verticalBoxes);
+        Draw_Main.setMaxTopNumbers(maxTopNumbers);
+        Draw_Main.setMaxSideNumbers(maxSideNumbers);
         Draw_Main.main(args);
     }
-
-
 }

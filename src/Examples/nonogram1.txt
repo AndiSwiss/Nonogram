@@ -1,6 +1,46 @@
-init: width, height, boxSize, horizontalBoxes, verticalBoxes:
-300
-500
-10
+init: boxSize, horizontalBoxes, verticalBoxes, maxTopNumbers, maxSideNumbers:
+20
 20
 30
+4
+4
+
+
+lines top part:
+3
+1 1
+1 3 4 3
+1 4 4 1
+6 2 1 3
+3 1 1 3
+6 5
+1 15
+1 11 1
+2 7
+2 1 2
+7 1
+1 1 9
+1 1 2 1
+2 1
+
+lines left part:
+3
+3 2
+7 1 1
+1 1 1 1
+1 1 1 1
+4 1
+1 2 2
+2 5 1
+3 6 1
+7 1
+3 1
+4 3 1
+2 3 1
+2 3 1
+1 2 1 8
+1 1 3 1
+1 1 3 1
+4 1 1 1
+1 1 1 2
+1 1 4

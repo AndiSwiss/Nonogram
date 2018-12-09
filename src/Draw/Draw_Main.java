@@ -9,6 +9,8 @@ public class Draw_Main extends PApplet {
     private static int boxSize;
     private static int horizontalBoxes;
     private static int verticalBoxes;
+    private static int maxTopNumbers;
+    private static int maxSideNumbers;
 
     //-----------------------------//
     // Processing specific methods //
@@ -22,9 +24,24 @@ public class Draw_Main extends PApplet {
         size(width, height);
         fill(255);
         frameRate(30);
+        stroke(127);
         strokeWeight(3);
-        rect(30, 20, horizontalBoxes * boxSize, verticalBoxes * boxSize);
-        strokeWeight(2);
+
+
+        // top box:
+        rect(maxSideNumbers * boxSize + boxSize, boxSize,
+                horizontalBoxes * boxSize, maxTopNumbers * boxSize);
+
+        // side box:
+        rect(boxSize, maxTopNumbers * boxSize + boxSize,
+                maxSideNumbers * boxSize, verticalBoxes * boxSize);
+
+
+        //main box:
+        rect(maxSideNumbers * boxSize + boxSize,
+                maxTopNumbers * boxSize + boxSize,
+                horizontalBoxes * boxSize, verticalBoxes * boxSize);
+        strokeWeight(1);
 
     }
 
@@ -81,5 +98,13 @@ public class Draw_Main extends PApplet {
 
     public static void setHorizontalBoxes(int horizontalBoxes) {
         Draw_Main.horizontalBoxes = horizontalBoxes;
+    }
+
+    public static void setMaxTopNumbers(int maxTopNumbers) {
+        Draw_Main.maxTopNumbers = maxTopNumbers;
+    }
+
+    public static void setMaxSideNumbers(int maxSideNumbers) {
+        Draw_Main.maxSideNumbers = maxSideNumbers;
     }
 }
