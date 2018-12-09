@@ -22,28 +22,13 @@ public class Draw_Main extends PApplet {
     @Override
     public void setup() {
         size(width, height);
-        fill(255);
         frameRate(30);
-        stroke(127);
-        strokeWeight(3);
 
-
-        // top box:
-        rect(maxSideNumbers * boxSize + boxSize, boxSize,
-                horizontalBoxes * boxSize, maxTopNumbers * boxSize);
-
-        // side box:
-        rect(boxSize, maxTopNumbers * boxSize + boxSize,
-                maxSideNumbers * boxSize, verticalBoxes * boxSize);
-
-
-        //main box:
-        rect(maxSideNumbers * boxSize + boxSize,
-                maxTopNumbers * boxSize + boxSize,
-                horizontalBoxes * boxSize, verticalBoxes * boxSize);
-        strokeWeight(1);
+        drawBackground();
 
     }
+
+
 
     @Override
     public void draw() {
@@ -106,5 +91,54 @@ public class Draw_Main extends PApplet {
 
     public static void setMaxSideNumbers(int maxSideNumbers) {
         Draw_Main.maxSideNumbers = maxSideNumbers;
+    }
+
+
+    //-------------------------//
+    // Background Draw Methods //
+    //-------------------------//
+    public void drawBackground() {
+        fill(255);
+        stroke(127);
+
+        strokeWeight(3);
+        // top box:
+        rect(boxSize * (1 + maxSideNumbers), boxSize,
+                boxSize * horizontalBoxes, boxSize * maxTopNumbers);
+
+        // side box:
+        rect(boxSize, boxSize * (1 + maxTopNumbers),
+                boxSize * maxSideNumbers, boxSize * verticalBoxes);
+
+
+        //main box:
+        rect(boxSize * (1 + maxSideNumbers),
+                boxSize * (1 + maxTopNumbers),
+                boxSize * horizontalBoxes, boxSize * verticalBoxes);
+
+        // thin lines:
+        // horizontally:
+        strokeWeight(1);
+        int initialY = boxSize * (1 + maxTopNumbers);
+        for (int i = 1; i < verticalBoxes; i++) {
+            if (i % 5 == 0) {
+                strokeWeight(2);
+            }
+            int y = initialY + i * boxSize;
+            line(boxSize, y, width - boxSize, y);
+            strokeWeight(1);
+        }
+
+        // vertically:
+        int initialX = boxSize * (1 + maxSideNumbers);
+        for (int i = 1; i < horizontalBoxes; i++) {
+            if (i % 5 == 0) {
+                strokeWeight(2);
+            }
+            int x = initialX + i * boxSize;
+            line(x, boxSize, x, height - boxSize);
+            strokeWeight(1);
+        }
+
     }
 }

@@ -8,7 +8,7 @@ import static Helpers.FileHelpers.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.1d
+ * @version 0.1e
  */
 public class Nonogram {
     public static void main(String[] args) {
