@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static Helpers.StringHelpers.Strings.*;
+import static Helpers.StringHelpers.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.1a
+ * @version 0.1b
  */
 public class Nonogram {
     public static void main(String[] args) {
