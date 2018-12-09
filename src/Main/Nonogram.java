@@ -6,7 +6,7 @@ import static Helpers.FileReader.readAllFileInputs;
 
 /**
  * @author Andreas Ambühl
- * @version 0.1f
+ * @version 0.1g
  */
 public class Nonogram {
     public static void main(String[] args) {

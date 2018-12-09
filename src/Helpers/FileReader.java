@@ -25,39 +25,8 @@ public class FileReader {
         }
 
         // read the topNumbers and the sideNumbers:
-        List<List<Integer>> topNumbers = new ArrayList<>();
-        List<List<Integer>> sideNumbers = new ArrayList<>();
-        boolean startTopNumbers = false;
-        boolean startSideNumbers = false;
-
-        for (String line : input) {
-            // topNumbers:
-            if (line.contains("topNumbers")) {
-                startTopNumbers = true;
-                continue;
-            }
-
-            // sideNumbers:
-            if (line.contains("sideNumbers")) {
-                startSideNumbers = true;
-                continue;
-            }
-
-            if (startTopNumbers || startSideNumbers) {
-                if (line.length() > 0 && line.charAt(0) >= '0' && line.charAt(0) <= '9') {
-                    List<Integer> oneLine = getIntegersFromString(line);
-                    if (startTopNumbers) {
-                        topNumbers.add(oneLine);
-                    } else {
-                        sideNumbers.add(oneLine);
-                    }
-                } else {
-                    // stop
-                    startTopNumbers = false;
-                    startSideNumbers = false;
-                }
-            }
-        }
+        List<List<Integer>> topNumbers = readNumbers(input, "topNumbers");
+        List<List<Integer>> sideNumbers = readNumbers(input, "sideNumbers");
 
         // calculating the amount of horizontal and vertical boxes:
         int horizontalBoxes = topNumbers.size();
@@ -77,7 +46,6 @@ public class FileReader {
                 maxSideNumbers = one.size();
             }
         }
-
 
         // calculate width and height of the window:
         int width = boxSize * (1 + maxSideNumbers + horizontalBoxes + 1);
@@ -109,5 +77,31 @@ public class FileReader {
         Draw_Main.setMaxSideNumbers(maxSideNumbers);
         Draw_Main.setTopNumbers(topNumbers);
         Draw_Main.setSideNumbers(sideNumbers);
+    }
+
+    private static List<List<Integer>> readNumbers(List<String> input, String what) {
+
+        List<List<Integer>> numbers = new ArrayList<>();
+
+        boolean start = false;
+
+        for (String line : input) {
+            // search for the start line containing the keyword (such as topNumbers or sideNumbers):
+            if (line.contains(what)) {
+                start = true;
+                continue;
+            }
+
+            if (start) {
+                if (line.length() > 0 && line.charAt(0) >= '0' && line.charAt(0) <= '9') {
+                    List<Integer> oneLine = getIntegersFromString(line);
+                    numbers.add(oneLine);
+                } else {
+                    // stop:
+                    break;
+                }
+            }
+        }
+        return numbers;
     }
 }
