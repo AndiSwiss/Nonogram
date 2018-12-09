@@ -2,6 +2,8 @@ package Draw;
 
 import processing.core.PApplet;
 
+import java.util.List;
+
 public class Draw_Main extends PApplet {
 
     private static int width;
@@ -11,6 +13,8 @@ public class Draw_Main extends PApplet {
     private static int verticalBoxes;
     private static int maxTopNumbers;
     private static int maxSideNumbers;
+    private static List<List<Integer>> topNumbers;
+    private static List<List<Integer>> sideNumbers;
 
     //-----------------------------//
     // Processing specific methods //
@@ -25,9 +29,9 @@ public class Draw_Main extends PApplet {
         frameRate(30);
 
         drawBackground();
+        drawDigits();
 
     }
-
 
 
     @Override
@@ -48,56 +52,11 @@ public class Draw_Main extends PApplet {
         }
     }
 
-    //-------------------//
-    // Getter and Setter //
-    //-------------------//
 
-
-    public static void setWidth(int width) {
-        Draw_Main.width = width;
-    }
-
-    public static void setHeight(int height) {
-        Draw_Main.height = height;
-    }
-
-    public static int getBoxSize() {
-        return boxSize;
-    }
-
-    public static void setBoxSize(int boxSize) {
-        Draw_Main.boxSize = boxSize;
-    }
-
-    public static int getVerticalBoxes() {
-        return verticalBoxes;
-    }
-
-    public static void setVerticalBoxes(int verticalBoxes) {
-        Draw_Main.verticalBoxes = verticalBoxes;
-    }
-
-    public static int getHorizontalBoxes() {
-        return horizontalBoxes;
-    }
-
-    public static void setHorizontalBoxes(int horizontalBoxes) {
-        Draw_Main.horizontalBoxes = horizontalBoxes;
-    }
-
-    public static void setMaxTopNumbers(int maxTopNumbers) {
-        Draw_Main.maxTopNumbers = maxTopNumbers;
-    }
-
-    public static void setMaxSideNumbers(int maxSideNumbers) {
-        Draw_Main.maxSideNumbers = maxSideNumbers;
-    }
-
-
-    //-------------------------//
-    // Background Draw Methods //
-    //-------------------------//
-    public void drawBackground() {
+    //---------------------//
+    // Custom Draw Methods //
+    //---------------------//
+    private void drawBackground() {
         fill(255);
         stroke(127);
 
@@ -139,6 +98,62 @@ public class Draw_Main extends PApplet {
             line(x, boxSize, x, height - boxSize);
             strokeWeight(1);
         }
+    }
 
+    private void drawDigits() {
+        // todo: draw '...topNumbers;' and '...sideNumbers':
+
+    }
+
+
+    //-------------------//
+    // Getter and Setter //
+    //-------------------//
+    public static void setWidth(int width) {
+        Draw_Main.width = width;
+    }
+
+    public static void setHeight(int height) {
+        Draw_Main.height = height;
+    }
+
+    public static int getBoxSize() {
+        return boxSize;
+    }
+
+    public static void setBoxSize(int boxSize) {
+        Draw_Main.boxSize = boxSize;
+    }
+
+    public static int getVerticalBoxes() {
+        return verticalBoxes;
+    }
+
+    public static void setVerticalBoxes(int verticalBoxes) {
+        Draw_Main.verticalBoxes = verticalBoxes;
+    }
+
+    public static int getHorizontalBoxes() {
+        return horizontalBoxes;
+    }
+
+    public static void setHorizontalBoxes(int horizontalBoxes) {
+        Draw_Main.horizontalBoxes = horizontalBoxes;
+    }
+
+    public static void setMaxTopNumbers(int maxTopNumbers) {
+        Draw_Main.maxTopNumbers = maxTopNumbers;
+    }
+
+    public static void setMaxSideNumbers(int maxSideNumbers) {
+        Draw_Main.maxSideNumbers = maxSideNumbers;
+    }
+
+    public static void setTopNumbers(List<List<Integer>> topNumbers) {
+        Draw_Main.topNumbers = topNumbers;
+    }
+
+    public static void setSideNumbers(List<List<Integer>> sideNumbers) {
+        Draw_Main.sideNumbers = sideNumbers;
     }
 }
