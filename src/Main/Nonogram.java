@@ -14,6 +14,11 @@ public class Nonogram {
 
         readAllFileInputs(fileName, true);
 
+
+        // todo: show the solution in the processing-draw -> src/Examples/nonogram1_solution.txt
+        // todo: check the drawn solution with the lines I got from the file input
+        // todo: create a nonogram-solver
+
         Draw_Main.main(args);
     }
 }
