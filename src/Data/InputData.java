@@ -1,6 +1,4 @@
-package Helpers;
-
-import Draw.Draw_Main;
+package Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +7,23 @@ import static Helpers.FileHelpers.getStringsFromAFile;
 import static Helpers.StringHelpers.getIntegersFromString;
 import static Helpers.StringHelpers.getLastIntegerFromString;
 
-public class FileReader {
+public class InputData {
+    private int myWidth;
+    private int myHeight;
+    private int boxSize;
+    private int horizontalBoxes;
+    private int verticalBoxes;
+    private int maxTopNumbers;
+    private int maxSideNumbers;
+    private List<List<Integer>> topNumbers;
+    private List<List<Integer>> sideNumbers;
 
-    public static void readAllFileInputs(String fileName, boolean debugMode) {
+    public void readAllFileInputs(String fileName, boolean debugMode) {
         List<String> input;
         input = getStringsFromAFile(fileName);
 
         // reading the boxSize from the file:
-        int boxSize = 0;
+        boxSize = 0;
         for (String line : input) {
             if (line.contains("boxSize")) {
                 boxSize = getLastIntegerFromString(line);
@@ -25,22 +32,22 @@ public class FileReader {
         }
 
         // read the topNumbers and the sideNumbers:
-        List<List<Integer>> topNumbers = readNumbers(input, "topNumbers");
-        List<List<Integer>> sideNumbers = readNumbers(input, "sideNumbers");
+        topNumbers = readNumbers(input, "topNumbers");
+        sideNumbers = readNumbers(input, "sideNumbers");
 
         // calculating the amount of horizontal and vertical boxes:
-        int horizontalBoxes = topNumbers.size();
-        int verticalBoxes = sideNumbers.size();
+        horizontalBoxes = topNumbers.size();
+        verticalBoxes = sideNumbers.size();
 
         // calculating maxTopNumbers and maxSideNumbers
-        int maxTopNumbers = 0;
+        maxTopNumbers = 0;
         for (List<Integer> one : topNumbers) {
             if (one.size() > maxTopNumbers) {
                 maxTopNumbers = one.size();
             }
         }
 
-        int maxSideNumbers = 0;
+        maxSideNumbers = 0;
         for (List<Integer> one : sideNumbers) {
             if (one.size() > maxSideNumbers) {
                 maxSideNumbers = one.size();
@@ -48,8 +55,8 @@ public class FileReader {
         }
 
         // calculate width and height of the window:
-        int width = boxSize * (1 + maxSideNumbers + horizontalBoxes + 1);
-        int height = boxSize * (1 + maxTopNumbers + verticalBoxes + 1);
+        myWidth = boxSize * (1 + maxSideNumbers + horizontalBoxes + 1);
+        myHeight = boxSize * (1 + maxTopNumbers + verticalBoxes + 1);
 
         if (debugMode) {
             System.out.println("\ntopNumbers:");
@@ -63,20 +70,9 @@ public class FileReader {
             System.out.printf("verticalBoxes: %s\n", verticalBoxes);
             System.out.printf("maxTopNumbers: %s\n", maxTopNumbers);
             System.out.printf("maxSideNumbers: %s\n", maxSideNumbers);
-            System.out.printf("width: %s\n", width);
-            System.out.printf("height: %s\n", height);
+            System.out.printf("width: %s\n", myWidth);
+            System.out.printf("height: %s\n", myHeight);
         }
-
-        // giving the values to draw:
-        Draw_Main.setWidth(width);
-        Draw_Main.setHeight(height);
-        Draw_Main.setBoxSize(boxSize);
-        Draw_Main.setHorizontalBoxes(horizontalBoxes);
-        Draw_Main.setVerticalBoxes(verticalBoxes);
-        Draw_Main.setMaxTopNumbers(maxTopNumbers);
-        Draw_Main.setMaxSideNumbers(maxSideNumbers);
-        Draw_Main.setTopNumbers(topNumbers);
-        Draw_Main.setSideNumbers(sideNumbers);
     }
 
     private static List<List<Integer>> readNumbers(List<String> input, String what) {
@@ -103,5 +99,46 @@ public class FileReader {
             }
         }
         return numbers;
+    }
+
+    //-------------------//
+    // Getter and Setter //
+    //-------------------//
+
+
+    public int getMyWidth() {
+        return myWidth;
+    }
+
+    public int getMyHeight() {
+        return myHeight;
+    }
+
+    public int getBoxSize() {
+        return boxSize;
+    }
+
+    public int getHorizontalBoxes() {
+        return horizontalBoxes;
+    }
+
+    public int getVerticalBoxes() {
+        return verticalBoxes;
+    }
+
+    public int getMaxTopNumbers() {
+        return maxTopNumbers;
+    }
+
+    public int getMaxSideNumbers() {
+        return maxSideNumbers;
+    }
+
+    public List<List<Integer>> getTopNumbers() {
+        return topNumbers;
+    }
+
+    public List<List<Integer>> getSideNumbers() {
+        return sideNumbers;
     }
 }

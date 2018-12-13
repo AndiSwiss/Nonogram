@@ -1,13 +1,18 @@
 package Draw;
 
+import Data.InputData;
 import processing.core.PApplet;
 
 import java.util.List;
 
-public class Draw_Main extends PApplet {
+/**
+ * @author Andreas Ambühl
+ * @version 0.2a
+ */
+public class Nonogram extends PApplet {
 
-    private static int width;
-    private static int height;
+    private static int myWidth;
+    private static int myHeight;
     private static int boxSize;
     private static int horizontalBoxes;
     private static int verticalBoxes;
@@ -20,12 +25,35 @@ public class Draw_Main extends PApplet {
     // Processing specific methods //
     //-----------------------------//
     public static void main(String[] args) {
+        String fileName = "src/Examples/nonogram2.txt";
+
+        InputData data = new InputData();
+        data.readAllFileInputs(fileName, true);
+
+        // todo:   data.checkIfInputMatchesSolution();
+
+        // todo: get rid of the static fields in this method if possible, so the following won't be necessary
+        myWidth = data.getMyWidth();
+        myHeight = data.getMyHeight();
+        boxSize = data.getBoxSize();
+        horizontalBoxes = data.getHorizontalBoxes();
+        verticalBoxes = data.getVerticalBoxes();
+        maxTopNumbers = data.getMaxTopNumbers();
+        maxSideNumbers = data.getMaxSideNumbers();
+        topNumbers = data.getTopNumbers();
+        sideNumbers = data.getSideNumbers();
+
+
+        // todo: show the solution in the processing-draw -> src/Examples/nonogram1_solution.txt
+        // todo: check the drawn solution with the lines I got from the file input
+        // todo: create a nonogram-solver
+
         PApplet.main("Draw.Draw_Main");
     }
 
     @Override
     public void setup() {
-        size(width, height);
+        size(myWidth, myHeight);
         frameRate(30);
 
         drawBackground();
@@ -84,7 +112,7 @@ public class Draw_Main extends PApplet {
                 strokeWeight(2);
             }
             int y = initialY + i * boxSize;
-            line(boxSize, y, width - boxSize, y);
+            line(boxSize, y, myWidth - boxSize, y);
             strokeWeight(1);
         }
 
@@ -95,7 +123,7 @@ public class Draw_Main extends PApplet {
                 strokeWeight(2);
             }
             int x = initialX + i * boxSize;
-            line(x, boxSize, x, height - boxSize);
+            line(x, boxSize, x, myHeight - boxSize);
             strokeWeight(1);
         }
     }
@@ -106,54 +134,4 @@ public class Draw_Main extends PApplet {
     }
 
 
-    //-------------------//
-    // Getter and Setter //
-    //-------------------//
-    public static void setWidth(int width) {
-        Draw_Main.width = width;
-    }
-
-    public static void setHeight(int height) {
-        Draw_Main.height = height;
-    }
-
-    public static int getBoxSize() {
-        return boxSize;
-    }
-
-    public static void setBoxSize(int boxSize) {
-        Draw_Main.boxSize = boxSize;
-    }
-
-    public static int getVerticalBoxes() {
-        return verticalBoxes;
-    }
-
-    public static void setVerticalBoxes(int verticalBoxes) {
-        Draw_Main.verticalBoxes = verticalBoxes;
-    }
-
-    public static int getHorizontalBoxes() {
-        return horizontalBoxes;
-    }
-
-    public static void setHorizontalBoxes(int horizontalBoxes) {
-        Draw_Main.horizontalBoxes = horizontalBoxes;
-    }
-
-    public static void setMaxTopNumbers(int maxTopNumbers) {
-        Draw_Main.maxTopNumbers = maxTopNumbers;
-    }
-
-    public static void setMaxSideNumbers(int maxSideNumbers) {
-        Draw_Main.maxSideNumbers = maxSideNumbers;
-    }
-
-    public static void setTopNumbers(List<List<Integer>> topNumbers) {
-        Draw_Main.topNumbers = topNumbers;
-    }
-
-    public static void setSideNumbers(List<List<Integer>> sideNumbers) {
-        Draw_Main.sideNumbers = sideNumbers;
-    }
 }
