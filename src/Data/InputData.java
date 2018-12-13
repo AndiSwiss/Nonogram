@@ -18,6 +18,7 @@ public class InputData {
     private int maxSideNumbers;
     private List<List<Integer>> topNumbers;
     private List<List<Integer>> sideNumbers;
+    private List<String> solutionFile;
 
     /**
      * Reads all the input-data from the file and stores them
@@ -122,92 +123,171 @@ public class InputData {
     }
 
 
-
-
-    public void checkIfInputMatchesSolution(String fileName) {
-        List<String> solution;
+    /**
+     * Reads the solution file.
+     *
+     * @param fileName file to read. The appendix ".txt" gets automatically replaced by "_solution.txt"
+     */
+    public void readSolutionFile(String fileName) {
         fileName = fileName.replace(".txt", "_solution.txt");
-        System.out.printf("fileName: %s\n", fileName);
-        solution = getStringsFromAFile(fileName);
+        solutionFile = getStringsFromAFile(fileName);
+    }
 
-        // find out the symbol which is used:
-        char c = ' ';
-        for (String line : solution) {
-            // strip all spaces away:
-            line = line.trim();
-            // if there is still some stuff in the line:
-            if (line.length() > 0) {
-                c = line.charAt(0);
-                break;
+
+    /**
+     * reads the sideNumbers from the solution
+     *
+     * @return the list with all the sideNumbers
+     */
+    private List<List<Integer>> readSideNumbersFromSolution() {
+        List<List<Integer>> sideFromSol = new ArrayList<>();
+
+        for (String line : solutionFile) {
+            sideFromSol.add(new ArrayList<>());
+            int current = 0;
+            for (char c : line.toCharArray()) {
+                //noinspection Duplicates
+                if (c != ' ') {
+                    current++;
+                } else if (current > 0) {
+                    sideFromSol.get(sideFromSol.size() - 1).add(current);
+                    current = 0;
+                }
+
+            }
+            if (current > 0) {
+                sideFromSol.get(sideFromSol.size() - 1).add(current);
+            }
+        }
+/*
+        System.out.println("\nSide Numbers from solution:");
+        for (int i = 0; i < sideFromSol.size(); i++) {
+            System.out.print("Line " + i + ": ");
+            for (int n : sideFromSol.get(i)) {
+                System.out.print(n + ", ");
+            }
+            System.out.println();
+        }
+*/
+        return sideFromSol;
+    }
+
+    /**
+     * reads the sideNumbers from the solution
+     *
+     * @return the list with all the sideNumbers
+     */
+    private List<List<Integer>> readTopNumbersFromSolution() {
+        List<List<Integer>> topFromSol = new ArrayList<>();
+
+        // find max width:
+        int maxWidth = 0;
+        for (String line : solutionFile) {
+            if (line.length() > maxWidth) maxWidth = line.length();
+        }
+
+        for (int i = 0; i < maxWidth; i++) {
+            topFromSol.add(new ArrayList<>());
+            int current = 0;
+            for (String s : solutionFile) {
+                // go through the column:
+                try {
+                    char c = s.charAt(i);
+                    //noinspection Duplicates
+                    if (c != ' ') {
+                        current++;
+                    } else if (current > 0) {
+                        topFromSol.get(topFromSol.size() - 1).add(current);
+                        current = 0;
+
+                    }
+                } catch (Exception e) {
+                    // if array out of index - error
+                    if (current > 0) {
+                        topFromSol.get(topFromSol.size() - 1).add(current);
+                        current = 0;
+                    }
+                }
+            }
+            if (current > 0) {
+                topFromSol.get(topFromSol.size() - 1).add(current);
+            }
+        }
+/*
+        System.out.println("\nTop Numbers from solution:");
+        for (int i = 0; i < topFromSol.size(); i++) {
+            System.out.print("Line " + i + ": ");
+            for (int n : topFromSol.get(i)) {
+                System.out.print(n + ", ");
+            }
+            System.out.println();
+        }
+*/
+        return topFromSol;
+    }
+
+
+    /**
+     * Checks if sideNumbers and topNumbers are the same as the ones read from the solution file
+     *
+     * @throws IllegalArgumentException If there are differences found (actually the called sub-methods
+     *                                  throw those errors).
+     */
+    public void checkIfInputMatchesSolution() {
+
+
+        List<List<Integer>> sideNumbersFromSolution = readSideNumbersFromSolution();
+        List<List<Integer>> topNumbersFromSolution = readTopNumbersFromSolution();
+
+        // check if those lists match the already read lines:
+        if (compareTwoListLists(sideNumbers, sideNumbersFromSolution)) {
+            System.out.println("sideNumbers is the same as sideNumbersFromSolution.");
+        }
+        if (compareTwoListLists(topNumbers, topNumbersFromSolution)) {
+            System.out.println("topNumbers is the same as topNumbersFromSolution.");
+        }
+
+
+    }
+
+    /**
+     * Compares two List<List<Integer> lists.
+     *
+     * @param l1 list 1
+     * @param l2 list 2
+     * @return true if the same
+     * @throws IllegalArgumentException If they are not the same
+     */
+    private boolean compareTwoListLists(List<List<Integer>> l1, List<List<Integer>> l2) {
+        if (l1.size() != l2.size()) {
+            throw new IllegalArgumentException("Compared lists have not the same size!");
+        }
+
+        for (int i = 0; i < l1.size(); i++) {
+            if (l1.get(i).size() != l2.get(i).size()) {
+                throw new IllegalArgumentException("Compared lists differ in line " + i + ": not the same size!");
             }
         }
 
-        System.out.println("\nSymbol used in the Solution: " + c);
-
-        // checking the side numbers
-        for (int i = 0; i < solution.size(); i++) {
-            String line = solution.get(i);
-            List<Integer> numbers = sideNumbers.get(i);
-            int counter = 0;
-            for (int j = 0; j < line.length(); j++) {
-                if (line.charAt(j) == ' ' && counter == 0) {
-                    // do nothing, just continue to search for something...
-//                    continue;
-                } else if (line.charAt(j) == ' ') {
-                    // number found, check it:
-                    if (numbers.size() == 0) {
-                        throw new IllegalArgumentException("ERROR in checkIfInputMatchesSolution: " +
-                                "Expected to find another number, but there was none!");
-                    }
-
-                    if (numbers.get(0) == counter) {
-                        System.out.println("Found the number " + counter + "  in line " + i + ".");
-                        counter = 0;
-                        numbers.remove(0);
-                    } else {
-                        throw new IllegalArgumentException("ERROR in checkIfInputMatchesSolution: " +
-                                "mismatch of the solution (expected " + numbers.get(0) +  ") and " +
-                                "the read numbers (read " + counter + ") from the solution");
-                    }
-                } else {
-                    counter++;
+        for (int i = 0; i < l1.size(); i++) {
+            int lineLength = l1.get(i).size();
+            for (int j = 0; j < lineLength; j++) {
+                int n1 = l1.get(i).get(j);
+                int n2 = l2.get(i).get(j);
+                if (n1 != n2) {
+                    throw new IllegalArgumentException("Compared integer in line " + i + " at position " + j
+                            + " differ: " + n1 + " vs " + n2);
                 }
             }
-
-            //todo: better make a separate method which constructs the number from the solution (that I can continue to use!)
-            // todo: and then write a separate easy method, which compares those numbers!
-
-            if (counter > 0) {
-                // number found, check it:
-                if (numbers.size() == 0) {
-                    throw new IllegalArgumentException("ERROR in checkIfInputMatchesSolution: " +
-                            "Expected to find another number, but there was none!");
-                }
-
-                if (numbers.get(0) == counter) {
-                    System.out.println("Found the number " + counter + "  in line " + i + ".");
-                    counter = 0;
-                    numbers.remove(0);
-                } else {
-                    throw new IllegalArgumentException("ERROR in checkIfInputMatchesSolution: " +
-                            "mismatch of the solution (expected " + numbers.get(0) +  ") and " +
-                            "the read numbers (read " + counter + ") from the solution");
-                }
-            }
-
-
         }
 
-        // todo: checking the top numbers (you have to check columns!)
-
+        return true;
     }
 
 
     //-------------------//
     // Getter and Setter //
     //-------------------//
-
-
     public String getTitle() {
         return title;
     }
@@ -248,4 +328,7 @@ public class InputData {
         return sideNumbers;
     }
 
+    public List<String> getSolutionFile() {
+        return solutionFile;
+    }
 }

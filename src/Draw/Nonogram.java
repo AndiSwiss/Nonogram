@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.2b
+ * @version 0.2c
  */
 public class Nonogram extends PApplet {
 
@@ -21,6 +21,7 @@ public class Nonogram extends PApplet {
     private static int maxSideNumbers;
     private static List<List<Integer>> topNumbers;
     private static List<List<Integer>> sideNumbers;
+    private static List<String> solutionFile;
 
     //-----------------------------//
     // Processing specific methods //
@@ -30,8 +31,9 @@ public class Nonogram extends PApplet {
 
         InputData data = new InputData();
         data.readAllFileInputs(fileName, true);
+        data.readSolutionFile(fileName);
 
-        data.checkIfInputMatchesSolution(fileName);
+        data.checkIfInputMatchesSolution();
 
         // todo: get rid of the static fields in this method if possible, so the following won't be necessary
         title = data.getTitle();
@@ -44,6 +46,7 @@ public class Nonogram extends PApplet {
         maxSideNumbers = data.getMaxSideNumbers();
         topNumbers = data.getTopNumbers();
         sideNumbers = data.getSideNumbers();
+        solutionFile = data.getSolutionFile();
 
 
         // todo: show the solution in the processing-draw -> src/Examples/nonogram1_solution.txt
