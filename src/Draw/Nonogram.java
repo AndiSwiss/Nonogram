@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.2c
+ * @version 0.2d
  */
 public class Nonogram extends PApplet {
 
@@ -22,6 +22,12 @@ public class Nonogram extends PApplet {
     private static List<List<Integer>> topNumbers;
     private static List<List<Integer>> sideNumbers;
     private static List<String> solutionFile;
+
+    // some color values:
+    private static int cBlack = 0;
+    private static int cThinLine = 127;
+    private static int cWhite = 255;
+
 
     //-----------------------------//
     // Processing specific methods //
@@ -65,7 +71,10 @@ public class Nonogram extends PApplet {
         drawDigits();
         drawTitle();
 
+        drawSolution();
+
     }
+
 
 
     @Override
@@ -100,7 +109,7 @@ public class Nonogram extends PApplet {
 
     private void drawBackground() {
         fill(255);
-        stroke(127);
+        stroke(cThinLine);
 
         strokeWeight(3);
         // top box:
@@ -145,6 +154,59 @@ public class Nonogram extends PApplet {
     private void drawDigits() {
         // todo: draw '...topNumbers;' and '...sideNumbers':
 
+    }
+
+
+    private void drawSolution() {
+        for (int i = 0; i < solutionFile.size(); i++) {
+            String line = solutionFile.get(i);
+            for (int j = 0; j < line.length(); j++) {
+                if (line.charAt(j) != ' ') {
+                    drawBox(j, i);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Draws a box on the playable field. x/y 0/0 is the top-left corner of the playable field.
+     *
+     * @param x         x
+     * @param y         y
+     * @param colorCode color: 0 = white, 1 = black, 2.... other colors
+     */
+    private void drawBox(int x, int y, int colorCode) {
+        stroke(cThinLine);
+
+        // set the color-tone:
+        int color;
+        switch (colorCode) {
+            case 0:
+                color = cWhite;
+                break;
+            case 1:
+                color = cBlack;
+                break;
+            default:
+                throw new IllegalArgumentException("Color not defined in method drawBox!");
+        }
+        fill(color);
+
+        rect(boxSize * (1 + maxSideNumbers + x),
+                boxSize * (3 + maxTopNumbers + y) ,
+                boxSize,
+                boxSize);
+    }
+
+    /**
+     * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
+     *
+     * @param x x
+     * @param y y
+     */
+    private void drawBox(int x, int y) {
+        drawBox(x, y, 1);
     }
 
 
