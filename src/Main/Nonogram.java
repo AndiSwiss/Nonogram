@@ -10,7 +10,7 @@ import static Helpers.FileReader.readAllFileInputs;
  */
 public class Nonogram {
     public static void main(String[] args) {
-        String fileName = "src/Examples/nonogram1.txt";
+        String fileName = "src/Examples/nonogram2.txt";
 
         readAllFileInputs(fileName, true);
 
