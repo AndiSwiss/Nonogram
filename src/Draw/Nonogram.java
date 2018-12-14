@@ -1,41 +1,20 @@
 package Draw;
 
+
 import Data.InputData;
 import processing.core.PApplet;
 
-import java.util.ArrayList;
 import java.util.List;
+
+// all Data is stored in the static object Data (in Package Data):
+import static Data.DataStorage.*;
+
 
 /**
  * @author Andreas Ambühl
- * @version 0.2f
+ * @version 0.3a
  */
 public class Nonogram extends PApplet {
-
-    private static String title;
-    private static int myWidth;
-    private static int myHeight;
-    private static int boxSize;
-    private static int horizontalBoxes;
-    private static int verticalBoxes;
-    private static int maxTopNumbers;
-    private static int maxSideNumbers;
-    private static List<List<Integer>> topNumbers;
-    private static List<List<Integer>> sideNumbers;
-    private static List<String> solutionFile;
-
-    // some color values:
-    private static int cBlack = 0;
-    private static int cDarkGrey2 = 40;
-    private static int cDarkGrey = 80;
-    private static int cGrey = 127;
-    private static int cWhite = 255;
-
-    // for interactive UI:
-    List<UiElement> uiElements = new ArrayList<>();
-    static int mousePressedX = -1;
-    static int mousePressedY = -1;
-
 
     //-----------------------------//
     // Processing specific methods //
@@ -50,17 +29,7 @@ public class Nonogram extends PApplet {
         data.checkIfInputMatchesSolution();
 
         // todo: get rid of the static fields in this method if possible, so the following won't be necessary
-        title = data.getTitle();
-        myWidth = data.getMyWidth();
-        myHeight = data.getMyHeight();
-        boxSize = data.getBoxSize();
-        horizontalBoxes = data.getHorizontalBoxes();
-        verticalBoxes = data.getVerticalBoxes();
-        maxTopNumbers = data.getMaxTopNumbers();
-        maxSideNumbers = data.getMaxSideNumbers();
-        topNumbers = data.getTopNumbers();
-        sideNumbers = data.getSideNumbers();
-        solutionFile = data.getSolutionFile();
+
 
 
         // todo: show the solution in the processing-draw -> src/Examples/nonogram1_solution.txt
@@ -75,13 +44,14 @@ public class Nonogram extends PApplet {
         size(myWidth, myHeight);
         frameRate(30);
 
-        drawBackground();
-        drawDigits();
-        drawTitle();
-
-        drawSolution();
-
-        buildUiElementList();
+        drawAllZoneBoxesForTesting();
+//        drawBackground();
+//        drawDigits();
+//        drawTitle();
+//
+//        drawSolution();
+//
+//        buildUiElementList();
 
     }
 
@@ -170,6 +140,29 @@ public class Nonogram extends PApplet {
     //---------------------//
     // Custom Draw Methods //
     //---------------------//
+
+    private void drawAllZoneBoxesForTesting() {
+        stroke(cDarkGrey2);
+        strokeWeight(3);
+        for (Zone z : Zone.values()) {
+            fill(z.getBackgroundColor());
+            rect(z.getMinX(), z.getMinY(), z.getSizeX(), z.getSizeY());
+            fill(cDarkGrey2);
+            text(z.getName(), z.getMinX() + boxSize, z.getMinY() + boxSize);
+        }
+    }
+
+    private void drawOneBox(int x, int y, int color) {
+        // todo: define enum Zone:  , MAIN, LEFT, RIGHT, TOP, BOTTOM, FOOTER;
+        // todo: a Zone should have defined: Zone-name, minX, minY, sizeX, sizeY, background-color
+        // todo: based on this, rewrite and simplify the drawMethods
+
+        // use the MAIN-Zone-Enum for this drawing!:
+        Zone main = Zone.MAIN;
+
+
+    }
+
     private void drawTitle() {
         fill(cDarkGrey2);
         textAlign(LEFT);

@@ -3,25 +3,17 @@ package Data;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Data.DataStorage.*;
+
+
 import static Helpers.FileHelpers.getStringsFromAFile;
 import static Helpers.StringHelpers.getIntegersFromString;
 import static Helpers.StringHelpers.getLastIntegerFromString;
 
 public class InputData {
-    private String title;
-    private int myWidth;
-    private int myHeight;
-    private int boxSize;
-    private int horizontalBoxes;
-    private int verticalBoxes;
-    private int maxTopNumbers;
-    private int maxSideNumbers;
-    private List<List<Integer>> topNumbers;
-    private List<List<Integer>> sideNumbers;
-    private List<String> solutionFile;
 
     /**
-     * Reads all the input-data from the file and stores them
+     * Reads all the input-data from the file and stores in Data/DataStorage (in it's static member fields)
      *
      * @param fileName  FileName including the relative path (src/...)
      * @param debugMode If true, then it will print the read data to the terminal.
@@ -73,8 +65,8 @@ public class InputData {
         }
 
         // calculate width and height of the window:
-        myWidth = boxSize * (1 + maxSideNumbers + horizontalBoxes + 1);
-        myHeight = boxSize * (3 + maxTopNumbers + verticalBoxes + 1);
+        myWidth = boxSize * (1 + maxSideNumbers + horizontalBoxes + rightSideWidth + 1);
+        myHeight = boxSize * (1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + bottomHeight + footerHeight + 1);
 
         if (debugMode) {
             System.out.println("\ntopNumbers:");
