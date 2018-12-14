@@ -3,11 +3,12 @@ package Draw;
 import Data.InputData;
 import processing.core.PApplet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.2e
+ * @version 0.2f
  */
 public class Nonogram extends PApplet {
 
@@ -29,6 +30,11 @@ public class Nonogram extends PApplet {
     private static int cDarkGrey = 80;
     private static int cGrey = 127;
     private static int cWhite = 255;
+
+    // for interactive UI:
+    List<UiElement> uiElements = new ArrayList<>();
+    static int mousePressedX = -1;
+    static int mousePressedY = -1;
 
 
     //-----------------------------//
@@ -75,12 +81,76 @@ public class Nonogram extends PApplet {
 
         drawSolution();
 
+        buildUiElementList();
+
     }
 
 
     @Override
     public void draw() {
 
+    }
+
+    //-----------------//
+    // UI-Interactions //
+    //-----------------//
+    private void buildUiElementList() {
+        // todo: build the UiElements:
+        // todo: remove the following test-element:
+        int minX = boxSize;
+        int minY = boxSize * 3;
+        int sizeX = boxSize * 3;
+        int sizeY = boxSize * 3;
+
+        fill(cBlack);
+        rect(minX, minY, sizeX, sizeY);
+        uiElements.add(new UiElement("Test1", minX, minY, sizeX, sizeY));
+    }
+
+    @Override
+    public void mousePressed() {
+        // since this is called multiple times on every click and during the mouse is pressed, store just the first one:
+        if (mousePressedX == -1) {
+            mousePressedX = mouseX;
+            mousePressedY = mouseY;
+        }
+    }
+
+    @Override
+    public void mouseReleased() {
+        // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
+
+        // check, if mousePressed was on an UI-Element, and which one:
+        UiElement selectedPressed = inWhichUiElementIsIt(mousePressedX, mousePressedY, uiElements);
+
+        if (selectedPressed != null) {
+            UiElement selectedReleased = inWhichUiElementIsIt(mouseX, mouseY, uiElements);
+
+            if (selectedPressed.equals(selectedReleased)) {
+                // todo: do the action!
+
+                System.out.println("UiElement is successfully clicked: " + selectedPressed);
+
+
+            }
+        }
+
+        // reset mousePressed-values:
+        mousePressedX = -1;
+        mousePressedY = -1;
+    }
+
+    private UiElement inWhichUiElementIsIt(int x, int y, List<UiElement> uiElements) {
+
+        for (UiElement ui : uiElements) {
+            if (x >= ui.getMinX()
+                    && x <= ui.getMaxX()
+                    && y >= ui.getMinY()
+                    && y <= ui.getMaxY()) {
+                return ui;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -100,7 +170,6 @@ public class Nonogram extends PApplet {
     //---------------------//
     // Custom Draw Methods //
     //---------------------//
-
     private void drawTitle() {
         fill(cDarkGrey2);
         textAlign(LEFT);
