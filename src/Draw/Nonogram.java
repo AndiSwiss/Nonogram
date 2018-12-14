@@ -13,7 +13,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3c
+ * @version 0.3d
  */
 public class Nonogram extends PApplet {
 
@@ -49,10 +49,11 @@ public class Nonogram extends PApplet {
         drawBackground();
         drawFooter();
 
-//        drawDigits();
+        drawDigits();
 
         drawSolution();
 
+        // todo: build the UiElementList:
 //        buildUiElementList();
 
 
@@ -145,6 +146,17 @@ public class Nonogram extends PApplet {
     //---------------------//
 
     /**
+     * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
+     *
+     * @param x x
+     * @param y y
+     */
+    private void drawBox(int x, int y) {
+        drawBox(x, y, cBlack);
+    }
+
+
+    /**
      * Draws a box on the playable field. x/y 0/0 is the top-left corner of the playable field.
      *
      * @param x     x
@@ -178,22 +190,24 @@ public class Nonogram extends PApplet {
 
 
     /**
-     * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
-     *
-     * @param x x
-     * @param y y
-     */
-    private void drawBox(int x, int y) {
-        drawBox(x, y, cBlack);
-    }
-
-    /**
-     * Draws a black rectangle
+     * Overloaded method: draws a black rectangle.
      */
     private void drawRectangle(Zone zone, int x, int y, int sizeX, int sizeY) {
         drawRectangle(zone, x, y, sizeX, sizeY, cBlack, 1, cBlack);
     }
 
+    /**
+     * Draws a rectangle in a specific zone.
+     *
+     * @param zone         zone
+     * @param x            x relative to zone (is automatically multiplied by boxSize)
+     * @param y            y relative to zone (is automatically multiplied by boxSize)
+     * @param sizeX        horizontal size
+     * @param sizeY        vertical size
+     * @param fillColor    color for the fill
+     * @param strokeWeight line thickness
+     * @param strokeColor  line color
+     */
     private void drawRectangle(Zone zone, int x, int y, int sizeX, int sizeY, int fillColor, int strokeWeight, int strokeColor) {
         fill(fillColor);
         strokeWeight(strokeWeight);
@@ -204,6 +218,17 @@ public class Nonogram extends PApplet {
                 boxSize * sizeY);
     }
 
+    /**
+     * Draw a horizontal or a vertical line inside a specific zone.
+     *
+     * @param zone         zone
+     * @param x            x relative to zone (is automatically multiplied by boxSize)
+     * @param y            y relative to zone (is automatically multiplied by boxSize)
+     * @param horizontal   true for horizontal, false for vertical
+     * @param length       length
+     * @param strokeWeight line thickness
+     * @param strokeColor  line color
+     */
     private void drawLine(Zone zone, int x, int y, boolean horizontal, int length, int strokeWeight, int strokeColor) {
         strokeWeight(strokeWeight);
         stroke(strokeColor);
@@ -228,24 +253,27 @@ public class Nonogram extends PApplet {
     }
 
 
-    private void drawTitle() {
-        drawText(title, Zone.HEADER, 0, 0, cBlack);
-    }
+    private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize) {
+        fill(cBlack);
 
-    private void drawText(String string, Zone zone, int boxX, int boxY, int color, double relativeSize) {
-        fill(color);
+        int x = zone.getMinX() + (int) (boxX * boxSize);
+        int y = zone.getMinY() + (int) ((boxY + 1) * boxSize);
+
         textSize((int) (relativeSize * boxSize));
-        text(string, zone.getMinX() + boxX * boxSize, zone.getMinY() + (boxY + 1) * boxSize);
+        text(string, x, y);
     }
 
     /**
      * Overloaded method
      */
-    private void drawText(String string, Zone zone, int boxX, int boxY, int color) {
-        drawText(string, zone, boxX, boxY, color, 1);
+    private void drawText(String string, Zone zone, int boxX, int boxY) {
+        drawText(string, zone, boxX, boxY, 1);
     }
 
 
+    /**
+     * Draw the background elements
+     */
     private void drawBackground() {
 
         // top box:
@@ -260,12 +288,6 @@ public class Nonogram extends PApplet {
         drawRectangle(Zone.MAIN, 0, 0, horizontalBoxes, verticalBoxes,
                 Zone.MAIN.getColor(), 3, cZoneOutline);
 
-        // footer:
-        drawRectangle(Zone.FOOTER, 0,0,
-                Zone.FOOTER.getSizeX() / boxSize,
-                Zone.FOOTER.getSizeY() / boxSize,
-                cLightGrey2, 1, cLightGrey2);
-
         // thin lines:
         // horizontally:
         drawBackgroundLinesInOneZone(Zone.MAIN, true);
@@ -274,9 +296,14 @@ public class Nonogram extends PApplet {
         drawBackgroundLinesInOneZone(Zone.TOP, false);
 
 
-
     }
 
+    /**
+     * Draws the background lines in a zone
+     *
+     * @param zone       zone
+     * @param horizontal true is horizontal, false is vertical
+     */
     private void drawBackgroundLinesInOneZone(Zone zone, boolean horizontal) {
         int weight = 1;
 
@@ -312,39 +339,48 @@ public class Nonogram extends PApplet {
 
     }
 
+    /**
+     * Draws the digits in sideNumbers and topNumbers
+     */
     private void drawDigits() {
-        // todo: draw '...topNumbers;' and '...sideNumbers':
-        textSize((int) (boxSize * 0.7));
+        double textSize = 0.7;
         textAlign(CENTER, CENTER);
         fill(cDarkGrey2);
 
         // sideNumbers:
         for (int i = 0; i < sideNumbers.size(); i++) {
-            int y = (int) (boxSize * (3.5 + maxTopNumbers + i));
+            double y = i - 0.5;
             List<Integer> line = sideNumbers.get(i);
 
             for (int j = 0; j < line.size(); j++) {
-                int x = (int) (boxSize * (1.5 + j + (maxSideNumbers - line.size())));
+                double x = j + (maxSideNumbers - line.size()) + 0.5;
 
-                text(line.get(j), x, y);
+                drawText(line.get(j).toString(), Zone.LEFT, x, y, textSize);
             }
         }
 
         // topNumbers:
         for (int i = 0; i < topNumbers.size(); i++) {
-            int x = (int) (boxSize * (1.5 + maxSideNumbers + i));
+            double x = i + 0.5;
+
             List<Integer> line = topNumbers.get(i);
 
             for (int j = 0; j < line.size(); j++) {
-                int y = (int) (boxSize * (3.5 + j + (maxTopNumbers - line.size())));
+                double y = j + (maxTopNumbers - line.size()) - 0.5;
 
-                text(line.get(j), x, y);
+                drawText(line.get(j).toString(), Zone.TOP, x, y, textSize);
             }
         }
+
+        // reset alignment:
+        textAlign(LEFT);
 
     }
 
 
+    /**
+     * Draws the solution
+     */
     private void drawSolution() {
         for (int i = 0; i < verticalBoxes; i++) {
             String line = solutionFile.get(i);
@@ -361,8 +397,26 @@ public class Nonogram extends PApplet {
         }
     }
 
+    /**
+     * Draw the title
+     */
+    private void drawTitle() {
+        drawText(title, Zone.HEADER, 0, 0);
+    }
+
+
+    /**
+     * Draw the footer-text
+     */
     private void drawFooter() {
-        drawText(footerText, Zone.FOOTER, 1, 1, cDarkGrey);
+        // footer-box:
+        drawRectangle(Zone.FOOTER, 0, 0,
+                Zone.FOOTER.getSizeX() / boxSize,
+                Zone.FOOTER.getSizeY() / boxSize,
+                cLightGrey2, 1, cLightGrey2);
+
+        // footer-text:
+        drawText(footerText, Zone.FOOTER, 1, 1);
     }
 
 
