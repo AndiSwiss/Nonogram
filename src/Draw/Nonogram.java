@@ -1,18 +1,19 @@
 package Draw;
 
 
-import Data.InputData;
+import Data.InputDataHandler;
 import processing.core.PApplet;
 
 import java.util.List;
 
 // all Data is stored in the static object Data (in Package Data):
 import static Data.DataStorage.*;
+import static Data.InitialData.*;
 
 
 /**
  * @author Andreas Ambühl
- * @version 0.3a
+ * @version 0.3b
  */
 public class Nonogram extends PApplet {
 
@@ -22,7 +23,7 @@ public class Nonogram extends PApplet {
     public static void main(String[] args) {
         String fileName = "src/Examples/nonogram1.txt";
 
-        InputData data = new InputData();
+        InputDataHandler data = new InputDataHandler();
         data.readAllFileInputs(fileName, true);
         data.readSolutionFile(fileName);
 

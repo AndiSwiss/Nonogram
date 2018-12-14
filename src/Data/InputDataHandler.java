@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Data.DataStorage.*;
+import static Data.InitialData.*;
 
 
 import static Helpers.FileHelpers.getStringsFromAFile;
 import static Helpers.StringHelpers.getIntegersFromString;
 import static Helpers.StringHelpers.getLastIntegerFromString;
 
-public class InputData {
+/**
+ * Reads all data from the given input-File and stores and/or processes them to be stored in /Data/DataStorage
+ */
+public class InputDataHandler {
 
     /**
      * Reads all the input-data from the file and stores in Data/DataStorage (in it's static member fields)

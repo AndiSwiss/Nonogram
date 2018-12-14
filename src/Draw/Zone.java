@@ -2,6 +2,7 @@ package Draw;
 
 
 import static Data.DataStorage.*;
+import static Data.InitialData.*;
 
 /**
  * Check the Zones via the method drawAllZoneBoxesForTesting() in Nonogram.java
