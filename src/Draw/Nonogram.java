@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.2d
+ * @version 0.2e
  */
 public class Nonogram extends PApplet {
 
@@ -25,6 +25,7 @@ public class Nonogram extends PApplet {
 
     // some color values:
     private static int cBlack = 0;
+    private static int cDarkGrey2 = 40;
     private static int cDarkGrey = 80;
     private static int cGrey = 127;
     private static int cWhite = 255;
@@ -34,7 +35,7 @@ public class Nonogram extends PApplet {
     // Processing specific methods //
     //-----------------------------//
     public static void main(String[] args) {
-        String fileName = "src/Examples/nonogram2.txt";
+        String fileName = "src/Examples/nonogram1.txt";
 
         InputData data = new InputData();
         data.readAllFileInputs(fileName, true);
@@ -77,7 +78,6 @@ public class Nonogram extends PApplet {
     }
 
 
-
     @Override
     public void draw() {
 
@@ -102,8 +102,8 @@ public class Nonogram extends PApplet {
     //---------------------//
 
     private void drawTitle() {
-        fill(255);
-        stroke(255);
+        fill(cDarkGrey2);
+        textAlign(LEFT);
         textSize(boxSize);
         text(title, boxSize, (int) (1.5 * boxSize));
     }
@@ -158,6 +158,33 @@ public class Nonogram extends PApplet {
 
     private void drawDigits() {
         // todo: draw '...topNumbers;' and '...sideNumbers':
+        textSize((int) (boxSize * 0.7));
+        textAlign(CENTER, CENTER);
+        fill(cDarkGrey2);
+
+        // sideNumbers:
+        for (int i = 0; i < sideNumbers.size(); i++) {
+            int y = (int) (boxSize * (3.5 + maxTopNumbers + i));
+            List<Integer> line = sideNumbers.get(i);
+
+            for (int j = 0; j < line.size(); j++) {
+                int x = (int) (boxSize * (1.5 + j + (maxSideNumbers - line.size())));
+
+                text(line.get(j), x, y);
+            }
+        }
+
+        // topNumbers:
+        for (int i = 0; i < topNumbers.size(); i++) {
+            int x = (int) (boxSize * (1.5 + maxSideNumbers + i));
+            List<Integer> line = topNumbers.get(i);
+
+            for (int j = 0; j < line.size(); j++) {
+                int y = (int) (boxSize * (3.5 + j + (maxTopNumbers - line.size())));
+
+                text(line.get(j), x, y);
+            }
+        }
 
     }
 
@@ -199,7 +226,7 @@ public class Nonogram extends PApplet {
         fill(color);
 
         rect(boxSize * (1 + maxSideNumbers + x),
-                boxSize * (3 + maxTopNumbers + y) ,
+                boxSize * (3 + maxTopNumbers + y),
                 boxSize,
                 boxSize);
     }
