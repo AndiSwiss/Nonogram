@@ -260,7 +260,8 @@ public class InputData {
      */
     private boolean compareTwoListLists(List<List<Integer>> l1, List<List<Integer>> l2) {
         if (l1.size() != l2.size()) {
-            throw new IllegalArgumentException("Compared lists have not the same size!");
+            throw new IllegalArgumentException("Compared lists have not the same size! l1: "
+                + l1.size() + ", l2: " + l2.size());
         }
 
         for (int i = 0; i < l1.size(); i++) {

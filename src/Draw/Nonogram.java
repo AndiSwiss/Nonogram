@@ -25,7 +25,8 @@ public class Nonogram extends PApplet {
 
     // some color values:
     private static int cBlack = 0;
-    private static int cThinLine = 127;
+    private static int cDarkGrey = 80;
+    private static int cGrey = 127;
     private static int cWhite = 255;
 
 
@@ -33,7 +34,7 @@ public class Nonogram extends PApplet {
     // Processing specific methods //
     //-----------------------------//
     public static void main(String[] args) {
-        String fileName = "src/Examples/nonogram1.txt";
+        String fileName = "src/Examples/nonogram2.txt";
 
         InputData data = new InputData();
         data.readAllFileInputs(fileName, true);
@@ -109,7 +110,7 @@ public class Nonogram extends PApplet {
 
     private void drawBackground() {
         fill(255);
-        stroke(cThinLine);
+        stroke(cDarkGrey);
 
         strokeWeight(3);
         // top box:
@@ -126,16 +127,20 @@ public class Nonogram extends PApplet {
                 boxSize * (3 + maxTopNumbers),
                 boxSize * horizontalBoxes, boxSize * verticalBoxes);
 
+
         // thin lines:
         // horizontally:
+        stroke(cGrey);
         strokeWeight(1);
         int initialY = boxSize * (3 + maxTopNumbers);
         for (int i = 1; i < verticalBoxes; i++) {
             if (i % 5 == 0) {
-                strokeWeight(2);
+                strokeWeight(3);
             }
             int y = initialY + i * boxSize;
             line(boxSize, y, myWidth - boxSize, y);
+
+            // reset the stroke:
             strokeWeight(1);
         }
 
@@ -143,7 +148,7 @@ public class Nonogram extends PApplet {
         int initialX = boxSize * (1 + maxSideNumbers);
         for (int i = 1; i < horizontalBoxes; i++) {
             if (i % 5 == 0) {
-                strokeWeight(2);
+                strokeWeight(3);
             }
             int x = initialX + i * boxSize;
             line(x, 3 * boxSize, x, myHeight - boxSize);
@@ -177,7 +182,7 @@ public class Nonogram extends PApplet {
      * @param colorCode color: 0 = white, 1 = black, 2.... other colors
      */
     private void drawBox(int x, int y, int colorCode) {
-        stroke(cThinLine);
+        stroke(cGrey);
 
         // set the color-tone:
         int color;
