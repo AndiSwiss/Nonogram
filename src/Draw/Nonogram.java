@@ -13,7 +13,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3b
+ * @version 0.3c
  */
 public class Nonogram extends PApplet {
 
@@ -29,12 +29,7 @@ public class Nonogram extends PApplet {
 
         data.checkIfInputMatchesSolution();
 
-        // todo: get rid of the static fields in this method if possible, so the following won't be necessary
 
-
-
-        // todo: show the solution in the processing-draw -> src/Examples/nonogram1_solution.txt
-        // todo: check the drawn solution with the lines I got from the file input
         // todo: create a nonogram-solver
 
         PApplet.main("Draw.Nonogram");
@@ -44,15 +39,22 @@ public class Nonogram extends PApplet {
     public void setup() {
         size(myWidth, myHeight);
         frameRate(30);
+        background(cLightGrey3);
 
-        drawAllZoneBoxesForTesting();
-//        drawBackground();
+        // For testing, whether the defined zones are ok:
+//        Zone.drawAllZoneBoxesForTesting(this);
+
+        drawTitle();
+
+        drawBackground();
+        drawFooter();
+
 //        drawDigits();
-//        drawTitle();
-//
-//        drawSolution();
-//
+
+        drawSolution();
+
 //        buildUiElementList();
+
 
     }
 
@@ -142,81 +144,172 @@ public class Nonogram extends PApplet {
     // Custom Draw Methods //
     //---------------------//
 
-    private void drawAllZoneBoxesForTesting() {
-        stroke(cDarkGrey2);
-        strokeWeight(3);
-        for (Zone z : Zone.values()) {
-            fill(z.getBackgroundColor());
-            rect(z.getMinX(), z.getMinY(), z.getSizeX(), z.getSizeY());
-            fill(cDarkGrey2);
-            text(z.getName(), z.getMinX() + boxSize, z.getMinY() + boxSize);
+    /**
+     * Draws a box on the playable field. x/y 0/0 is the top-left corner of the playable field.
+     *
+     * @param x     x
+     * @param y     y
+     * @param color color on the black/white color scale
+     */
+    private void drawBox(int x, int y, int color) {
+
+        drawRectangle(Zone.MAIN, x, y, 1, 1, color, 1, cBackgroundLine);
+
+
+        // redraw thicker horizontal and vertical lines every five lines:
+        // horizontal (on left side of the box):
+        if (x % 5 == 0) {
+            drawLine(Zone.MAIN, x, y, false, 1, 3, cBackgroundLine);
+        }
+        // on right side of the box, if it is the last one:
+        else if (x == horizontalBoxes - 1) {
+            drawLine(Zone.MAIN, x + 1, y, false, 1, 3, cBackgroundLine);
+        }
+
+        // vertical (on top side of the box):
+        if (y % 5 == 0) {
+            drawLine(Zone.MAIN, x, y, true, 1, 3, cBackgroundLine);
+        }
+        // on right side of the box, if it is the last one:
+        else if (y == verticalBoxes - 1) {
+            drawLine(Zone.MAIN, x, y + 1, true, 1, 3, cBackgroundLine);
         }
     }
 
-    private void drawOneBox(int x, int y, int color) {
-        // todo: define enum Zone:  , MAIN, LEFT, RIGHT, TOP, BOTTOM, FOOTER;
-        // todo: a Zone should have defined: Zone-name, minX, minY, sizeX, sizeY, background-color
-        // todo: based on this, rewrite and simplify the drawMethods
 
-        // use the MAIN-Zone-Enum for this drawing!:
-        Zone main = Zone.MAIN;
-
-
+    /**
+     * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
+     *
+     * @param x x
+     * @param y y
+     */
+    private void drawBox(int x, int y) {
+        drawBox(x, y, cBlack);
     }
+
+    /**
+     * Draws a black rectangle
+     */
+    private void drawRectangle(Zone zone, int x, int y, int sizeX, int sizeY) {
+        drawRectangle(zone, x, y, sizeX, sizeY, cBlack, 1, cBlack);
+    }
+
+    private void drawRectangle(Zone zone, int x, int y, int sizeX, int sizeY, int fillColor, int strokeWeight, int strokeColor) {
+        fill(fillColor);
+        strokeWeight(strokeWeight);
+        stroke(strokeColor);
+        rect(zone.getMinX() + x * boxSize,
+                zone.getMinY() + y * boxSize,
+                boxSize * sizeX,
+                boxSize * sizeY);
+    }
+
+    private void drawLine(Zone zone, int x, int y, boolean horizontal, int length, int strokeWeight, int strokeColor) {
+        strokeWeight(strokeWeight);
+        stroke(strokeColor);
+
+        int x2;
+        int y2;
+
+        if (horizontal) {
+            x2 = zone.getMinX() + boxSize * (x + length);
+            y2 = zone.getMinY() + boxSize * y;
+
+        } else {
+            x2 = zone.getMinX() + boxSize * x;
+            y2 = zone.getMinY() + boxSize * (y + length);
+
+        }
+
+        line(zone.getMinX() + boxSize * x,
+                zone.getMinY() + boxSize * y,
+                x2, y2)
+        ;
+    }
+
 
     private void drawTitle() {
-        fill(cDarkGrey2);
-        textAlign(LEFT);
-        textSize(boxSize);
-        text(title, boxSize, (int) (1.5 * boxSize));
+        drawText(title, Zone.HEADER, 0, 0, cBlack);
     }
 
-    private void drawBackground() {
-        fill(255);
-        stroke(cDarkGrey);
+    private void drawText(String string, Zone zone, int boxX, int boxY, int color, double relativeSize) {
+        fill(color);
+        textSize((int) (relativeSize * boxSize));
+        text(string, zone.getMinX() + boxX * boxSize, zone.getMinY() + (boxY + 1) * boxSize);
+    }
 
-        strokeWeight(3);
+    /**
+     * Overloaded method
+     */
+    private void drawText(String string, Zone zone, int boxX, int boxY, int color) {
+        drawText(string, zone, boxX, boxY, color, 1);
+    }
+
+
+    private void drawBackground() {
+
         // top box:
-        rect(boxSize * (1 + maxSideNumbers), 3 * boxSize,
-                boxSize * horizontalBoxes, boxSize * maxTopNumbers);
+        drawRectangle(Zone.TOP, 0, 0, horizontalBoxes, maxTopNumbers,
+                Zone.TOP.getColor(), 3, cZoneOutline);
 
         // side box:
-        rect(boxSize, boxSize * (3 + maxTopNumbers),
-                boxSize * maxSideNumbers, boxSize * verticalBoxes);
+        drawRectangle(Zone.LEFT, 0, 0, maxSideNumbers, verticalBoxes,
+                Zone.LEFT.getColor(), 3, cZoneOutline);
 
+        // main box:
+        drawRectangle(Zone.MAIN, 0, 0, horizontalBoxes, verticalBoxes,
+                Zone.MAIN.getColor(), 3, cZoneOutline);
 
-        //main box:
-        rect(boxSize * (1 + maxSideNumbers),
-                boxSize * (3 + maxTopNumbers),
-                boxSize * horizontalBoxes, boxSize * verticalBoxes);
-
+        // footer:
+        drawRectangle(Zone.FOOTER, 0,0,
+                Zone.FOOTER.getSizeX() / boxSize,
+                Zone.FOOTER.getSizeY() / boxSize,
+                cLightGrey2, 1, cLightGrey2);
 
         // thin lines:
         // horizontally:
-        stroke(cGrey);
-        strokeWeight(1);
-        int initialY = boxSize * (3 + maxTopNumbers);
-        for (int i = 1; i < verticalBoxes; i++) {
-            if (i % 5 == 0) {
-                strokeWeight(3);
-            }
-            int y = initialY + i * boxSize;
-            line(boxSize, y, myWidth - boxSize, y);
+        drawBackgroundLinesInOneZone(Zone.MAIN, true);
+        drawBackgroundLinesInOneZone(Zone.MAIN, false);
+        drawBackgroundLinesInOneZone(Zone.LEFT, true);
+        drawBackgroundLinesInOneZone(Zone.TOP, false);
 
-            // reset the stroke:
-            strokeWeight(1);
+
+
+    }
+
+    private void drawBackgroundLinesInOneZone(Zone zone, boolean horizontal) {
+        int weight = 1;
+
+        int length;
+        int size;
+        if (horizontal) {
+            length = zone.getSizeX() / boxSize;
+            size = zone.getSizeY() / boxSize;
+        } else {
+            length = zone.getSizeY() / boxSize;
+            size = zone.getSizeX() / boxSize;
         }
 
-        // vertically:
-        int initialX = boxSize * (1 + maxSideNumbers);
-        for (int i = 1; i < horizontalBoxes; i++) {
+        System.out.println("for Zone " + zone.getName() + ", length = " + size);
+
+        for (int i = 1; i < size; i++) {
             if (i % 5 == 0) {
-                strokeWeight(3);
+                weight = 3;
             }
-            int x = initialX + i * boxSize;
-            line(x, 3 * boxSize, x, myHeight - boxSize);
-            strokeWeight(1);
+            int x;
+            int y;
+            if (horizontal) {
+                x = 0;
+                y = i;
+            } else {
+                x = i;
+                y = 0;
+            }
+            drawLine(zone, x, y, horizontal, length, weight, cBackgroundLine);
+            weight = 1;
         }
+
+
     }
 
     private void drawDigits() {
@@ -253,55 +346,23 @@ public class Nonogram extends PApplet {
 
 
     private void drawSolution() {
-        for (int i = 0; i < solutionFile.size(); i++) {
+        for (int i = 0; i < verticalBoxes; i++) {
             String line = solutionFile.get(i);
-            for (int j = 0; j < line.length(); j++) {
-                if (line.charAt(j) != ' ') {
+            for (int j = 0; j < horizontalBoxes; j++) {
+                // if found an element (and j is still inside the line's length:
+                if (j < line.length() && line.charAt(j) != ' ') {
                     drawBox(j, i);
+                }
+                // else draw a white box:
+                else {
+                    drawBox(j, i, cWhite);
                 }
             }
         }
     }
 
-
-    /**
-     * Draws a box on the playable field. x/y 0/0 is the top-left corner of the playable field.
-     *
-     * @param x         x
-     * @param y         y
-     * @param colorCode color: 0 = white, 1 = black, 2.... other colors
-     */
-    private void drawBox(int x, int y, int colorCode) {
-        stroke(cGrey);
-
-        // set the color-tone:
-        int color;
-        switch (colorCode) {
-            case 0:
-                color = cWhite;
-                break;
-            case 1:
-                color = cBlack;
-                break;
-            default:
-                throw new IllegalArgumentException("Color not defined in method drawBox!");
-        }
-        fill(color);
-
-        rect(boxSize * (1 + maxSideNumbers + x),
-                boxSize * (3 + maxTopNumbers + y),
-                boxSize,
-                boxSize);
-    }
-
-    /**
-     * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
-     *
-     * @param x x
-     * @param y y
-     */
-    private void drawBox(int x, int y) {
-        drawBox(x, y, 1);
+    private void drawFooter() {
+        drawText(footerText, Zone.FOOTER, 1, 1, cDarkGrey);
     }
 
 

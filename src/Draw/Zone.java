@@ -1,6 +1,8 @@
 package Draw;
 
 
+import processing.core.PApplet;
+
 import static Data.DataStorage.*;
 import static Data.InitialData.*;
 
@@ -10,25 +12,25 @@ import static Data.InitialData.*;
 public enum Zone {
     HEADER(1, 1,
             maxSideNumbers + horizontalBoxes + rightSideWidth, headerHeight,
-            cLightGrey),
+            cBackground),
     MAIN(1 + maxSideNumbers, 1 + headerHeight + 1 + maxTopNumbers,
             horizontalBoxes, verticalBoxes,
-            cLightGrey),
+            cLightGrey2),
     LEFT(1, 1 + headerHeight + 1 + maxTopNumbers,
             maxSideNumbers, verticalBoxes,
-            cLightGrey),
+            cBackground),
     RIGHT(1 + maxSideNumbers + horizontalBoxes, 1 + headerHeight + 1 + maxTopNumbers,
             rightSideWidth, verticalBoxes,
-            cLightGrey),
+            cBackground),
     TOP(1 + maxSideNumbers, 1 + headerHeight + 1,
             horizontalBoxes, maxTopNumbers,
-            cLightGrey),
+            cBackground),
     BOTTOM(1, 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1,
             maxSideNumbers + horizontalBoxes + rightSideWidth, bottomHeight,
-            cLightGrey),
-    FOOTER(1, 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + bottomHeight,
-            maxSideNumbers + horizontalBoxes + rightSideWidth, footerHeight,
-            cLightGrey);
+            cBackground),
+    FOOTER(0, 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + bottomHeight,
+            1 + maxSideNumbers + horizontalBoxes + rightSideWidth + 1, footerHeight,
+            cLightGrey + 1);
 
 
     private String name;
@@ -38,17 +40,17 @@ public enum Zone {
     private int sizeY;
     private int maxX;
     private int maxY;
-    private int backgroundColor;
+    private int color;
 
 
-    Zone(int minX, int minY, int sizeX, int sizeY, int backgroundColor) {
+    Zone(int minX, int minY, int sizeX, int sizeY, int color) {
 
 
         this.minX = minX * boxSize;
         this.minY = minY * boxSize;
         this.sizeX = sizeX * boxSize;
         this.sizeY = sizeY * boxSize;
-        this.backgroundColor = backgroundColor;
+        this.color = color;
 
         this.maxX = minX + sizeX;
         this.maxY = minY + sizeY;
@@ -57,6 +59,17 @@ public enum Zone {
         name = name().charAt(0) + name().substring(1).toLowerCase();
 
 
+    }
+
+    static void drawAllZoneBoxesForTesting(PApplet p) {
+        p.stroke(cGrey);
+        p.strokeWeight(1);
+        for (Zone z : Zone.values()) {
+            p.fill(z.getColor());
+            p.rect(z.getMinX(), z.getMinY(), z.getSizeX(), z.getSizeY());
+            p.fill(cBlack);
+            p.text(z.getName(), z.getMinX() + boxSize, z.getMinY() + boxSize);
+        }
     }
 
     public String getName() {
@@ -87,8 +100,8 @@ public enum Zone {
         return maxY;
     }
 
-    public int getBackgroundColor() {
-        return backgroundColor;
+    public int getColor() {
+        return color;
     }
 
     @Override
