@@ -76,7 +76,7 @@ public enum Zone {
                 minX = 1;
                 minY = 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1;
                 sizeX = myWidth / boxSize - 2;
-                sizeY = myHeight / boxSize - footerHeight - minY - 1;
+                sizeY = myHeight / boxSize - footerHeight - minY;
                 color = cBackground;
                 break;
             case "FOOTER":

@@ -31,10 +31,11 @@ public class InitialData {
 
 
     // for interactive UI:
-    public static int headerHeight = 3;
-    public static int rightSideWidth = 5;
-    public static int footerHeight = 3;
-    public static Position mousePressedPos = null;
+    public static final int headerHeight = 3;
+    public static final int rightSideWidth = 5;
+    public static final int footerHeight = 1;
+    public static final String footerText = "© 2018 by Andreas Ambühl";
 
-    public static String footerText = "© 2018 by Andreas Ambühl";
+    // for tracking the mouse:
+    public static Position mousePressedPos = null;
 }

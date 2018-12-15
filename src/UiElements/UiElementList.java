@@ -19,7 +19,7 @@ public class UiElementList {
         uiElements.add(new UiTextbox("fileChooserTitle", "Choose the file:"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram1.txt", "Example 1"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram2.txt", "Example 2"));
-        uiElements.add(new UiTextbox("src/Example/nonogram3.txt", "Example 3: not yet solvable thus not selectable!"));
+        uiElements.add(new UiTextbox("src/Example/nonogram3.txt", "Example 3: not yet solved thus not selectable!"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram4.txt", "Example 4"));
 
 
@@ -27,6 +27,8 @@ public class UiElementList {
         uiElements.add(new UiTextbox("emptySpace", ""));
         uiElements.add(new UiTextbox("optionsTitle", "Options:"));
         uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution"));
+        uiElements.add(new UiClickableOption("makeLarger", "Make larger"));
+        uiElements.add(new UiClickableOption("makeSmaller", "Make smaller"));
     }
 
 

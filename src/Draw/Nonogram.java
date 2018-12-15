@@ -15,7 +15,7 @@ import static UiElements.UiElementList.uiElements;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4a
+ * @version 0.4b
  */
 public class Nonogram extends PApplet {
 
@@ -52,8 +52,6 @@ public class Nonogram extends PApplet {
 
     private void loadNewExample(String fileName) {
 
-        background(cLightGrey3);
-
         // reset the drawSolution-Ui to 'not selected':
         uiElements.stream()
                 .filter(ui -> ui.getName().equals("drawSolution"))
@@ -65,20 +63,7 @@ public class Nonogram extends PApplet {
 
         data.checkIfInputMatchesSolution();
 
-        // draw the stuff:
-        // first update the zones with the new values:
-        for (Zone z : Zone.values()) {
-            z.updateZone();
-        }
-
-        drawTitle();
-
-        drawBackground();
-        drawFooter();
-
-        drawDigits();
-
-        drawAllUiElements();
+        reDrawUi();
 
     }
 
@@ -183,8 +168,38 @@ public class Nonogram extends PApplet {
             // draw the UiElement again to see the effect of the selection:
             drawUiElement(ui);
         }
+
+        if (ui instanceof UiClickableOption) {
+            if (ui.getName().toLowerCase().contains("smaller")) {
+                changeUiSize(-1);
+
+
+            } else if (ui.getName().toLowerCase().contains("larger")) {
+                changeUiSize(1);
+            }
+        }
     }
 
+    private void changeUiSize(int value) {
+        boxSize += value;
+
+        System.out.println("New boxSize is " + boxSize);
+
+        // check whether the solution was already shown, so that I can draw it again:
+        boolean solutionWasDrawn = false;
+        for (UiElement ui : uiElements) {
+            if (ui.getName().contains("drawSolution")) {
+                solutionWasDrawn = ui.isSelected();
+            }
+        }
+
+        reDrawUi();
+
+        // if the solution was drawn previously:
+        if (solutionWasDrawn) {
+            drawSolution();
+        }
+    }
 
     /**
      * @param pos        Position in question
@@ -232,6 +247,21 @@ public class Nonogram extends PApplet {
     //---------------------//
     // Custom Draw Methods //
     //---------------------//
+
+    private void reDrawUi() {
+        background(cBackground);
+
+        // first update the zones with the new values:
+        for (Zone z : Zone.values()) {
+            z.updateZone();
+        }
+
+        drawTitle();
+        drawBackground();
+        drawFooter();
+        drawDigits();
+        drawAllUiElements();
+    }
 
     /**
      * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
@@ -333,9 +363,24 @@ public class Nonogram extends PApplet {
         ;
     }
 
+    /**
+     * Overloaded method
+     */
+    private void drawText(String string, Zone zone, double boxX, double boxY) {
+        drawText(string, zone, boxX, boxY, 1);
+    }
 
+
+    /**
+     * Overloaded method
+     */
     private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize) {
-        fill(cBlack);
+        drawText(string, zone, boxX, boxY, relativeSize, cBlack);
+    }
+
+
+    private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize, int color) {
+        fill(color);
 
         int x = zone.getMinX() + (int) (boxX * boxSize);
         int y = zone.getMinY() + (int) ((boxY + 1) * boxSize);
@@ -344,12 +389,7 @@ public class Nonogram extends PApplet {
         text(string, x, y);
     }
 
-    /**
-     * Overloaded method
-     */
-    private void drawText(String string, Zone zone, int boxX, int boxY) {
-        drawText(string, zone, boxX, boxY, 1);
-    }
+
 
     /**
      * Draws the main-field with the thin lines
@@ -502,7 +542,7 @@ public class Nonogram extends PApplet {
                 cLightGrey2, 1, cLightGrey2);
 
         // footer-text:
-        drawText(footerText, Zone.FOOTER, 1, 1);
+        drawText(footerText, Zone.FOOTER, 1, -0.2, 0.75, cDarkGrey);
     }
 
 
