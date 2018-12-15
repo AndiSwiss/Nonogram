@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3i
+ * @version 0.3j
  */
 public class Nonogram extends PApplet {
 
@@ -66,8 +66,9 @@ public class Nonogram extends PApplet {
 //        Zone.drawAllZoneBoxesForTesting(this);
 
 
-
-
+        // todo: since the 'buildUiElementList' is here, it get's overwritten every time
+        // todo: hence also the isSelected() get's always reset, when a new file is loaded
+        // todo: but currently, this builder depends on the zone, so I think I have to refactor that....
         buildUiElementList();
         drawAllUiElements();
 
@@ -106,12 +107,8 @@ public class Nonogram extends PApplet {
 
 
     private void drawUiElement(UiElement ui) {
-        drawUiElement(ui, false);
-    }
 
-    private void drawUiElement(UiElement ui, boolean selected) {
-
-        int color = selected ? cUiSelected : cUiNotSelected;
+        int color = ui.isSelected() ? cUiSelected : cUiNotSelected;
 
         drawRectangle(ui.getZone(), ui.getRelStartX(), ui.getRelStartY(),
                 ui.getRelSizeX(), ui.getRelSizeY(), color, 0, color);
@@ -153,59 +150,43 @@ public class Nonogram extends PApplet {
     private void uiAction(UiElement ui) {
 
         if (ui instanceof UiFileChooser) {
-            String fileName = ui.getName();
-            loadNewExample(fileName);
 
-            selectUiElement(ui);
-            // deselect all other elements of this group:
+            // deselect all elements of this group:
             for (UiElement uiElement : uiElements) {
-                if (!uiElement.equals(ui)) {
-                    if (uiElement instanceof UiFileChooser) {
-                        deselectUiElement(uiElement);
-                    }
+                if (uiElement instanceof UiFileChooser) {
+                    uiElement.setSelected(false);
                 }
             }
+
+            // select the active element:
+            ui.setSelected(true);
+
+            // load the chosen example:
+            String fileName = ui.getName();
+            loadNewExample(fileName);
         }
 
 
         if (ui instanceof UiSwitchableOption) {
             if (ui.isSelected()) {
-                deselectUiElement(ui);
+                ui.setSelected(false);
                 if (ui.getName().equals("drawSolution")) {
                     drawEmptyMain();
                 }
             } else {
-                selectUiElement(ui);
+                ui.setSelected(true);
                 if (ui.getName().equals("drawSolution")) {
                     drawSolution();
                 } else if (ui.getName().equals("clearEverything")) {
                     background(cDarkGrey2);
-                    selectUiElement(ui);
                 }
             }
-        }
 
-
-        // the other ui-elements of this group:
-        for (UiElement uiElement : uiElements) {
-            if (uiElement != ui) {
-                if (uiElement instanceof UiFileChooser && ui instanceof UiFileChooser) {
-                    uiElement.setSelected(false);
-                    drawUiElement(uiElement, false);
-                }
-            }
+            // draw the UiElement again to see the effect of the selection:
+            drawUiElement(ui);
         }
     }
 
-    private void selectUiElement(UiElement uiElement) {
-        uiElement.setSelected(true);
-        drawUiElement(uiElement, true);
-    }
-
-    private void deselectUiElement(UiElement uiElement) {
-        uiElement.setSelected(false);
-        drawUiElement(uiElement, false);
-    }
 
     /**
      * @param pos        Position in question
