@@ -15,7 +15,7 @@ import static UiElements.UiElementList.uiElements;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3k
+ * @version 0.4a
  */
 public class Nonogram extends PApplet {
 
@@ -34,8 +34,16 @@ public class Nonogram extends PApplet {
 
         UiElementList.buildUiElementList();
 
+
         String fileName = "src/Examples/nonogram1.txt";
+        // set the first example-Ui to selected:
+        uiElements.stream()
+                .filter(ui -> ui.getName().contains("nonogram1"))
+                .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
+
+        // For testing, whether the defined zones are ok:
+//        Zone.drawAllZoneBoxesForTesting(this);
 
         // todo: create a nonogram-solver
 
@@ -69,9 +77,6 @@ public class Nonogram extends PApplet {
         drawFooter();
 
         drawDigits();
-
-        // For testing, whether the defined zones are ok:
-//        Zone.drawAllZoneBoxesForTesting(this);
 
         drawAllUiElements();
 

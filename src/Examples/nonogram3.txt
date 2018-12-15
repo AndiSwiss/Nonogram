@@ -1,0 +1,7 @@
+title: Pack003: SW Mix M-L, Nr. 12 - NOT SOLVED YET!!
+boxSize: 20
+
+topNumbers:
+
+
+sideNumbers:

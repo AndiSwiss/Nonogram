@@ -94,3 +94,6 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/osx,intellij
+
+# cutom gitignores:
+src/Examples/nonogram3_strategyPics

@@ -9,7 +9,7 @@ package Data;
 @SuppressWarnings("WeakerAccess")
 public class InitialData {
     // window size:
-    public static final int myWidth = 800;
+    public static final int myWidth = 1200;
     public static final int myHeight = 1000;
 
     // some color values:
@@ -33,7 +33,6 @@ public class InitialData {
     // for interactive UI:
     public static int headerHeight = 3;
     public static int rightSideWidth = 5;
-    public static int bottomHeight = 7;
     public static int footerHeight = 3;
     public static Position mousePressedPos = null;
 

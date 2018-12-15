@@ -40,7 +40,7 @@ public enum Zone {
             case "HEADER":
                 minX = 1;
                 minY = 1;
-                sizeX = maxSideNumbers + horizontalBoxes + rightSideWidth;
+                sizeX = myWidth / boxSize - 2;
                 sizeY = headerHeight;
                 color = cBackground;
                 break;
@@ -75,8 +75,8 @@ public enum Zone {
             case "BOTTOM":
                 minX = 1;
                 minY = 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1;
-                sizeX = maxSideNumbers + horizontalBoxes + rightSideWidth;
-                sizeY = bottomHeight;
+                sizeX = myWidth / boxSize - 2;
+                sizeY = myHeight / boxSize - footerHeight - minY - 1;
                 color = cBackground;
                 break;
             case "FOOTER":
