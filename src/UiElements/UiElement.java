@@ -1,6 +1,7 @@
-package Draw;
+package UiElements;
 
 import Data.Position;
+import Draw.Zone;
 
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ public abstract class UiElement {
      * @param name     name
      * @param message  message, can be empty, if no message is wanted
      */
-    public UiElement(String name, String message) {
+    UiElement(String name, String message) {
         this.name = name;
         this.message = message;
     }
@@ -39,7 +40,7 @@ public abstract class UiElement {
     }
 
 
-    public void updatePositionValues(Position start, int relSizeX, int relSizeY) {
+    void updatePositionValues(Position start, int relSizeX, int relSizeY) {
         this.start = start;
         this.relSizeX = relSizeX;
         this.relSizeY = relSizeY;

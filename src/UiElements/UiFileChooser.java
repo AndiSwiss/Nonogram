@@ -1,7 +1,7 @@
-package Draw;
+package UiElements;
 
 public class UiFileChooser extends UiElement {
-    public UiFileChooser(String name, String message) {
+    UiFileChooser(String name, String message) {
         super(name, message);
     }
 }

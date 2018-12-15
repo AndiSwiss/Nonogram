@@ -1,7 +1,7 @@
-package Draw;
+package UiElements;
 
 public class UiTextbox extends UiElement {
-    public UiTextbox(String name, String message) {
+    UiTextbox(String name, String message) {
         super(name, message);
     }
 }

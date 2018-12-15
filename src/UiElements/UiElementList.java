@@ -1,6 +1,7 @@
-package Draw;
+package UiElements;
 
 import Data.Position;
+import Draw.Zone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,9 @@ public class UiElementList {
         uiElements.add(new UiFileChooser("src/Examples/nonogram2.txt", "Example 2"));
 
         // Options:
-        uiElements.add(new UiTextbox("optionsTitle", "Options"));
+        uiElements.add(new UiTextbox("emptySpace", ""));
+        uiElements.add(new UiTextbox("optionsTitle", "Options:"));
         uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution"));
-        uiElements.add(new UiSwitchableOption("clearEverything", "Clear everything!"));
     }
 
 

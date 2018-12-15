@@ -1,8 +1,8 @@
 package Draw;
 
-
 import Data.InputDataHandler;
 import Data.Position;
+import UiElements.*;
 import processing.core.PApplet;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 // all Data is stored in the static object Data (in Package Data):
 import static Data.DataStorage.*;
 import static Data.InitialData.*;
-import static Draw.UiElementList.uiElements;
+import static UiElements.UiElementList.uiElements;
 
 
 /**
@@ -70,17 +70,10 @@ public class Nonogram extends PApplet {
 
         drawDigits();
 
-
         // For testing, whether the defined zones are ok:
 //        Zone.drawAllZoneBoxesForTesting(this);
 
-
-        // todo: since the 'buildUiElementList' is here, it get's overwritten every time
-        // todo: hence also the isSelected() get's always reset, when a new file is loaded
-        // todo: but currently, this builder depends on the zone, so I think I have to refactor that....
-
         drawAllUiElements();
-
 
     }
 

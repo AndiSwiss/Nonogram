@@ -1,7 +1,7 @@
-package Draw;
+package UiElements;
 
 public class UiSwitchableOption extends UiElement {
-    public UiSwitchableOption(String name, String message) {
+    UiSwitchableOption(String name, String message) {
         super(name, message);
     }
 }
