@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3e
+ * @version 0.3f
  */
 public class Nonogram extends PApplet {
 
@@ -79,9 +79,9 @@ public class Nonogram extends PApplet {
         // File chooser:
         drawText("Choose the file:", Zone.BOTTOM, 1,0 - 0.2, 0.8);
         uiElements.add(new UiElement("file: nonogram1", "Example 1",
-                Zone.BOTTOM, 0, 1, 15, 1));
+                new Position(Zone.BOTTOM, 0, 1), 15, 1));
         uiElements.add(new UiElement("file: nonogram2", "Example 2",
-                Zone.BOTTOM, 0, 2, 15, 1));
+                new Position(Zone.BOTTOM, 0, 2), 15, 1));
 
 
     }
@@ -99,10 +99,10 @@ public class Nonogram extends PApplet {
 
         int color = selected ? cUiSelected : cUiNotSelected;
         
-        drawRectangle(ui.getZone(), ui.getMinX(),ui.getMinY(),
-                ui.getSizeX(),ui.getSizeY(),color, 0, color);
+        drawRectangle(ui.getZone(), ui.getRelStartX(), ui.getRelStartY(),
+                ui.getRelSizeX(),ui.getRelSizeY(),color, 0, color);
         if (ui.getMessage().length() > 0) {
-            drawText(ui.getMessage(), ui.getZone(), ui.getMinX() + 1, ui.getMinY() - 0.2, 0.8);
+            drawText(ui.getMessage(), ui.getZone(), ui.getRelStartX() + 1, ui.getRelStartY() - 0.2, 0.8);
         }
     }
 
@@ -144,26 +144,25 @@ public class Nonogram extends PApplet {
     private UiElement inWhichUiElementIsIt(int x, int y, List<UiElement> uiElements) {
 
         // x/y-values from the mouse are absolute positions, whereas the uiElements are in relative positions
-        // -> convert that for comparison!
-
-        Position mouse = new Position(x, y);
-        // converted x / y to relative:
-        x = mouse.getRelX();
-        y = mouse.getRelY();
-//        System.out.println("Mouse was clicked in " + mouse);
+        // -> convert everything to absolute positions:
 
 
         // todo: the mix of relative and absolute positions doesn't work ->
         // todo: refactor many things to use the new class Position, which includes absolute and relative positions!
 
+        // Zone of the mouse:
+        Zone mouseZone = (new Position(x,y)).getZone();
+
         for (UiElement ui : uiElements) {
 //            System.out.println("currently checking on x/y " + x + "/" + y + " ui-element: " + ui);
 
-            if (ui.getZone() == mouse.getZone()) {
-                if (x >= ui.getMinX()
-                        && x <= ui.getMaxX()
-                        && y >= ui.getMinY()
-                        && y <= ui.getMaxY()) {
+            if (ui.getZone() == mouseZone) {
+                // convert the ui-position in to absolute values:
+
+                if (x >= ui.getAbsStartX()
+                        && x <= ui.getAbsEndX()
+                        && y >= ui.getAbsStartY()
+                        && y <= ui.getAbsEndY()) {
                     return ui;
                 }
             }

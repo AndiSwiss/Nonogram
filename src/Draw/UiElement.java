@@ -1,41 +1,37 @@
 package Draw;
 
+import Data.Position;
+
 import java.util.Objects;
 
 public class UiElement {
     private String name;
     private String message;
+    private Position start;
     private Zone zone;
-    private int minX;
-    private int minY;
-    private int sizeX;
-    private int sizeY;
-
-    //calculated from sizeX:
-    private int maxX;
-    //calculated from sizeY:
-    private int maxY;
+    private int relSizeX;
+    private int relSizeY;
+    private Position end;
 
     /**
-     * @param name    name
-     * @param message message, can be empty, if no message is wanted
-     * @param zone    zone
-     * @param minX    minX
-     * @param minY    minY
-     * @param sizeX   sizeX
-     * @param sizeY   sizeY
+     * @param name     name
+     * @param message  message, can be empty, if no message is wanted
+     * @param start    start position
+     * @param relSizeX relSizeX
+     * @param relSizeY relSizeY
      */
-    public UiElement(String name, String message, Zone zone, int minX, int minY, int sizeX, int sizeY) {
+    public UiElement(String name, String message, Position start, int relSizeX, int relSizeY) {
         this.name = name;
         this.message = message;
-        this.zone = zone;
-        this.minX = minX;
-        this.minY = minY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+        this.start = start;
+        this.relSizeX = relSizeX;
+        this.relSizeY = relSizeY;
 
-        maxX = minX + sizeX;
-        maxY = minY + sizeY;
+        zone = start.getZone();
+
+        end = new Position(start.getZone(),
+                start.getRelX() + relSizeX,
+                start.getRelY() + relSizeY);
     }
 
     @Override
@@ -43,18 +39,16 @@ public class UiElement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UiElement uiElement = (UiElement) o;
-        return minX == uiElement.minX &&
-                minY == uiElement.minY &&
-                sizeX == uiElement.sizeX &&
-                sizeY == uiElement.sizeY &&
-                Objects.equals(name, uiElement.name);
+        return relSizeX == uiElement.relSizeX &&
+                relSizeY == uiElement.relSizeY &&
+                Objects.equals(name, uiElement.name) &&
+                Objects.equals(start, uiElement.start);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, minX, minY, sizeX, sizeY);
+        return Objects.hash(name, start, relSizeX, relSizeY);
     }
-
 
     //---------//
     // Getters //
@@ -65,48 +59,63 @@ public class UiElement {
         return name;
     }
 
-    public int getMinX() {
-        return minX;
-    }
-
-    public int getMinY() {
-        return minY;
-    }
-
-    public int getSizeX() {
-        return sizeX;
-    }
-
-    public int getSizeY() {
-        return sizeY;
-    }
-
-    public int getMaxX() {
-        return maxX;
-    }
-
-    public int getMaxY() {
-        return maxY;
-    }
-
     public String getMessage() {
         return message;
+    }
+
+    public Position getStart() {
+        return start;
+    }
+
+    public int getRelSizeX() {
+        return relSizeX;
+    }
+
+    public int getRelSizeY() {
+        return relSizeY;
+    }
+
+    public Position getEnd() {
+        return end;
     }
 
     public Zone getZone() {
         return zone;
     }
 
+    public int getRelStartX() {
+        return start.getRelX();
+    }
+
+    public int getRelStartY() {
+        return start.getRelY();
+    }
+
+    public int getAbsStartX() {
+        return start.getAbsX();
+    }
+
+    public int getAbsStartY() {
+        return start.getAbsY();
+    }
+
+    public int getAbsEndX() {
+        return end.getAbsX();
+    }
+
+    public int getAbsEndY() {
+        return end.getAbsY();
+    }
+
     @Override
     public String toString() {
         return "UiElement{" +
                 "name='" + name + '\'' +
-                ", minX=" + minX +
-                ", minY=" + minY +
-                ", sizeX=" + sizeX +
-                ", sizeY=" + sizeY +
-                ", maxX=" + maxX +
-                ", maxY=" + maxY +
+                ", message='" + message + '\'' +
+                ", start=" + start +
+                ", relSizeX=" + relSizeX +
+                ", relSizeY=" + relSizeY +
+                ", end=" + end +
                 '}';
     }
 }
