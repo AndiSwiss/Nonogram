@@ -10,13 +10,15 @@ import java.util.List;
 // all Data is stored in the static object Data (in Package Data):
 import static Data.DataStorage.*;
 import static Data.InitialData.*;
+import static Draw.UiElementList.uiElements;
 
 
 /**
  * @author Andreas Ambühl
- * @version 0.3j
+ * @version 0.3k
  */
 public class Nonogram extends PApplet {
+
 
     //-----------------------------//
     // Processing specific methods //
@@ -30,6 +32,8 @@ public class Nonogram extends PApplet {
         size(myWidth, myHeight);
         frameRate(30);
 
+        UiElementList.buildUiElementList();
+
         String fileName = "src/Examples/nonogram1.txt";
         loadNewExample(fileName);
 
@@ -41,6 +45,11 @@ public class Nonogram extends PApplet {
     private void loadNewExample(String fileName) {
 
         background(cLightGrey3);
+
+        // reset the drawSolution-Ui to 'not selected':
+        uiElements.stream()
+                .filter(ui -> ui.getName().equals("drawSolution"))
+                .forEach(ui -> ui.setSelected(false));
 
         InputDataHandler data = new InputDataHandler();
         data.readAllFileInputs(fileName, true);
@@ -69,7 +78,7 @@ public class Nonogram extends PApplet {
         // todo: since the 'buildUiElementList' is here, it get's overwritten every time
         // todo: hence also the isSelected() get's always reset, when a new file is loaded
         // todo: but currently, this builder depends on the zone, so I think I have to refactor that....
-        buildUiElementList();
+
         drawAllUiElements();
 
 
@@ -84,31 +93,22 @@ public class Nonogram extends PApplet {
     //-----------------//
     // UI-Interactions //
     //-----------------//
-    private void buildUiElementList() {
-
-        // File chooser:
-        drawText("Choose the file:", Zone.BOTTOM, 1, 0 - 0.2, 0.8);
-        uiElements.add(new UiFileChooser("src/Examples/nonogram1.txt", "Example 1",
-                new Position(Zone.BOTTOM, 0, 1), 15, 1));
-        uiElements.add(new UiFileChooser("src/Examples/nonogram2.txt", "Example 2",
-                new Position(Zone.BOTTOM, 0, 2), 15, 1));
-
-        // Options:
-        drawText("Options", Zone.BOTTOM, 1, 4 - 02, 0.8);
-        uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution",
-                new Position(Zone.BOTTOM, 0, 5), 15, 1));
-        uiElements.add(new UiSwitchableOption("clearEverything", "Clear everything!",
-                new Position(Zone.BOTTOM, 0, 6), 15, 1));
-    }
-
     private void drawAllUiElements() {
+        UiElementList.updateAllUiElementPositions();
         uiElements.forEach(this::drawUiElement);
     }
 
-
     private void drawUiElement(UiElement ui) {
 
-        int color = ui.isSelected() ? cUiSelected : cUiNotSelected;
+        int color;
+        if (ui.isSelected()) {
+            color = cUiSelected;
+        } else {
+            color = cUiNotSelected;
+        }
+        if (ui instanceof UiTextbox) {
+            color = cBackground;
+        }
 
         drawRectangle(ui.getZone(), ui.getRelStartX(), ui.getRelStartY(),
                 ui.getRelSizeX(), ui.getRelSizeY(), color, 0, color);

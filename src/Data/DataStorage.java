@@ -1,8 +1,5 @@
 package Data;
 
-import Draw.UiElement;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,9 +18,5 @@ public class DataStorage {
     public static List<List<Integer>> topNumbers;
     public static List<List<Integer>> sideNumbers;
     public static List<String> solutionFile;
-
-
-    // for interactive UI:
-    public static List<UiElement> uiElements = new ArrayList<>();
 
 }
