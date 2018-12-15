@@ -12,6 +12,7 @@ public class UiElement {
     private int relSizeX;
     private int relSizeY;
     private Position end;
+    private boolean selected;
 
     /**
      * @param name     name
@@ -117,5 +118,13 @@ public class UiElement {
                 ", relSizeY=" + relSizeY +
                 ", end=" + end +
                 '}';
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

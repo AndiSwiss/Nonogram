@@ -22,13 +22,7 @@ public class Nonogram extends PApplet {
     // Processing specific methods //
     //-----------------------------//
     public static void main(String[] args) {
-        String fileName = "src/Examples/nonogram1.txt";
 
-        InputDataHandler data = new InputDataHandler();
-        data.readAllFileInputs(fileName, true);
-        data.readSolutionFile(fileName);
-
-        data.checkIfInputMatchesSolution();
 
 
         // todo: create a nonogram-solver
@@ -40,10 +34,21 @@ public class Nonogram extends PApplet {
     public void setup() {
         size(myWidth, myHeight);
         frameRate(30);
+
+        String fileName = "src/Examples/nonogram1.txt";
+        loadNewExample(fileName);
+    }
+
+
+    private void loadNewExample(String fileName) {
+
         background(cLightGrey3);
 
-        // For testing, whether the defined zones are ok:
-//        Zone.drawAllZoneBoxesForTesting(this);
+        InputDataHandler data = new InputDataHandler();
+        data.readAllFileInputs(fileName, true);
+        data.readSolutionFile(fileName);
+
+        data.checkIfInputMatchesSolution();
 
         drawTitle();
 
@@ -52,7 +57,13 @@ public class Nonogram extends PApplet {
 
         drawDigits();
 
-        drawSolution();
+
+        // For testing, whether the defined zones are ok:
+//        Zone.drawAllZoneBoxesForTesting(this);
+
+
+        // todo: create UI-Element for drawing the solution:
+//        drawSolution();
 
         buildUiElementList();
         drawAllUiElements();
@@ -114,16 +125,24 @@ public class Nonogram extends PApplet {
         // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
 
         // check, if mousePressed was on an UI-Element, and which one:
-        UiElement selectedPressed = inWhichUiElementIsIt(mousePressedPos, uiElements);
+        UiElement ui = inWhichUiElementIsIt(mousePressedPos, uiElements);
 
-        if (selectedPressed != null) {
+        if (ui != null) {
             UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY), uiElements);
 
-            if (selectedPressed.equals(selectedReleased)) {
-                // todo: do the action!
-                // todo: also use the boolean "selected" in drawUiElement(UiElement ui, boolean selected)
+            if (ui.equals(selectedReleased)) {
 
-                System.out.println("UiElement is successfully clicked: " + selectedPressed);
+                System.out.println("UiElement is successfully clicked: " + ui);
+
+                // todo: do the action!
+                if (ui.isSelected()) {
+                    // todo: also use the boolean "selected" in drawUiElement(UiElement ui, boolean selected)
+                    ui.setSelected(false);
+                    drawUiElement(ui,false);
+                } else {
+                    ui.setSelected(true);
+                    drawUiElement(ui, true);
+                }
 
 
             }
