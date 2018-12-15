@@ -27,14 +27,13 @@ public class Position {
         convertRelativeToAbsolutePosition(zone, relX, relY);
     }
 
-    public Position convertRelativeToAbsolutePosition(Zone zone, int relX, int relY) {
+    private void convertRelativeToAbsolutePosition(Zone zone, int relX, int relY) {
         absX = (relX * boxSize) + zone.getMinX();
         absY = (relY * boxSize) + zone.getMinY();
 
-        return this;
     }
 
-    public Zone checkInWhichZoneTheAbsolutePositionIs(int absX, int absY) {
+    private Zone checkInWhichZoneTheAbsolutePositionIs(int absX, int absY) {
         for (Zone z : Zone.values()) {
             if (absX >= z.getMinX() && absX <= z.getMaxX()
                     && absY >= z.getMinY() && absY <= z.getMaxY()) {
@@ -45,7 +44,7 @@ public class Position {
         return null;
     }
 
-    public Position convertAbsoluteToRelativePosition(int absX, int absY) {
+    private void convertAbsoluteToRelativePosition(int absX, int absY) {
         // check in which zone it is
         zone = checkInWhichZoneTheAbsolutePositionIs(absX, absY);
 
@@ -59,7 +58,6 @@ public class Position {
             relY = -1;
         }
 
-        return this;
     }
 
     @Override

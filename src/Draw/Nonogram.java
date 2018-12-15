@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3f
+ * @version 0.3g
  */
 public class Nonogram extends PApplet {
 
@@ -54,9 +54,6 @@ public class Nonogram extends PApplet {
 
         drawSolution();
 
-        System.out.println("Zone Bottom: " + Zone.BOTTOM.debugString());
-
-        // todo: build the UiElementList:
         buildUiElementList();
         drawAllUiElements();
 
@@ -73,11 +70,9 @@ public class Nonogram extends PApplet {
     // UI-Interactions //
     //-----------------//
     private void buildUiElementList() {
-        // todo: build the UiElements:
-        // todo: remove the following test-element:
 
         // File chooser:
-        drawText("Choose the file:", Zone.BOTTOM, 1,0 - 0.2, 0.8);
+        drawText("Choose the file:", Zone.BOTTOM, 1, 0 - 0.2, 0.8);
         uiElements.add(new UiElement("file: nonogram1", "Example 1",
                 new Position(Zone.BOTTOM, 0, 1), 15, 1));
         uiElements.add(new UiElement("file: nonogram2", "Example 2",
@@ -98,9 +93,9 @@ public class Nonogram extends PApplet {
     private void drawUiElement(UiElement ui, boolean selected) {
 
         int color = selected ? cUiSelected : cUiNotSelected;
-        
+
         drawRectangle(ui.getZone(), ui.getRelStartX(), ui.getRelStartY(),
-                ui.getRelSizeX(),ui.getRelSizeY(),color, 0, color);
+                ui.getRelSizeX(), ui.getRelSizeY(), color, 0, color);
         if (ui.getMessage().length() > 0) {
             drawText(ui.getMessage(), ui.getZone(), ui.getRelStartX() + 1, ui.getRelStartY() - 0.2, 0.8);
         }
@@ -109,9 +104,8 @@ public class Nonogram extends PApplet {
     @Override
     public void mousePressed() {
         // since this is called multiple times on every click and during the mouse is pressed, store just the first one:
-        if (mousePressedX == -1) {
-            mousePressedX = mouseX;
-            mousePressedY = mouseY;
+        if (mousePressedPos == null) {
+            mousePressedPos = new Position(mouseX, mouseY);
         }
     }
 
@@ -120,50 +114,48 @@ public class Nonogram extends PApplet {
         // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
 
         // check, if mousePressed was on an UI-Element, and which one:
-        UiElement selectedPressed = inWhichUiElementIsIt(mousePressedX, mousePressedY, uiElements);
+        UiElement selectedPressed = inWhichUiElementIsIt(mousePressedPos, uiElements);
 
         if (selectedPressed != null) {
-            UiElement selectedReleased = inWhichUiElementIsIt(mouseX, mouseY, uiElements);
+            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY), uiElements);
 
             if (selectedPressed.equals(selectedReleased)) {
                 // todo: do the action!
+                // todo: also use the boolean "selected" in drawUiElement(UiElement ui, boolean selected)
 
                 System.out.println("UiElement is successfully clicked: " + selectedPressed);
-
-
 
 
             }
         }
 
         // reset mousePressed-values:
-        mousePressedX = -1;
-        mousePressedY = -1;
+        mousePressedPos = null;
     }
 
-    private UiElement inWhichUiElementIsIt(int x, int y, List<UiElement> uiElements) {
-
-        // x/y-values from the mouse are absolute positions, whereas the uiElements are in relative positions
-        // -> convert everything to absolute positions:
-
-
-        // todo: the mix of relative and absolute positions doesn't work ->
-        // todo: refactor many things to use the new class Position, which includes absolute and relative positions!
+    /**
+     * @param pos        Position in question
+     * @param uiElements List of the UI-Elements
+     * @return Returns the uiElement, in which the searched position is in, or null if it is in no uiElement
+     */
+    private UiElement inWhichUiElementIsIt(Position pos, List<UiElement> uiElements) {
 
         // Zone of the mouse:
-        Zone mouseZone = (new Position(x,y)).getZone();
+        Zone posZone = pos.getZone();
 
-        for (UiElement ui : uiElements) {
-//            System.out.println("currently checking on x/y " + x + "/" + y + " ui-element: " + ui);
+        if (posZone != null) {
+            for (UiElement ui : uiElements) {
 
-            if (ui.getZone() == mouseZone) {
-                // convert the ui-position in to absolute values:
+                // only continue, if the UiElement is in the same zone like mouse:
+                if (ui.getZone() == posZone) {
 
-                if (x >= ui.getAbsStartX()
-                        && x <= ui.getAbsEndX()
-                        && y >= ui.getAbsStartY()
-                        && y <= ui.getAbsEndY()) {
-                    return ui;
+                    // compare the absolute values:
+                    if (pos.getAbsX() >= ui.getAbsStartX()
+                            && pos.getAbsX() <= ui.getAbsEndX()
+                            && pos.getAbsY() >= ui.getAbsStartY()
+                            && pos.getAbsY() <= ui.getAbsEndY()) {
+                        return ui;
+                    }
                 }
             }
         }

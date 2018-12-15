@@ -6,6 +6,7 @@ package Data;
  * -> Easily use them anywhere with the following import-statement: <br>
  * import static Data.InitialData.*;
  */
+@SuppressWarnings("WeakerAccess")
 public class InitialData {
     // some color values:
     public static final int cBlack = 0;
@@ -30,8 +31,7 @@ public class InitialData {
     public static int rightSideWidth = 5;
     public static int bottomHeight = 7;
     public static int footerHeight = 3;
-    public static int mousePressedX = -1;
-    public static int mousePressedY = -1;
+    public static Position mousePressedPos = null;
 
     public static String footerText = "© 2018 by Andreas Ambühl";
 }
