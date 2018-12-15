@@ -68,10 +68,6 @@ public class InputDataHandler {
             }
         }
 
-        // calculate width and height of the window:
-        myWidth = boxSize * (1 + maxSideNumbers + horizontalBoxes + rightSideWidth + 1);
-        myHeight = boxSize * (1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + bottomHeight + footerHeight);
-
         if (debugMode) {
             System.out.println("\ntopNumbers:");
             topNumbers.forEach(System.out::println);

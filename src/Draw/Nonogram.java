@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3g
+ * @version 0.3f
  */
 public class Nonogram extends PApplet {
 

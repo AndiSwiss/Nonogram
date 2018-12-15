@@ -8,6 +8,10 @@ package Data;
  */
 @SuppressWarnings("WeakerAccess")
 public class InitialData {
+    // window size:
+    public static final int myWidth = 1600;
+    public static final int myHeight = 1000;
+
     // some color values:
     public static final int cBlack = 0;
     public static final int cDarkGrey2 = 40;

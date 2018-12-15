@@ -29,8 +29,8 @@ public enum Zone {
     BOTTOM(1, 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1,
             maxSideNumbers + horizontalBoxes + rightSideWidth, bottomHeight,
             cBackground),
-    FOOTER(0, 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + bottomHeight,
-            1 + maxSideNumbers + horizontalBoxes + rightSideWidth + 1, footerHeight,
+    FOOTER(0, myHeight / boxSize - footerHeight,
+            myWidth / boxSize, footerHeight,
             cLightGrey + 1);
 
 

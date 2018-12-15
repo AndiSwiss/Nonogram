@@ -13,8 +13,6 @@ import java.util.List;
 public class DataStorage {
 
     public static String title;
-    public static int myWidth;
-    public static int myHeight;
     public static int boxSize;
     public static int horizontalBoxes;
     public static int verticalBoxes;
