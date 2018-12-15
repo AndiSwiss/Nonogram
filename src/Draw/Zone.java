@@ -10,28 +10,13 @@ import static Data.InitialData.*;
  * Check the Zones via the method drawAllZoneBoxesForTesting() in Nonogram.java
  */
 public enum Zone {
-    HEADER(1, 1,
-            maxSideNumbers + horizontalBoxes + rightSideWidth, headerHeight,
-            cBackground),
-    MAIN(1 + maxSideNumbers, 1 + headerHeight + 1 + maxTopNumbers,
-            horizontalBoxes, verticalBoxes,
-            cLightGrey2),
-    LEFT(1, 1 + headerHeight + 1 + maxTopNumbers,
-            maxSideNumbers, verticalBoxes,
-            cBackground),
-    RIGHT(1 + maxSideNumbers + horizontalBoxes, 1 + headerHeight + 1 + maxTopNumbers,
-            rightSideWidth, verticalBoxes,
-            cBackground),
-    TOP(1 + maxSideNumbers, 1 + headerHeight + 1,
-            horizontalBoxes, maxTopNumbers,
-            cBackground),
-    BOTTOM(1, 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1,
-            maxSideNumbers + horizontalBoxes + rightSideWidth, bottomHeight,
-            cBackground),
-    FOOTER(0, myHeight / boxSize - footerHeight,
-            myWidth / boxSize, footerHeight,
-            cLightGrey + 1);
-
+    HEADER(),
+    MAIN(),
+    LEFT(),
+    RIGHT(),
+    TOP(),
+    BOTTOM(),
+    FOOTER();
 
     private String name;
     private int minX;
@@ -43,20 +28,80 @@ public enum Zone {
     private int color;
 
 
-    Zone(int minX, int minY, int sizeX, int sizeY, int color) {
+    /**
+     * the private constructor for zone:
+     */
+    Zone() {
+        updateZone();
+    }
 
+    void updateZone() {
+        switch (name()) {
+            case "HEADER":
+                minX = 1;
+                minY = 1;
+                sizeX = maxSideNumbers + horizontalBoxes + rightSideWidth;
+                sizeY = headerHeight;
+                color = cBackground;
+                break;
+            case "MAIN":
+                minX = 1 + maxSideNumbers;
+                minY = 1 + headerHeight + 1 + maxTopNumbers;
+                sizeX = horizontalBoxes;
+                sizeY = verticalBoxes;
+                color = cLightGrey2;
+                break;
+            case "LEFT":
+                minX = 1;
+                minY = 1 + headerHeight + 1 + maxTopNumbers;
+                sizeX = maxSideNumbers;
+                sizeY = verticalBoxes;
+                color = cBackground;
+                break;
+            case "RIGHT":
+                minX = 1 + maxSideNumbers + horizontalBoxes;
+                minY = 1 + headerHeight + 1 + maxTopNumbers;
+                sizeX = rightSideWidth;
+                sizeY = verticalBoxes;
+                color = cBackground;
+                break;
+            case "TOP":
+                minX = 1 + maxSideNumbers;
+                minY = 1 + headerHeight + 1;
+                sizeX = horizontalBoxes;
+                sizeY = maxTopNumbers;
+                color = cBackground;
+                break;
+            case "BOTTOM":
+                minX = 1;
+                minY = 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1;
+                sizeX = maxSideNumbers + horizontalBoxes + rightSideWidth;
+                sizeY = bottomHeight;
+                color = cBackground;
+                break;
+            case "FOOTER":
+                minX = 0;
+                minY = myHeight / boxSize - footerHeight;
+                sizeX = myWidth / boxSize;
+                sizeY = footerHeight;
+                color = cLightGrey + 1;
+                break;
+                default:
+                    throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());
+        }
 
-        this.minX = minX * boxSize;
-        this.minY = minY * boxSize;
-        this.sizeX = sizeX * boxSize;
-        this.sizeY = sizeY * boxSize;
-        this.color = color;
+        minX *= boxSize;
+        minY *= boxSize;
+        sizeX *= boxSize;
+        sizeY *= boxSize;
 
-        this.maxX = this.minX + this.sizeX;
-        this.maxY = this.minY + this.sizeY;
+        maxX = minX + sizeX;
+        maxY = minY + sizeY;
 
         // keep the first letter capitalized, but make the rest lowercase:
         name = name().charAt(0) + name().substring(1).toLowerCase();
+
+
     }
 
     static void drawAllZoneBoxesForTesting(PApplet p) {

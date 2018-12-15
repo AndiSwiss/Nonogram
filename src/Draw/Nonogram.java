@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3h
+ * @version 0.3i
  */
 public class Nonogram extends PApplet {
 
@@ -48,6 +48,12 @@ public class Nonogram extends PApplet {
 
         data.checkIfInputMatchesSolution();
 
+        // draw the stuff:
+        // first update the zones with the new values:
+        for (Zone z : Zone.values()) {
+            z.updateZone();
+        }
+
         drawTitle();
 
         drawBackground();
@@ -61,13 +67,6 @@ public class Nonogram extends PApplet {
 
 
 
-        // todo: Problem: the Zones don't get reconfigured after the file load, since after the first calling of the
-        // todo: zones, they can never change any more
-        // todo: I could either: create a static method "recalculate zones"
-        // todo: but for that I should move the construction parameters out of the Enum-Constructor
-        // todo: better: restructure the whole thing:
-        // todo: Package "Zones", interface Zone, each Zone is a class
-        // todo: then I can update those Zones, and Zones can even have special properties
 
         buildUiElementList();
         drawAllUiElements();
@@ -143,11 +142,7 @@ public class Nonogram extends PApplet {
 
                 System.out.println("UiElement is successfully clicked: " + ui);
 
-                // todo: do the action!
                 uiAction(ui);
-
-
-
             }
         }
 
