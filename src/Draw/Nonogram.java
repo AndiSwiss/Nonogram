@@ -2,6 +2,7 @@ package Draw;
 
 
 import Data.InputDataHandler;
+import Data.Position;
 import processing.core.PApplet;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3d
+ * @version 0.3e
  */
 public class Nonogram extends PApplet {
 
@@ -53,8 +54,11 @@ public class Nonogram extends PApplet {
 
         drawSolution();
 
+        System.out.println("Zone Bottom: " + Zone.BOTTOM.debugString());
+
         // todo: build the UiElementList:
-//        buildUiElementList();
+        buildUiElementList();
+        drawAllUiElements();
 
 
     }
@@ -71,14 +75,35 @@ public class Nonogram extends PApplet {
     private void buildUiElementList() {
         // todo: build the UiElements:
         // todo: remove the following test-element:
-        int minX = boxSize;
-        int minY = boxSize * 3;
-        int sizeX = boxSize * 3;
-        int sizeY = boxSize * 3;
 
-        fill(cBlack);
-        rect(minX, minY, sizeX, sizeY);
-        uiElements.add(new UiElement("Test1", minX, minY, sizeX, sizeY));
+        // File chooser:
+        drawText("Choose the file:", Zone.BOTTOM, 1,0 - 0.2, 0.8);
+        uiElements.add(new UiElement("file: nonogram1", "Example 1",
+                Zone.BOTTOM, 0, 1, 15, 1));
+        uiElements.add(new UiElement("file: nonogram2", "Example 2",
+                Zone.BOTTOM, 0, 2, 15, 1));
+
+
+    }
+
+    private void drawAllUiElements() {
+        uiElements.forEach(this::drawUiElement);
+    }
+
+
+    private void drawUiElement(UiElement ui) {
+        drawUiElement(ui, false);
+    }
+
+    private void drawUiElement(UiElement ui, boolean selected) {
+
+        int color = selected ? cUiSelected : cUiNotSelected;
+        
+        drawRectangle(ui.getZone(), ui.getMinX(),ui.getMinY(),
+                ui.getSizeX(),ui.getSizeY(),color, 0, color);
+        if (ui.getMessage().length() > 0) {
+            drawText(ui.getMessage(), ui.getZone(), ui.getMinX() + 1, ui.getMinY() - 0.2, 0.8);
+        }
     }
 
     @Override
@@ -106,6 +131,8 @@ public class Nonogram extends PApplet {
                 System.out.println("UiElement is successfully clicked: " + selectedPressed);
 
 
+
+
             }
         }
 
@@ -116,12 +143,29 @@ public class Nonogram extends PApplet {
 
     private UiElement inWhichUiElementIsIt(int x, int y, List<UiElement> uiElements) {
 
+        // x/y-values from the mouse are absolute positions, whereas the uiElements are in relative positions
+        // -> convert that for comparison!
+
+        Position mouse = new Position(x, y);
+        // converted x / y to relative:
+        x = mouse.getRelX();
+        y = mouse.getRelY();
+//        System.out.println("Mouse was clicked in " + mouse);
+
+
+        // todo: the mix of relative and absolute positions doesn't work ->
+        // todo: refactor many things to use the new class Position, which includes absolute and relative positions!
+
         for (UiElement ui : uiElements) {
-            if (x >= ui.getMinX()
-                    && x <= ui.getMaxX()
-                    && y >= ui.getMinY()
-                    && y <= ui.getMaxY()) {
-                return ui;
+//            System.out.println("currently checking on x/y " + x + "/" + y + " ui-element: " + ui);
+
+            if (ui.getZone() == mouse.getZone()) {
+                if (x >= ui.getMinX()
+                        && x <= ui.getMaxX()
+                        && y >= ui.getMinY()
+                        && y <= ui.getMaxY()) {
+                    return ui;
+                }
             }
         }
         return null;
@@ -188,13 +232,6 @@ public class Nonogram extends PApplet {
         }
     }
 
-
-    /**
-     * Overloaded method: draws a black rectangle.
-     */
-    private void drawRectangle(Zone zone, int x, int y, int sizeX, int sizeY) {
-        drawRectangle(zone, x, y, sizeX, sizeY, cBlack, 1, cBlack);
-    }
 
     /**
      * Draws a rectangle in a specific zone.

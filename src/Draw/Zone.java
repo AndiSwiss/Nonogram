@@ -1,6 +1,7 @@
 package Draw;
 
 
+import Data.Position;
 import processing.core.PApplet;
 
 import static Data.DataStorage.*;
@@ -52,8 +53,8 @@ public enum Zone {
         this.sizeY = sizeY * boxSize;
         this.color = color;
 
-        this.maxX = minX + sizeX;
-        this.maxY = minY + sizeY;
+        this.maxX = this.minX + this.sizeX;
+        this.maxY = this.minY + this.sizeY;
 
         // keep the first letter capitalized, but make the rest lowercase:
         name = name().charAt(0) + name().substring(1).toLowerCase();
@@ -108,4 +109,16 @@ public enum Zone {
     public String toString() {
         return name;
     }
-}
+
+    public String debugString() {
+        return "Zone{" +
+                "name='" + name + '\'' +
+                ", minX=" + minX +
+                ", minY=" + minY +
+                ", sizeX=" + sizeX +
+                ", sizeY=" + sizeY +
+                ", maxX=" + maxX +
+                ", maxY=" + maxY +
+                ", color=" + color +
+                '}';
+    }}

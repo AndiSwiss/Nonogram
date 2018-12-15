@@ -21,6 +21,8 @@ public class InitialData {
     public static final int cBackground = cLightGrey3;
     public static final int cBackgroundLine = cDarkGrey;
     public static final int cZoneOutline = cDarkGrey;
+    public static final int cUiNotSelected = cLightGrey2;
+    public static final int cUiSelected = cLightGrey;
 
 
     // for interactive UI:

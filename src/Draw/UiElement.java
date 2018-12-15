@@ -4,6 +4,8 @@ import java.util.Objects;
 
 public class UiElement {
     private String name;
+    private String message;
+    private Zone zone;
     private int minX;
     private int minY;
     private int sizeX;
@@ -14,8 +16,19 @@ public class UiElement {
     //calculated from sizeY:
     private int maxY;
 
-    public UiElement(String name, int minX, int minY, int sizeX, int sizeY) {
+    /**
+     * @param name    name
+     * @param message message, can be empty, if no message is wanted
+     * @param zone    zone
+     * @param minX    minX
+     * @param minY    minY
+     * @param sizeX   sizeX
+     * @param sizeY   sizeY
+     */
+    public UiElement(String name, String message, Zone zone, int minX, int minY, int sizeX, int sizeY) {
         this.name = name;
+        this.message = message;
+        this.zone = zone;
         this.minX = minX;
         this.minY = minY;
         this.sizeX = sizeX;
@@ -74,6 +87,14 @@ public class UiElement {
 
     public int getMaxY() {
         return maxY;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Zone getZone() {
+        return zone;
     }
 
     @Override
