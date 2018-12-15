@@ -1,7 +1,6 @@
 package Draw;
 
 
-import Data.Position;
 import processing.core.PApplet;
 
 import static Data.DataStorage.*;
@@ -58,8 +57,6 @@ public enum Zone {
 
         // keep the first letter capitalized, but make the rest lowercase:
         name = name().charAt(0) + name().substring(1).toLowerCase();
-
-
     }
 
     static void drawAllZoneBoxesForTesting(PApplet p) {

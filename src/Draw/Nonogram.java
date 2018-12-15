@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3g
+ * @version 0.3h
  */
 public class Nonogram extends PApplet {
 
@@ -22,11 +22,6 @@ public class Nonogram extends PApplet {
     // Processing specific methods //
     //-----------------------------//
     public static void main(String[] args) {
-
-
-
-        // todo: create a nonogram-solver
-
         PApplet.main("Draw.Nonogram");
     }
 
@@ -37,6 +32,9 @@ public class Nonogram extends PApplet {
 
         String fileName = "src/Examples/nonogram1.txt";
         loadNewExample(fileName);
+
+        // todo: create a nonogram-solver
+
     }
 
 
@@ -62,8 +60,14 @@ public class Nonogram extends PApplet {
 //        Zone.drawAllZoneBoxesForTesting(this);
 
 
-        // todo: create UI-Element for drawing the solution:
-//        drawSolution();
+
+        // todo: Problem: the Zones don't get reconfigured after the file load, since after the first calling of the
+        // todo: zones, they can never change any more
+        // todo: I could either: create a static method "recalculate zones"
+        // todo: but for that I should move the construction parameters out of the Enum-Constructor
+        // todo: better: restructure the whole thing:
+        // todo: Package "Zones", interface Zone, each Zone is a class
+        // todo: then I can update those Zones, and Zones can even have special properties
 
         buildUiElementList();
         drawAllUiElements();
@@ -84,16 +88,17 @@ public class Nonogram extends PApplet {
 
         // File chooser:
         drawText("Choose the file:", Zone.BOTTOM, 1, 0 - 0.2, 0.8);
-        uiElements.add(new UiFileChooser("file: nonogram1", "Example 1",
+        uiElements.add(new UiFileChooser("src/Examples/nonogram1.txt", "Example 1",
                 new Position(Zone.BOTTOM, 0, 1), 15, 1));
-        uiElements.add(new UiFileChooser("file: nonogram2", "Example 2",
+        uiElements.add(new UiFileChooser("src/Examples/nonogram2.txt", "Example 2",
                 new Position(Zone.BOTTOM, 0, 2), 15, 1));
 
         // Options:
         drawText("Options", Zone.BOTTOM, 1, 4 - 02, 0.8);
         uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution",
                 new Position(Zone.BOTTOM, 0, 5), 15, 1));
-
+        uiElements.add(new UiSwitchableOption("clearEverything", "Clear everything!",
+                new Position(Zone.BOTTOM, 0, 6), 15, 1));
     }
 
     private void drawAllUiElements() {
@@ -153,9 +158,7 @@ public class Nonogram extends PApplet {
     private void uiAction(UiElement ui) {
 
         if (ui instanceof UiFileChooser) {
-            String name = ui.getName();
-            name = name.substring(name.lastIndexOf(' ') + 1);
-            String fileName = "src/Examples/" + name + ".txt";
+            String fileName = ui.getName();
             loadNewExample(fileName);
 
             selectUiElement(ui);
@@ -180,8 +183,10 @@ public class Nonogram extends PApplet {
                 selectUiElement(ui);
                 if (ui.getName().equals("drawSolution")) {
                     drawSolution();
+                } else if (ui.getName().equals("clearEverything")) {
+                    background(cDarkGrey2);
+                    selectUiElement(ui);
                 }
-
             }
         }
 
