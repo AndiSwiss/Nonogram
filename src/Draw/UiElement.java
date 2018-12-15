@@ -4,7 +4,7 @@ import Data.Position;
 
 import java.util.Objects;
 
-public class UiElement {
+public abstract class UiElement {
     private String name;
     private String message;
     private Position start;

@@ -14,7 +14,7 @@ import static Data.InitialData.*;
 
 /**
  * @author Andreas Ambühl
- * @version 0.3f
+ * @version 0.3g
  */
 public class Nonogram extends PApplet {
 
@@ -84,11 +84,15 @@ public class Nonogram extends PApplet {
 
         // File chooser:
         drawText("Choose the file:", Zone.BOTTOM, 1, 0 - 0.2, 0.8);
-        uiElements.add(new UiElement("file: nonogram1", "Example 1",
+        uiElements.add(new UiFileChooser("file: nonogram1", "Example 1",
                 new Position(Zone.BOTTOM, 0, 1), 15, 1));
-        uiElements.add(new UiElement("file: nonogram2", "Example 2",
+        uiElements.add(new UiFileChooser("file: nonogram2", "Example 2",
                 new Position(Zone.BOTTOM, 0, 2), 15, 1));
 
+        // Options:
+        drawText("Options", Zone.BOTTOM, 1, 4 - 02, 0.8);
+        uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution",
+                new Position(Zone.BOTTOM, 0, 5), 15, 1));
 
     }
 
@@ -135,14 +139,8 @@ public class Nonogram extends PApplet {
                 System.out.println("UiElement is successfully clicked: " + ui);
 
                 // todo: do the action!
-                if (ui.isSelected()) {
-                    // todo: also use the boolean "selected" in drawUiElement(UiElement ui, boolean selected)
-                    ui.setSelected(false);
-                    drawUiElement(ui,false);
-                } else {
-                    ui.setSelected(true);
-                    drawUiElement(ui, true);
-                }
+                uiAction(ui);
+
 
 
             }
@@ -150,6 +148,63 @@ public class Nonogram extends PApplet {
 
         // reset mousePressed-values:
         mousePressedPos = null;
+    }
+
+    private void uiAction(UiElement ui) {
+
+        if (ui instanceof UiFileChooser) {
+            String name = ui.getName();
+            name = name.substring(name.lastIndexOf(' ') + 1);
+            String fileName = "src/Examples/" + name + ".txt";
+            loadNewExample(fileName);
+
+            selectUiElement(ui);
+            // deselect all other elements of this group:
+            for (UiElement uiElement : uiElements) {
+                if (!uiElement.equals(ui)) {
+                    if (uiElement instanceof UiFileChooser) {
+                        deselectUiElement(uiElement);
+                    }
+                }
+            }
+        }
+
+
+        if (ui instanceof UiSwitchableOption) {
+            if (ui.isSelected()) {
+                deselectUiElement(ui);
+                if (ui.getName().equals("drawSolution")) {
+                    drawEmptyMain();
+                }
+            } else {
+                selectUiElement(ui);
+                if (ui.getName().equals("drawSolution")) {
+                    drawSolution();
+                }
+
+            }
+        }
+
+
+        // the other ui-elements of this group:
+        for (UiElement uiElement : uiElements) {
+            if (uiElement != ui) {
+                if (uiElement instanceof UiFileChooser && ui instanceof UiFileChooser) {
+                    uiElement.setSelected(false);
+                    drawUiElement(uiElement, false);
+                }
+            }
+        }
+    }
+
+    private void selectUiElement(UiElement uiElement) {
+        uiElement.setSelected(true);
+        drawUiElement(uiElement, true);
+    }
+
+    private void deselectUiElement(UiElement uiElement) {
+        uiElement.setSelected(false);
+        drawUiElement(uiElement, false);
     }
 
     /**
@@ -317,11 +372,25 @@ public class Nonogram extends PApplet {
         drawText(string, zone, boxX, boxY, 1);
     }
 
+    /**
+     * Draws the main-field with the thin lines
+     */
+    private void drawEmptyMain() {
+        // main box:
+        drawRectangle(Zone.MAIN, 0, 0, horizontalBoxes, verticalBoxes,
+                Zone.MAIN.getColor(), 3, cZoneOutline);
+
+        // thin lines:
+        drawBackgroundLinesInOneZone(Zone.MAIN, true);
+        drawBackgroundLinesInOneZone(Zone.MAIN, false);
+    }
 
     /**
      * Draw the background elements
      */
     private void drawBackground() {
+
+        drawEmptyMain();
 
         // top box:
         drawRectangle(Zone.TOP, 0, 0, horizontalBoxes, maxTopNumbers,
@@ -331,18 +400,9 @@ public class Nonogram extends PApplet {
         drawRectangle(Zone.LEFT, 0, 0, maxSideNumbers, verticalBoxes,
                 Zone.LEFT.getColor(), 3, cZoneOutline);
 
-        // main box:
-        drawRectangle(Zone.MAIN, 0, 0, horizontalBoxes, verticalBoxes,
-                Zone.MAIN.getColor(), 3, cZoneOutline);
-
         // thin lines:
-        // horizontally:
-        drawBackgroundLinesInOneZone(Zone.MAIN, true);
-        drawBackgroundLinesInOneZone(Zone.MAIN, false);
         drawBackgroundLinesInOneZone(Zone.LEFT, true);
         drawBackgroundLinesInOneZone(Zone.TOP, false);
-
-
     }
 
     /**
