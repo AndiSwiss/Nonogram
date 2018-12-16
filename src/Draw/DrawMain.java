@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4i
+ * @version 0.4j
  */
 public class DrawMain extends PApplet {
 
@@ -93,7 +93,7 @@ public class DrawMain extends PApplet {
     // UI-Interactions //
     //-----------------//
     private void drawAllUiElements() {
-        ul.updateAllUiElementPositions(no.boxSize);
+        ul.updateAllUiElementPositions(no.getBoxSize());
         ul.getUiElements().forEach(this::drawUiElement);
     }
 
@@ -120,7 +120,7 @@ public class DrawMain extends PApplet {
     public void mousePressed() {
         // since this is called multiple times on every click and during the mouse is pressed, store just the first one:
         if (mousePressedPos == null) {
-            mousePressedPos = new Position(mouseX, mouseY, no.boxSize);
+            mousePressedPos = new Position(mouseX, mouseY, no.getBoxSize());
         }
     }
 
@@ -132,7 +132,7 @@ public class DrawMain extends PApplet {
         UiElement ui = inWhichUiElementIsIt(mousePressedPos, ul.getUiElements());
 
         if (ui != null) {
-            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY, no.boxSize), ul.getUiElements());
+            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY, no.getBoxSize()), ul.getUiElements());
 
             if (ui.equals(selectedReleased)) {
 
@@ -199,9 +199,9 @@ public class DrawMain extends PApplet {
     }
 
     private void changeUiSize(int value) {
-        no.boxSize += value;
+        no.changeBoxSize(value);
 
-        System.out.println("New boxSize is " + no.boxSize);
+        System.out.println("New boxSize is " + no.getBoxSize());
 
         reDrawUi();
     }
@@ -335,10 +335,10 @@ public class DrawMain extends PApplet {
         fill(fillColor);
         strokeWeight(strokeWeight);
         stroke(strokeColor);
-        rect(zone.getMinX() + x * no.boxSize,
-                zone.getMinY() + y * no.boxSize,
-                no.boxSize * sizeX,
-                no.boxSize * sizeY);
+        rect(zone.getMinX() + x * no.getBoxSize(),
+                zone.getMinY() + y * no.getBoxSize(),
+                no.getBoxSize() * sizeX,
+                no.getBoxSize() * sizeY);
     }
 
     /**
@@ -360,17 +360,17 @@ public class DrawMain extends PApplet {
         int y2;
 
         if (horizontal) {
-            x2 = zone.getMinX() + no.boxSize * (x + length);
-            y2 = zone.getMinY() + no.boxSize * y;
+            x2 = zone.getMinX() + no.getBoxSize() * (x + length);
+            y2 = zone.getMinY() + no.getBoxSize() * y;
 
         } else {
-            x2 = zone.getMinX() + no.boxSize * x;
-            y2 = zone.getMinY() + no.boxSize * (y + length);
+            x2 = zone.getMinX() + no.getBoxSize() * x;
+            y2 = zone.getMinY() + no.getBoxSize() * (y + length);
 
         }
 
-        line(zone.getMinX() + no.boxSize * x,
-                zone.getMinY() + no.boxSize * y,
+        line(zone.getMinX() + no.getBoxSize() * x,
+                zone.getMinY() + no.getBoxSize() * y,
                 x2, y2)
         ;
     }
@@ -394,10 +394,10 @@ public class DrawMain extends PApplet {
     private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize, int color) {
         fill(color);
 
-        int x = zone.getMinX() + (int) (boxX * no.boxSize);
-        int y = zone.getMinY() + (int) ((boxY + 1) * no.boxSize);
+        int x = zone.getMinX() + (int) (boxX * no.getBoxSize());
+        int y = zone.getMinY() + (int) ((boxY + 1) * no.getBoxSize());
 
-        textSize((int) (relativeSize * no.boxSize));
+        textSize((int) (relativeSize * no.getBoxSize()));
         text(string, x, y);
     }
 
@@ -448,11 +448,11 @@ public class DrawMain extends PApplet {
         int length;
         int size;
         if (horizontal) {
-            length = zone.getSizeX() / no.boxSize;
-            size = zone.getSizeY() / no.boxSize;
+            length = zone.getSizeX() / no.getBoxSize();
+            size = zone.getSizeY() / no.getBoxSize();
         } else {
-            length = zone.getSizeY() / no.boxSize;
-            size = zone.getSizeX() / no.boxSize;
+            length = zone.getSizeY() / no.getBoxSize();
+            size = zone.getSizeX() / no.getBoxSize();
         }
 
 //        System.out.println("for Zone " + zone.getName() + ", length = " + size);
@@ -549,8 +549,8 @@ public class DrawMain extends PApplet {
     private void drawFooter() {
         // footer-box:
         drawRectangle(Zone.FOOTER, 0, 0,
-                Zone.FOOTER.getSizeX() / no.boxSize,
-                Zone.FOOTER.getSizeY() / no.boxSize,
+                Zone.FOOTER.getSizeX() / no.getBoxSize(),
+                Zone.FOOTER.getSizeY() / no.getBoxSize(),
                 id.cLightGrey2, 1, id.cLightGrey2);
 
         // footer-text:

@@ -32,7 +32,7 @@ public enum Zone {
             case "HEADER":
                 minX = 1;
                 minY = 1;
-                sizeX = id.myWidth / no.boxSize - 2;
+                sizeX = id.myWidth / no.getBoxSize() - 2;
                 sizeY = id.headerHeight;
                 color = id.cBackground;
                 break;
@@ -67,14 +67,14 @@ public enum Zone {
             case "BOTTOM":
                 minX = 1;
                 minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxes() + 1;
-                sizeX = id.myWidth / no.boxSize - 2;
-                sizeY = id.myHeight / no.boxSize - id.footerHeight - minY;
+                sizeX = id.myWidth / no.getBoxSize() - 2;
+                sizeY = id.myHeight / no.getBoxSize() - id.footerHeight - minY;
                 color = id.cBackground;
                 break;
             case "FOOTER":
                 minX = 0;
-                minY = id.myHeight / no.boxSize - id.footerHeight;
-                sizeX = id.myWidth / no.boxSize;
+                minY = id.myHeight / no.getBoxSize() - id.footerHeight;
+                sizeX = id.myWidth / no.getBoxSize();
                 sizeY = id.footerHeight;
                 color = id.cLightGrey + 1;
                 break;
@@ -82,10 +82,10 @@ public enum Zone {
                     throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());
         }
 
-        minX *= no.boxSize;
-        minY *= no.boxSize;
-        sizeX *= no.boxSize;
-        sizeY *= no.boxSize;
+        minX *= no.getBoxSize();
+        minY *= no.getBoxSize();
+        sizeX *= no.getBoxSize();
+        sizeY *= no.getBoxSize();
 
         maxX = minX + sizeX;
         maxY = minY + sizeY;
@@ -103,7 +103,7 @@ public enum Zone {
             p.fill(z.getColor());
             p.rect(z.getMinX(), z.getMinY(), z.getSizeX(), z.getSizeY());
             p.fill(id.cBlack);
-            p.text(z.getName(), z.getMinX() + no.boxSize, z.getMinY() + no.boxSize);
+            p.text(z.getName(), z.getMinX() + no.getBoxSize(), z.getMinY() + no.getBoxSize());
         }
     }
 

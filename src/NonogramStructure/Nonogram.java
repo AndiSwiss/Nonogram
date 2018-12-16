@@ -60,12 +60,24 @@ public class Nonogram {
         }
     }
 
+    /**
+     * Changes the boxSize.
+     * @param value A positive value increases the boxSize, a negative value decreases the boxSize.
+     */
+    //----------------//
+    // Custom Methods //
+    //----------------//
+    public void changeBoxSize(int value) {
+        boxSize += value;
+    }
+
     //---------//
     // Setters //
     //---------//
     public void setSolutionFile(List<String> solutionFile) {
         this.solutionFile = solutionFile;
     }
+
 
     //---------//
     // Getters //
