@@ -29,6 +29,7 @@ public class UiElementList {
         uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution"));
         uiElements.add(new UiClickableOption("makeLarger", "Make larger"));
         uiElements.add(new UiClickableOption("makeSmaller", "Make smaller"));
+        uiElements.add(new UiSwitchableOption("drawAllZoneBoxes", "Draw all zone boxes"));
     }
 
 

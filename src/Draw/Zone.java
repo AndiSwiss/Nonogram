@@ -1,10 +1,10 @@
 package Draw;
 
 
+import Data.InitialData;
 import processing.core.PApplet;
 
 import static Data.DataStorage.*;
-import static Data.InitialData.*;
 
 /**
  * Check the Zones via the method drawAllZoneBoxesForTesting() in Nonogram.java
@@ -28,63 +28,56 @@ public enum Zone {
     private int color;
 
 
-    /**
-     * the private constructor for zone:
-     */
-    Zone() {
-        updateZone();
-    }
-
-    void updateZone() {
+    void updateZone(InitialData id) {
         switch (name()) {
             case "HEADER":
                 minX = 1;
                 minY = 1;
-                sizeX = myWidth / boxSize - 2;
-                sizeY = headerHeight;
-                color = cBackground;
+                sizeX = id.myWidth / boxSize - 2;
+                sizeY = id.headerHeight;
+                color = id.cBackground;
                 break;
             case "MAIN":
                 minX = 1 + maxSideNumbers;
-                minY = 1 + headerHeight + 1 + maxTopNumbers;
+                minY = 1 + id.headerHeight + 1 + maxTopNumbers;
                 sizeX = horizontalBoxes;
                 sizeY = verticalBoxes;
-                color = cLightGrey2;
+                color = id.cLightGrey2;
                 break;
             case "LEFT":
                 minX = 1;
-                minY = 1 + headerHeight + 1 + maxTopNumbers;
+                minY = 1 + id.headerHeight + 1 + maxTopNumbers;
                 sizeX = maxSideNumbers;
                 sizeY = verticalBoxes;
-                color = cBackground;
+                color = id.cBackground;
                 break;
             case "RIGHT":
                 minX = 1 + maxSideNumbers + horizontalBoxes;
-                minY = 1 + headerHeight + 1 + maxTopNumbers;
-                sizeX = rightSideWidth;
+                minY = 1 + id.headerHeight + 1 + maxTopNumbers;
+                sizeX = id.rightSideWidth;
                 sizeY = verticalBoxes;
-                color = cBackground;
+                color = id.cBackground;
                 break;
             case "TOP":
                 minX = 1 + maxSideNumbers;
-                minY = 1 + headerHeight + 1;
+                minY = 1 + id.headerHeight + 1;
                 sizeX = horizontalBoxes;
                 sizeY = maxTopNumbers;
-                color = cBackground;
+                color = id.cBackground;
                 break;
             case "BOTTOM":
                 minX = 1;
-                minY = 1 + headerHeight + 1 + maxTopNumbers + verticalBoxes + 1;
-                sizeX = myWidth / boxSize - 2;
-                sizeY = myHeight / boxSize - footerHeight - minY;
-                color = cBackground;
+                minY = 1 + id.headerHeight + 1 + maxTopNumbers + verticalBoxes + 1;
+                sizeX = id.myWidth / boxSize - 2;
+                sizeY = id.myHeight / boxSize - id.footerHeight - minY;
+                color = id.cBackground;
                 break;
             case "FOOTER":
                 minX = 0;
-                minY = myHeight / boxSize - footerHeight;
-                sizeX = myWidth / boxSize;
-                sizeY = footerHeight;
-                color = cLightGrey + 1;
+                minY = id.myHeight / boxSize - id.footerHeight;
+                sizeX = id.myWidth / boxSize;
+                sizeY = id.footerHeight;
+                color = id.cLightGrey + 1;
                 break;
                 default:
                     throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());
@@ -104,13 +97,13 @@ public enum Zone {
 
     }
 
-    static void drawAllZoneBoxesForTesting(PApplet p) {
-        p.stroke(cGrey);
+    static void drawAllZoneBoxesForTesting(PApplet p, InitialData id) {
+        p.stroke(id.cGrey);
         p.strokeWeight(1);
         for (Zone z : Zone.values()) {
             p.fill(z.getColor());
             p.rect(z.getMinX(), z.getMinY(), z.getSizeX(), z.getSizeY());
-            p.fill(cBlack);
+            p.fill(id.cBlack);
             p.text(z.getName(), z.getMinX() + boxSize, z.getMinY() + boxSize);
         }
     }

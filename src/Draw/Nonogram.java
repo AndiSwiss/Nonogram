@@ -1,5 +1,6 @@
 package Draw;
 
+import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
 import UiElements.*;
@@ -9,16 +10,16 @@ import java.util.List;
 
 // all Data is stored in the static object Data (in Package Data):
 import static Data.DataStorage.*;
-import static Data.InitialData.*;
 import static UiElements.UiElementList.uiElements;
 
 
 /**
  * @author Andreas Ambühl
- * @version 0.4c
+ * @version 0.4d
  */
 public class Nonogram extends PApplet {
 
+    private InitialData id;
 
     //-----------------------------//
     // Processing specific methods //
@@ -29,8 +30,10 @@ public class Nonogram extends PApplet {
 
     @Override
     public void setup() {
-        size(myWidth, myHeight);
-        System.out.printf("width: %s, height: %s\n", myWidth, myHeight);
+        id = new InitialData();
+
+        size(id.myWidth, id.myHeight);
+        System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
         frameRate(30);
 
         UiElementList.buildUiElementList();
@@ -43,11 +46,13 @@ public class Nonogram extends PApplet {
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
 
-        // For testing, whether the defined zones are ok:
-//        Zone.drawAllZoneBoxesForTesting(this);
 
         // todo: create a nonogram-solver. Think about the strategies -> see  /src/Examples/nonogram3_strategyPics/*
 
+    }
+
+    private void drawAllZoneBoxes() {
+        Zone.drawAllZoneBoxesForTesting(this, id);
     }
 
 
@@ -86,12 +91,12 @@ public class Nonogram extends PApplet {
 
         int color;
         if (ui.isSelected()) {
-            color = cUiSelected;
+            color = id.cUiSelected;
         } else {
-            color = cUiNotSelected;
+            color = id.cUiNotSelected;
         }
         if (ui instanceof UiTextbox) {
-            color = cBackground;
+            color = id.cBackground;
         }
 
         drawRectangle(ui.getZone(), ui.getRelStartX(), ui.getRelStartY(),
@@ -156,13 +161,15 @@ public class Nonogram extends PApplet {
                 ui.setSelected(false);
                 if (ui.getName().equals("drawSolution")) {
                     drawEmptyMain();
+                } else if (ui.getName().equals("drawAllZoneBoxes")) {
+                    reDrawUi();
                 }
             } else {
                 ui.setSelected(true);
                 if (ui.getName().equals("drawSolution")) {
                     drawSolution();
-                } else if (ui.getName().equals("clearEverything")) {
-                    background(cDarkGrey2);
+                } else if (ui.getName().equals("drawAllZoneBoxes")) {
+                    drawAllZoneBoxes();
                 }
             }
 
@@ -250,11 +257,11 @@ public class Nonogram extends PApplet {
     //---------------------//
 
     private void reDrawUi() {
-        background(cBackground);
+        background(id.cBackground);
 
         // first update the zones with the new values:
         for (Zone z : Zone.values()) {
-            z.updateZone();
+            z.updateZone(id);
         }
 
         drawTitle();
@@ -271,7 +278,7 @@ public class Nonogram extends PApplet {
      * @param y y
      */
     private void drawBox(int x, int y) {
-        drawBox(x, y, cBlack);
+        drawBox(x, y, id.cBlack);
     }
 
 
@@ -284,26 +291,26 @@ public class Nonogram extends PApplet {
      */
     private void drawBox(int x, int y, int color) {
 
-        drawRectangle(Zone.MAIN, x, y, 1, 1, color, 1, cBackgroundLine);
+        drawRectangle(Zone.MAIN, x, y, 1, 1, color, 1, id.cBackgroundLine);
 
 
         // redraw thicker horizontal and vertical lines every five lines:
         // horizontal (on left side of the box):
         if (x % 5 == 0) {
-            drawLine(Zone.MAIN, x, y, false, 1, 3, cBackgroundLine);
+            drawLine(Zone.MAIN, x, y, false, 1, 3, id.cBackgroundLine);
         }
         // on right side of the box, if it is the last one:
         else if (x == horizontalBoxes - 1) {
-            drawLine(Zone.MAIN, x + 1, y, false, 1, 3, cBackgroundLine);
+            drawLine(Zone.MAIN, x + 1, y, false, 1, 3, id.cBackgroundLine);
         }
 
         // vertical (on top side of the box):
         if (y % 5 == 0) {
-            drawLine(Zone.MAIN, x, y, true, 1, 3, cBackgroundLine);
+            drawLine(Zone.MAIN, x, y, true, 1, 3, id.cBackgroundLine);
         }
         // on right side of the box, if it is the last one:
         else if (y == verticalBoxes - 1) {
-            drawLine(Zone.MAIN, x, y + 1, true, 1, 3, cBackgroundLine);
+            drawLine(Zone.MAIN, x, y + 1, true, 1, 3, id.cBackgroundLine);
         }
     }
 
@@ -376,7 +383,7 @@ public class Nonogram extends PApplet {
      * Overloaded method
      */
     private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize) {
-        drawText(string, zone, boxX, boxY, relativeSize, cBlack);
+        drawText(string, zone, boxX, boxY, relativeSize, id.cBlack);
     }
 
 
@@ -398,7 +405,7 @@ public class Nonogram extends PApplet {
     private void drawEmptyMain() {
         // main box:
         drawRectangle(Zone.MAIN, 0, 0, horizontalBoxes, verticalBoxes,
-                Zone.MAIN.getColor(), 3, cZoneOutline);
+                Zone.MAIN.getColor(), 3, id.cZoneOutline);
 
         // thin lines:
         drawBackgroundLinesInOneZone(Zone.MAIN, true);
@@ -414,11 +421,11 @@ public class Nonogram extends PApplet {
 
         // top box:
         drawRectangle(Zone.TOP, 0, 0, horizontalBoxes, maxTopNumbers,
-                Zone.TOP.getColor(), 3, cZoneOutline);
+                Zone.TOP.getColor(), 3, id.cZoneOutline);
 
         // side box:
         drawRectangle(Zone.LEFT, 0, 0, maxSideNumbers, verticalBoxes,
-                Zone.LEFT.getColor(), 3, cZoneOutline);
+                Zone.LEFT.getColor(), 3, id.cZoneOutline);
 
         // thin lines:
         drawBackgroundLinesInOneZone(Zone.LEFT, true);
@@ -459,7 +466,7 @@ public class Nonogram extends PApplet {
                 x = i;
                 y = 0;
             }
-            drawLine(zone, x, y, horizontal, length, weight, cBackgroundLine);
+            drawLine(zone, x, y, horizontal, length, weight, id.cBackgroundLine);
             weight = 1;
         }
 
@@ -472,7 +479,7 @@ public class Nonogram extends PApplet {
     private void drawDigits() {
         double textSize = 0.7;
         textAlign(CENTER, CENTER);
-        fill(cDarkGrey2);
+        fill(id.cDarkGrey2);
 
         // sideNumbers:
         for (int i = 0; i < sideNumbers.size(); i++) {
@@ -518,7 +525,7 @@ public class Nonogram extends PApplet {
                 }
                 // else draw a white box:
                 else {
-                    drawBox(j, i, cWhite);
+                    drawBox(j, i, id.cWhite);
                 }
             }
         }
@@ -540,10 +547,10 @@ public class Nonogram extends PApplet {
         drawRectangle(Zone.FOOTER, 0, 0,
                 Zone.FOOTER.getSizeX() / boxSize,
                 Zone.FOOTER.getSizeY() / boxSize,
-                cLightGrey2, 1, cLightGrey2);
+                id.cLightGrey2, 1, id.cLightGrey2);
 
         // footer-text:
-        drawText(footerText, Zone.FOOTER, 1, -0.2, 0.75, cDarkGrey);
+        drawText(id.footerText, Zone.FOOTER, 1, -0.2, 0.75, id.cDarkGrey);
     }
 
 
