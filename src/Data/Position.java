@@ -4,8 +4,6 @@ import Draw.Zone;
 
 import java.util.Objects;
 
-import static Data.DataStorage.boxSize;
-
 public class Position {
     private int absX;
     private int absY;
@@ -14,20 +12,20 @@ public class Position {
     private int relY;
 
 
-    public Position(int absX, int absY) {
+    public Position(int absX, int absY, int boxSize) {
         this.absX = absX;
         this.absY = absY;
-        convertAbsoluteToRelativePosition(absX, absY);
+        convertAbsoluteToRelativePosition(absX, absY, boxSize);
     }
 
-    public Position(Zone zone, int relX, int relY) {
+    public Position(Zone zone, int relX, int relY, int boxSize) {
         this.zone = zone;
         this.relX = relX;
         this.relY = relY;
-        convertRelativeToAbsolutePosition(zone, relX, relY);
+        convertRelativeToAbsolutePosition(zone, relX, relY, boxSize);
     }
 
-    private void convertRelativeToAbsolutePosition(Zone zone, int relX, int relY) {
+    private void convertRelativeToAbsolutePosition(Zone zone, int relX, int relY, int boxSize) {
         absX = (relX * boxSize) + zone.getMinX();
         absY = (relY * boxSize) + zone.getMinY();
 
@@ -44,7 +42,7 @@ public class Position {
         return null;
     }
 
-    private void convertAbsoluteToRelativePosition(int absX, int absY) {
+    private void convertAbsoluteToRelativePosition(int absX, int absY, int boxSize) {
         // check in which zone it is
         zone = checkInWhichZoneTheAbsolutePositionIs(absX, absY);
 

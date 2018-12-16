@@ -1,5 +1,6 @@
 package Draw;
 
+import Data.DataStorage;
 import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
@@ -9,7 +10,6 @@ import processing.core.PApplet;
 import java.util.List;
 
 // all Data is stored in the static object Data (in Package Data):
-import static Data.DataStorage.*;
 import static UiElements.UiElementList.uiElements;
 
 
@@ -20,6 +20,7 @@ import static UiElements.UiElementList.uiElements;
 public class Nonogram extends PApplet {
 
     private InitialData id;
+    private DataStorage ds;
 
     //-----------------------------//
     // Processing specific methods //
@@ -31,6 +32,7 @@ public class Nonogram extends PApplet {
     @Override
     public void setup() {
         id = new InitialData();
+        ds = new DataStorage();
 
         size(id.myWidth, id.myHeight);
         System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
@@ -52,7 +54,7 @@ public class Nonogram extends PApplet {
     }
 
     private void drawAllZoneBoxes() {
-        Zone.drawAllZoneBoxesForTesting(this, id);
+        Zone.drawAllZoneBoxesForTesting(this, id, ds);
     }
 
 
@@ -64,10 +66,10 @@ public class Nonogram extends PApplet {
                 .forEach(ui -> ui.setSelected(false));
 
         InputDataHandler data = new InputDataHandler();
-        data.readAllFileInputs(fileName, true);
-        data.readSolutionFile(fileName);
+        data.readAllFileInputs(fileName, ds, true);
+        ds.solutionFile = data.readSolutionFile(fileName);
 
-        data.checkIfInputMatchesSolution();
+        data.checkIfInputMatchesSolution(ds);
 
         reDrawUi();
 
@@ -83,7 +85,7 @@ public class Nonogram extends PApplet {
     // UI-Interactions //
     //-----------------//
     private void drawAllUiElements() {
-        UiElementList.updateAllUiElementPositions();
+        UiElementList.updateAllUiElementPositions(ds.boxSize);
         uiElements.forEach(this::drawUiElement);
     }
 
@@ -109,8 +111,8 @@ public class Nonogram extends PApplet {
     @Override
     public void mousePressed() {
         // since this is called multiple times on every click and during the mouse is pressed, store just the first one:
-        if (mousePressedPos == null) {
-            mousePressedPos = new Position(mouseX, mouseY);
+        if (ds.mousePressedPos == null) {
+            ds.mousePressedPos = new Position(mouseX, mouseY, ds.boxSize);
         }
     }
 
@@ -119,10 +121,10 @@ public class Nonogram extends PApplet {
         // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
 
         // check, if mousePressed was on an UI-Element, and which one:
-        UiElement ui = inWhichUiElementIsIt(mousePressedPos, uiElements);
+        UiElement ui = inWhichUiElementIsIt(ds.mousePressedPos, uiElements);
 
         if (ui != null) {
-            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY), uiElements);
+            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY, ds.boxSize), uiElements);
 
             if (ui.equals(selectedReleased)) {
 
@@ -133,7 +135,7 @@ public class Nonogram extends PApplet {
         }
 
         // reset mousePressed-values:
-        mousePressedPos = null;
+        ds.mousePressedPos = null;
     }
 
     private void uiAction(UiElement ui) {
@@ -189,9 +191,9 @@ public class Nonogram extends PApplet {
     }
 
     private void changeUiSize(int value) {
-        boxSize += value;
+        ds.boxSize += value;
 
-        System.out.println("New boxSize is " + boxSize);
+        System.out.println("New boxSize is " + ds.boxSize);
 
         // check whether the solution was already shown, so that I can draw it again:
         boolean solutionWasDrawn = false;
@@ -261,7 +263,7 @@ public class Nonogram extends PApplet {
 
         // first update the zones with the new values:
         for (Zone z : Zone.values()) {
-            z.updateZone(id);
+            z.updateZone(id, ds);
         }
 
         drawTitle();
@@ -300,7 +302,7 @@ public class Nonogram extends PApplet {
             drawLine(Zone.MAIN, x, y, false, 1, 3, id.cBackgroundLine);
         }
         // on right side of the box, if it is the last one:
-        else if (x == horizontalBoxes - 1) {
+        else if (x == ds.horizontalBoxes - 1) {
             drawLine(Zone.MAIN, x + 1, y, false, 1, 3, id.cBackgroundLine);
         }
 
@@ -309,7 +311,7 @@ public class Nonogram extends PApplet {
             drawLine(Zone.MAIN, x, y, true, 1, 3, id.cBackgroundLine);
         }
         // on right side of the box, if it is the last one:
-        else if (y == verticalBoxes - 1) {
+        else if (y == ds.verticalBoxes - 1) {
             drawLine(Zone.MAIN, x, y + 1, true, 1, 3, id.cBackgroundLine);
         }
     }
@@ -331,10 +333,10 @@ public class Nonogram extends PApplet {
         fill(fillColor);
         strokeWeight(strokeWeight);
         stroke(strokeColor);
-        rect(zone.getMinX() + x * boxSize,
-                zone.getMinY() + y * boxSize,
-                boxSize * sizeX,
-                boxSize * sizeY);
+        rect(zone.getMinX() + x * ds.boxSize,
+                zone.getMinY() + y * ds.boxSize,
+                ds.boxSize * sizeX,
+                ds.boxSize * sizeY);
     }
 
     /**
@@ -356,17 +358,17 @@ public class Nonogram extends PApplet {
         int y2;
 
         if (horizontal) {
-            x2 = zone.getMinX() + boxSize * (x + length);
-            y2 = zone.getMinY() + boxSize * y;
+            x2 = zone.getMinX() + ds.boxSize * (x + length);
+            y2 = zone.getMinY() + ds.boxSize * y;
 
         } else {
-            x2 = zone.getMinX() + boxSize * x;
-            y2 = zone.getMinY() + boxSize * (y + length);
+            x2 = zone.getMinX() + ds.boxSize * x;
+            y2 = zone.getMinY() + ds.boxSize * (y + length);
 
         }
 
-        line(zone.getMinX() + boxSize * x,
-                zone.getMinY() + boxSize * y,
+        line(zone.getMinX() + ds.boxSize * x,
+                zone.getMinY() + ds.boxSize * y,
                 x2, y2)
         ;
     }
@@ -390,10 +392,10 @@ public class Nonogram extends PApplet {
     private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize, int color) {
         fill(color);
 
-        int x = zone.getMinX() + (int) (boxX * boxSize);
-        int y = zone.getMinY() + (int) ((boxY + 1) * boxSize);
+        int x = zone.getMinX() + (int) (boxX * ds.boxSize);
+        int y = zone.getMinY() + (int) ((boxY + 1) * ds.boxSize);
 
-        textSize((int) (relativeSize * boxSize));
+        textSize((int) (relativeSize * ds.boxSize));
         text(string, x, y);
     }
 
@@ -404,7 +406,7 @@ public class Nonogram extends PApplet {
      */
     private void drawEmptyMain() {
         // main box:
-        drawRectangle(Zone.MAIN, 0, 0, horizontalBoxes, verticalBoxes,
+        drawRectangle(Zone.MAIN, 0, 0, ds.horizontalBoxes, ds.verticalBoxes,
                 Zone.MAIN.getColor(), 3, id.cZoneOutline);
 
         // thin lines:
@@ -420,11 +422,11 @@ public class Nonogram extends PApplet {
         drawEmptyMain();
 
         // top box:
-        drawRectangle(Zone.TOP, 0, 0, horizontalBoxes, maxTopNumbers,
+        drawRectangle(Zone.TOP, 0, 0, ds.horizontalBoxes, ds.maxTopNumbers,
                 Zone.TOP.getColor(), 3, id.cZoneOutline);
 
         // side box:
-        drawRectangle(Zone.LEFT, 0, 0, maxSideNumbers, verticalBoxes,
+        drawRectangle(Zone.LEFT, 0, 0, ds.maxSideNumbers, ds.verticalBoxes,
                 Zone.LEFT.getColor(), 3, id.cZoneOutline);
 
         // thin lines:
@@ -444,11 +446,11 @@ public class Nonogram extends PApplet {
         int length;
         int size;
         if (horizontal) {
-            length = zone.getSizeX() / boxSize;
-            size = zone.getSizeY() / boxSize;
+            length = zone.getSizeX() / ds.boxSize;
+            size = zone.getSizeY() / ds.boxSize;
         } else {
-            length = zone.getSizeY() / boxSize;
-            size = zone.getSizeX() / boxSize;
+            length = zone.getSizeY() / ds.boxSize;
+            size = zone.getSizeX() / ds.boxSize;
         }
 
 //        System.out.println("for Zone " + zone.getName() + ", length = " + size);
@@ -482,25 +484,25 @@ public class Nonogram extends PApplet {
         fill(id.cDarkGrey2);
 
         // sideNumbers:
-        for (int i = 0; i < sideNumbers.size(); i++) {
+        for (int i = 0; i < ds.sideNumbers.size(); i++) {
             double y = i - 0.5;
-            List<Integer> line = sideNumbers.get(i);
+            List<Integer> line = ds.sideNumbers.get(i);
 
             for (int j = 0; j < line.size(); j++) {
-                double x = j + (maxSideNumbers - line.size()) + 0.5;
+                double x = j + (ds.maxSideNumbers - line.size()) + 0.5;
 
                 drawText(line.get(j).toString(), Zone.LEFT, x, y, textSize);
             }
         }
 
         // topNumbers:
-        for (int i = 0; i < topNumbers.size(); i++) {
+        for (int i = 0; i < ds.topNumbers.size(); i++) {
             double x = i + 0.5;
 
-            List<Integer> line = topNumbers.get(i);
+            List<Integer> line = ds.topNumbers.get(i);
 
             for (int j = 0; j < line.size(); j++) {
-                double y = j + (maxTopNumbers - line.size()) - 0.5;
+                double y = j + (ds.maxTopNumbers - line.size()) - 0.5;
 
                 drawText(line.get(j).toString(), Zone.TOP, x, y, textSize);
             }
@@ -516,9 +518,9 @@ public class Nonogram extends PApplet {
      * Draws the solution
      */
     private void drawSolution() {
-        for (int i = 0; i < verticalBoxes; i++) {
-            String line = solutionFile.get(i);
-            for (int j = 0; j < horizontalBoxes; j++) {
+        for (int i = 0; i < ds.verticalBoxes; i++) {
+            String line = ds.solutionFile.get(i);
+            for (int j = 0; j < ds.horizontalBoxes; j++) {
                 // if found an element (and j is still inside the line's length:
                 if (j < line.length() && line.charAt(j) != ' ') {
                     drawBox(j, i);
@@ -535,7 +537,7 @@ public class Nonogram extends PApplet {
      * Draw the title
      */
     private void drawTitle() {
-        drawText(title, Zone.HEADER, 0, 0);
+        drawText(ds.title, Zone.HEADER, 0, 0);
     }
 
 
@@ -545,8 +547,8 @@ public class Nonogram extends PApplet {
     private void drawFooter() {
         // footer-box:
         drawRectangle(Zone.FOOTER, 0, 0,
-                Zone.FOOTER.getSizeX() / boxSize,
-                Zone.FOOTER.getSizeY() / boxSize,
+                Zone.FOOTER.getSizeX() / ds.boxSize,
+                Zone.FOOTER.getSizeY() / ds.boxSize,
                 id.cLightGrey2, 1, id.cLightGrey2);
 
         // footer-text:

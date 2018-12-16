@@ -6,8 +6,6 @@ import Helpers.StringHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Data.DataStorage.*;
-
 /**
  * Reads all data from the given input-File and stores and/or processes them to be stored in /Data/DataStorage
  */
@@ -17,9 +15,10 @@ public class InputDataHandler {
      * Reads all the input-data from the file and stores in Data/DataStorage (in it's static member fields)
      *
      * @param fileName  FileName including the relative path (src/...)
+     * @param ds        DataStorage
      * @param debugMode If true, then it will print the read data to the terminal.
      */
-    public void readAllFileInputs(String fileName, boolean debugMode) {
+    public void readAllFileInputs(String fileName, DataStorage ds, boolean debugMode) {
         List<String> input;
         FileHelper fh = new FileHelper();
         input = fh.getStringsFromAFile(fileName);
@@ -29,56 +28,56 @@ public class InputDataHandler {
             if (line.toLowerCase().contains("title")) {
                 line = line.replace("title: ", "");
                 line = line.replace("Title: ", "");
-                title = line;
+                ds.title = line;
                 break;
             }
         }
 
         // reading the boxSize from the file:
-        boxSize = 0;
+        ds.boxSize = 0;
         for (String line : input) {
             if (line.toLowerCase().contains("boxsize")) {
                 StringHelper sh = new StringHelper();
-                boxSize = sh.getLastIntegerFromString(line);
+                ds.boxSize = sh.getLastIntegerFromString(line);
                 break;
             }
         }
 
         // read the topNumbers and the sideNumbers:
-        topNumbers = readNumbers(input, "topNumbers");
-        sideNumbers = readNumbers(input, "sideNumbers");
+        ds.topNumbers = readNumbers(input, "topNumbers");
+        ds.sideNumbers = readNumbers(input, "sideNumbers");
 
         // calculating the amount of horizontal and vertical boxes:
-        horizontalBoxes = topNumbers.size();
-        verticalBoxes = sideNumbers.size();
+        ds.horizontalBoxes = ds.topNumbers.size();
+        ds.verticalBoxes = ds.sideNumbers.size();
 
         // calculating maxTopNumbers and maxSideNumbers
-        maxTopNumbers = 0;
-        for (List<Integer> one : topNumbers) {
-            if (one.size() > maxTopNumbers) {
-                maxTopNumbers = one.size();
+        ds.maxTopNumbers = 0;
+        for (List<Integer> one : ds.topNumbers) {
+            if (one.size() > ds.maxTopNumbers) {
+                ds.maxTopNumbers = one.size();
             }
         }
 
-        maxSideNumbers = 0;
-        for (List<Integer> one : sideNumbers) {
-            if (one.size() > maxSideNumbers) {
-                maxSideNumbers = one.size();
+        ds.maxSideNumbers = 0;
+        for (List<Integer> one : ds.sideNumbers) {
+            if (one.size() > ds.maxSideNumbers) {
+                ds.maxSideNumbers = one.size();
             }
         }
 
         if (debugMode) {
             System.out.println("\ntopNumbers:");
-            topNumbers.forEach(System.out::println);
+            ds.topNumbers.forEach(System.out::println);
             System.out.println("\nsideNumbers:");
-            sideNumbers.forEach(System.out::println);
+            ds.sideNumbers.forEach(System.out::println);
 
             System.out.println();
-            System.out.printf("boxSize: %s\n", boxSize);
-            System.out.printf("horizontalBoxes: %s\n", horizontalBoxes);
-            System.out.printf("verticalBoxes: %s\n", verticalBoxes);
-            System.out.printf("maxTopNumbers: %s\n", maxTopNumbers);
-            System.out.printf("maxSideNumbers: %s\n", maxSideNumbers);
+            System.out.printf("boxSize: %s\n", ds.boxSize);
+            System.out.printf("horizontalBoxes: %s\n", ds.horizontalBoxes);
+            System.out.printf("verticalBoxes: %s\n", ds.verticalBoxes);
+            System.out.printf("maxTopNumbers: %s\n", ds.maxTopNumbers);
+            System.out.printf("maxSideNumbers: %s\n", ds.maxSideNumbers);
         }
     }
 
@@ -117,20 +116,22 @@ public class InputDataHandler {
      * Reads the solution file.
      *
      * @param fileName file to read. The appendix ".txt" gets automatically replaced by "_solution.txt"
+     * @return List<String> of the solution file
      */
-    public void readSolutionFile(String fileName) {
+    public List<String> readSolutionFile(String fileName) {
         fileName = fileName.replace(".txt", "_solution.txt");
         FileHelper fh = new FileHelper();
-        solutionFile = fh.getStringsFromAFile(fileName);
+        return fh.getStringsFromAFile(fileName);
     }
 
 
     /**
      * reads the sideNumbers from the solution
      *
+     * @param solutionFile solutionFile
      * @return the list with all the sideNumbers
      */
-    private List<List<Integer>> readSideNumbersFromSolution() {
+    private List<List<Integer>> readSideNumbersFromSolution(List<String> solutionFile) {
         List<List<Integer>> sideFromSol = new ArrayList<>();
 
         for (String line : solutionFile) {
@@ -166,9 +167,10 @@ public class InputDataHandler {
     /**
      * reads the sideNumbers from the solution
      *
+     * @param solutionFile solutionFile
      * @return the list with all the sideNumbers
      */
-    private List<List<Integer>> readTopNumbersFromSolution() {
+    private List<List<Integer>> readTopNumbersFromSolution(List<String> solutionFile) {
         List<List<Integer>> topFromSol = new ArrayList<>();
 
         // find max width:
@@ -221,20 +223,21 @@ public class InputDataHandler {
     /**
      * Checks if sideNumbers and topNumbers are the same as the ones read from the solution file
      *
+     * @param ds DataStorage
      * @throws IllegalArgumentException If there are differences found (actually the called sub-methods
      *                                  throw those errors).
      */
-    public void checkIfInputMatchesSolution() {
+    public void checkIfInputMatchesSolution(DataStorage ds) {
 
 
-        List<List<Integer>> sideNumbersFromSolution = readSideNumbersFromSolution();
-        List<List<Integer>> topNumbersFromSolution = readTopNumbersFromSolution();
+        List<List<Integer>> sideNumbersFromSolution = readSideNumbersFromSolution(ds.solutionFile);
+        List<List<Integer>> topNumbersFromSolution = readTopNumbersFromSolution(ds.solutionFile);
 
         // check if those lists match the already read lines:
-        if (compareTwoListLists(sideNumbers, sideNumbersFromSolution)) {
+        if (compareTwoListLists(ds.sideNumbers, sideNumbersFromSolution)) {
             System.out.println("sideNumbers is the same as sideNumbersFromSolution.");
         }
-        if (compareTwoListLists(topNumbers, topNumbersFromSolution)) {
+        if (compareTwoListLists(ds.topNumbers, topNumbersFromSolution)) {
             System.out.println("topNumbers is the same as topNumbersFromSolution.");
         }
 
@@ -252,7 +255,7 @@ public class InputDataHandler {
     private boolean compareTwoListLists(List<List<Integer>> l1, List<List<Integer>> l2) {
         if (l1.size() != l2.size()) {
             throw new IllegalArgumentException("Compared lists have not the same size! l1: "
-                + l1.size() + ", l2: " + l2.size());
+                    + l1.size() + ", l2: " + l2.size());
         }
 
         for (int i = 0; i < l1.size(); i++) {

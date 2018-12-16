@@ -9,17 +9,17 @@ import java.util.List;
  */
 public class DataStorage {
 
-    public static String title;
-    public static int boxSize;
-    public static int horizontalBoxes;
-    public static int verticalBoxes;
-    public static int maxTopNumbers;
-    public static int maxSideNumbers;
-    public static List<List<Integer>> topNumbers;
-    public static List<List<Integer>> sideNumbers;
-    public static List<String> solutionFile;
+    public String title;
+    public int boxSize;
+    public int horizontalBoxes;
+    public int verticalBoxes;
+    public int maxTopNumbers;
+    public int maxSideNumbers;
+    public List<List<Integer>> topNumbers;
+    public List<List<Integer>> sideNumbers;
+    public List<String> solutionFile;
 
 
     // for tracking the mouse:
-    public static Position mousePressedPos = null;
+    public Position mousePressedPos = null;
 }

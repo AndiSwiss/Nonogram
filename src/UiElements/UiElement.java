@@ -40,7 +40,7 @@ public abstract class UiElement {
     }
 
 
-    void updatePositionValues(Position start, int relSizeX, int relSizeY) {
+    void updatePositionValues(Position start, int relSizeX, int relSizeY, int boxSize) {
         this.start = start;
         this.relSizeX = relSizeX;
         this.relSizeY = relSizeY;
@@ -49,7 +49,7 @@ public abstract class UiElement {
 
         end = new Position(start.getZone(),
                 start.getRelX() + relSizeX,
-                start.getRelY() + relSizeY);
+                start.getRelY() + relSizeY, boxSize);
     }
 
     //---------//
