@@ -4,6 +4,7 @@ import NonogramStructure.Nonogram;
 import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
+import NonogramStructure.NumberLine;
 import Solver.Solver;
 import UiElements.*;
 import processing.core.PApplet;
@@ -13,7 +14,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4g
+ * @version 0.4h
  */
 public class DrawMain extends PApplet {
 
@@ -486,7 +487,7 @@ public class DrawMain extends PApplet {
         // sideNumbers:
         for (int i = 0; i < no.sideNumbers.size(); i++) {
             double y = i - 0.5;
-            List<Integer> line = no.sideNumbers.get(i);
+            NumberLine line = no.sideNumbers.get(i);
 
             for (int j = 0; j < line.size(); j++) {
                 double x = j + (no.maxSideNumbers - line.size()) + 0.5;
@@ -499,7 +500,7 @@ public class DrawMain extends PApplet {
         for (int i = 0; i < no.topNumbers.size(); i++) {
             double x = i + 0.5;
 
-            List<Integer> line = no.topNumbers.get(i);
+            NumberLine line = no.topNumbers.get(i);
 
             for (int j = 0; j < line.size(); j++) {
                 double y = j + (no.maxTopNumbers - line.size()) - 0.5;

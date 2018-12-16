@@ -3,6 +3,8 @@ package Data;
 import Helpers.FileHelper;
 import Helpers.StringHelper;
 import NonogramStructure.Nonogram;
+import NonogramStructure.Number;
+import NonogramStructure.NumberLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,20 +50,21 @@ public class InputDataHandler {
         no.topNumbers = readNumbers(input, "topNumbers");
         no.sideNumbers = readNumbers(input, "sideNumbers");
 
+        // todo: move this calculation to the nonogram itself - this FileReader should just read the file, that's it!
         // calculating the amount of horizontal and vertical boxes:
         no.horizontalBoxes = no.topNumbers.size();
         no.verticalBoxes = no.sideNumbers.size();
 
         // calculating maxTopNumbers and maxSideNumbers
         no.maxTopNumbers = 0;
-        for (List<Integer> one : no.topNumbers) {
+        for (NumberLine one : no.topNumbers) {
             if (one.size() > no.maxTopNumbers) {
                 no.maxTopNumbers = one.size();
             }
         }
 
         no.maxSideNumbers = 0;
-        for (List<Integer> one : no.sideNumbers) {
+        for (NumberLine one : no.sideNumbers) {
             if (one.size() > no.maxSideNumbers) {
                 no.maxSideNumbers = one.size();
             }
@@ -85,7 +88,7 @@ public class InputDataHandler {
     /**
      * Helper method for readAllFileInputs(..)
      */
-    private List<List<Integer>> readNumbers(List<String> input, String what) {
+    private List<NumberLine> readNumbers(List<String> input, String what) {
 
         List<List<Integer>> numbers = new ArrayList<>();
 
@@ -109,7 +112,26 @@ public class InputDataHandler {
                 }
             }
         }
-        return numbers;
+        // convert the list of list of integers to a list of NumberLine:
+        return convertListListOfIntegerToListOfNumberLine(numbers);
+    }
+
+    /**
+     * Converter:
+     *
+     * @param input List<List<Integer>>
+     * @return List<NumberLine>
+     */
+    private List<NumberLine> convertListListOfIntegerToListOfNumberLine(List<List<Integer>> input) {
+        List<NumberLine> result = new ArrayList<>();
+        for (List<Integer> line : input) {
+            List<Number> numbers = new ArrayList<>();
+            for (int n : line) {
+                numbers.add(new Number(n));
+            }
+            result.add(new NumberLine(numbers));
+        }
+        return result;
     }
 
 
@@ -127,12 +149,12 @@ public class InputDataHandler {
 
 
     /**
-     * reads the sideNumbers from the solution
+     * Reads the sideNumbers from the solution
      *
      * @param solutionFile solutionFile
      * @return the list with all the sideNumbers
      */
-    private List<List<Integer>> readSideNumbersFromSolution(List<String> solutionFile) {
+    private List<NumberLine> readSideNumbersFromSolution(List<String> solutionFile) {
         List<List<Integer>> sideFromSol = new ArrayList<>();
 
         for (String line : solutionFile) {
@@ -162,7 +184,8 @@ public class InputDataHandler {
             System.out.println();
         }
 */
-        return sideFromSol;
+        // convert the list of list of integers to a list of NumberLine:
+        return convertListListOfIntegerToListOfNumberLine(sideFromSol);
     }
 
     /**
@@ -171,7 +194,7 @@ public class InputDataHandler {
      * @param solutionFile solutionFile
      * @return the list with all the sideNumbers
      */
-    private List<List<Integer>> readTopNumbersFromSolution(List<String> solutionFile) {
+    private List<NumberLine> readTopNumbersFromSolution(List<String> solutionFile) {
         List<List<Integer>> topFromSol = new ArrayList<>();
 
         // find max width:
@@ -217,7 +240,8 @@ public class InputDataHandler {
             System.out.println();
         }
 */
-        return topFromSol;
+        // convert the list of list of integers to a list of NumberLine:
+        return convertListListOfIntegerToListOfNumberLine(topFromSol);
     }
 
 
@@ -231,8 +255,8 @@ public class InputDataHandler {
     public void checkIfInputMatchesSolution(Nonogram no) {
 
 
-        List<List<Integer>> sideNumbersFromSolution = readSideNumbersFromSolution(no.solutionFile);
-        List<List<Integer>> topNumbersFromSolution = readTopNumbersFromSolution(no.solutionFile);
+        List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(no.solutionFile);
+        List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(no.solutionFile);
 
         // check if those lists match the already read lines:
         if (compareTwoListLists(no.sideNumbers, sideNumbersFromSolution)) {
@@ -246,14 +270,14 @@ public class InputDataHandler {
     }
 
     /**
-     * Compares two List<List<Integer> lists.
+     * Compares two List<NumberLine> lists.
      *
      * @param l1 list 1
      * @param l2 list 2
      * @return true if the same
      * @throws IllegalArgumentException If they are not the same
      */
-    private boolean compareTwoListLists(List<List<Integer>> l1, List<List<Integer>> l2) {
+    private boolean compareTwoListLists(List<NumberLine> l1, List<NumberLine> l2) {
         if (l1.size() != l2.size()) {
             throw new IllegalArgumentException("Compared lists have not the same size! l1: "
                     + l1.size() + ", l2: " + l2.size());
@@ -268,11 +292,12 @@ public class InputDataHandler {
         for (int i = 0; i < l1.size(); i++) {
             int lineLength = l1.get(i).size();
             for (int j = 0; j < lineLength; j++) {
-                int n1 = l1.get(i).get(j);
-                int n2 = l2.get(i).get(j);
-                if (n1 != n2) {
+
+                Number n1 = l1.get(i).get(j);
+                Number n2 = l2.get(i).get(j);
+                if (!n1.equals(n2)) {
                     throw new IllegalArgumentException("Compared integer in line " + i + " at position " + j
-                            + " differ: " + n1 + " vs " + n2);
+                            + " differ: " + n1.getN() + " vs " + n2.getN());
                 }
             }
         }
