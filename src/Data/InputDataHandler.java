@@ -18,10 +18,9 @@ public class InputDataHandler {
      * Reads all the input-data from the file and stores in Nonogram
      *
      * @param fileName  FileName including the relative path (src/...)
-     * @param debugMode If true, then it will print the read data to the terminal.
      * @return Nonogram, freshly constructed
      */
-    public Nonogram readAllFileInputs(String fileName, boolean debugMode) {
+    public Nonogram readAllFileInputs(String fileName) {
         List<String> input;
         FileHelper fh = new FileHelper();
         input = fh.getStringsFromAFile(fileName);
@@ -51,43 +50,8 @@ public class InputDataHandler {
         List<NumberLine> topNumbers = readNumbers(input, "topNumbers");
         List<NumberLine> sideNumbers = readNumbers(input, "sideNumbers");
 
-        Nonogram no = new Nonogram(title, topNumbers, sideNumbers, boxSize);
 
-        // todo: move this calculation to the nonogram itself - this FileReader should just read the file, that's it!
-        // calculating the amount of horizontal and vertical boxes:
-        no.horizontalBoxes = no.topNumbers.size();
-        no.verticalBoxes = no.sideNumbers.size();
-
-        // calculating maxTopNumbers and maxSideNumbers
-        no.maxTopNumbers = 0;
-        for (NumberLine one : no.topNumbers) {
-            if (one.size() > no.maxTopNumbers) {
-                no.maxTopNumbers = one.size();
-            }
-        }
-
-        no.maxSideNumbers = 0;
-        for (NumberLine one : no.sideNumbers) {
-            if (one.size() > no.maxSideNumbers) {
-                no.maxSideNumbers = one.size();
-            }
-        }
-
-        if (debugMode) {
-            System.out.println("\ntopNumbers:");
-            no.topNumbers.forEach(System.out::println);
-            System.out.println("\nsideNumbers:");
-            no.sideNumbers.forEach(System.out::println);
-
-            System.out.println();
-            System.out.printf("boxSize: %s\n", no.boxSize);
-            System.out.printf("horizontalBoxes: %s\n", no.horizontalBoxes);
-            System.out.printf("verticalBoxes: %s\n", no.verticalBoxes);
-            System.out.printf("maxTopNumbers: %s\n", no.maxTopNumbers);
-            System.out.printf("maxSideNumbers: %s\n", no.maxSideNumbers);
-        }
-
-        return no;
+        return new Nonogram(title, topNumbers, sideNumbers, boxSize);
     }
 
     /**

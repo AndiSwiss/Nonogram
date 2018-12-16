@@ -15,7 +15,6 @@ public class Nonogram {
     public int horizontalBoxes;
     public int verticalBoxes;
 
-    // todo: remove maxTopNumbers and maxSideNumbers and replace with getters, which get the size dynamically from topNumbers / sideNumbers
     public int maxTopNumbers;
     public int maxSideNumbers;
     public List<NumberLine> topNumbers;
@@ -40,6 +39,26 @@ public class Nonogram {
         this.topNumbers = topNumbers;
         this.sideNumbers = sideNumbers;
         this.boxSize = boxSize;
+
+        // todo: move this calculation to the nonogram itself - this FileReader should just read the file, that's it!
+        // calculating the amount of horizontal and vertical boxes:
+        horizontalBoxes = topNumbers.size();
+        verticalBoxes = sideNumbers.size();
+
+        // calculating maxTopNumbers and maxSideNumbers
+        maxTopNumbers = 0;
+        for (NumberLine one : topNumbers) {
+            if (one.size() > maxTopNumbers) {
+                maxTopNumbers = one.size();
+            }
+        }
+
+        maxSideNumbers = 0;
+        for (NumberLine one : sideNumbers) {
+            if (one.size() > maxSideNumbers) {
+                maxSideNumbers = one.size();
+            }
+        }
     }
 
 

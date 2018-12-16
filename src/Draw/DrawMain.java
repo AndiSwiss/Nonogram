@@ -1,12 +1,13 @@
 package Draw;
 
-import NonogramStructure.Nonogram;
 import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
+import NonogramStructure.Nonogram;
 import NonogramStructure.NumberLine;
 import Solver.Solver;
 import UiElements.*;
+
 import processing.core.PApplet;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class DrawMain extends PApplet {
                 .forEach(ui -> ui.setSelected(false));
 
         InputDataHandler data = new InputDataHandler();
-        no = data.readAllFileInputs(fileName, true);
+        no = data.readAllFileInputs(fileName);
         no.solutionFile = data.readSolutionFile(fileName);
 
         data.checkIfInputMatchesSolution(no);
