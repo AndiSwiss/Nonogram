@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringHelpers {
+public class StringHelper {
 
     /**
      * Searches for the last integer in a String and parses it to an integer. <br>
@@ -13,7 +13,7 @@ public class StringHelpers {
      * @return int
      * @throws IllegalArgumentException If no integer was found.
      */
-    public static int getLastIntegerFromString(String s) {
+    public int getLastIntegerFromString(String s) {
         List<Integer> ints = getIntegersFromString(s);
         if (ints == null || ints.size() == 0) {
             throw new IllegalArgumentException("The String did not contain any integers!");
@@ -28,7 +28,7 @@ public class StringHelpers {
      * @throws IllegalArgumentException If no integer was found.
      * @return List<Integer> The list of integers or null, if none were found
      */
-    public static List<Integer> getIntegersFromString(String s) {
+    public List<Integer> getIntegersFromString(String s) {
 
         // check for occurrence of doubles and throw an error if you found something like "4.6" [digit.digit]:
         if (s.contains(".")) {

@@ -15,7 +15,7 @@ import static UiElements.UiElementList.uiElements;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4b
+ * @version 0.4c
  */
 public class Nonogram extends PApplet {
 
@@ -444,7 +444,7 @@ public class Nonogram extends PApplet {
             size = zone.getSizeX() / boxSize;
         }
 
-        System.out.println("for Zone " + zone.getName() + ", length = " + size);
+//        System.out.println("for Zone " + zone.getName() + ", length = " + size);
 
         for (int i = 1; i < size; i++) {
             if (i % 5 == 0) {

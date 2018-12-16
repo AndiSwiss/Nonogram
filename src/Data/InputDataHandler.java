@@ -1,13 +1,12 @@
 package Data;
 
+import Helpers.FileHelper;
+import Helpers.StringHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static Data.DataStorage.*;
-
-import static Helpers.FileHelpers.getStringsFromAFile;
-import static Helpers.StringHelpers.getIntegersFromString;
-import static Helpers.StringHelpers.getLastIntegerFromString;
 
 /**
  * Reads all data from the given input-File and stores and/or processes them to be stored in /Data/DataStorage
@@ -22,7 +21,8 @@ public class InputDataHandler {
      */
     public void readAllFileInputs(String fileName, boolean debugMode) {
         List<String> input;
-        input = getStringsFromAFile(fileName);
+        FileHelper fh = new FileHelper();
+        input = fh.getStringsFromAFile(fileName);
 
         // reading the title form the file, if set:
         for (String line : input) {
@@ -38,7 +38,8 @@ public class InputDataHandler {
         boxSize = 0;
         for (String line : input) {
             if (line.toLowerCase().contains("boxsize")) {
-                boxSize = getLastIntegerFromString(line);
+                StringHelper sh = new StringHelper();
+                boxSize = sh.getLastIntegerFromString(line);
                 break;
             }
         }
@@ -99,7 +100,8 @@ public class InputDataHandler {
 
             if (start) {
                 if (line.length() > 0 && line.charAt(0) >= '0' && line.charAt(0) <= '9') {
-                    List<Integer> oneLine = getIntegersFromString(line);
+                    StringHelper sh = new StringHelper();
+                    List<Integer> oneLine = sh.getIntegersFromString(line);
                     numbers.add(oneLine);
                 } else {
                     // stop:
@@ -118,7 +120,8 @@ public class InputDataHandler {
      */
     public void readSolutionFile(String fileName) {
         fileName = fileName.replace(".txt", "_solution.txt");
-        solutionFile = getStringsFromAFile(fileName);
+        FileHelper fh = new FileHelper();
+        solutionFile = fh.getStringsFromAFile(fileName);
     }
 
 
