@@ -1,0 +1,29 @@
+package Solver;
+
+public class Box {
+    private int posX;
+    private int posY;
+    private State state;
+
+    public Box(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
+    }
+
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public State getState() {
+        return state;
+    }
+}

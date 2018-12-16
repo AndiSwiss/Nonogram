@@ -4,6 +4,7 @@ import Data.DataStorage;
 import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
+import Solver.Solver;
 import UiElements.*;
 import processing.core.PApplet;
 
@@ -49,6 +50,9 @@ public class Nonogram extends PApplet {
 
 
         // todo: create a nonogram-solver. Think about the strategies -> see  /src/Examples/nonogram3_strategyPics/*
+        Solver solver = new Solver(ds);
+        solver.start();
+
 
     }
 
