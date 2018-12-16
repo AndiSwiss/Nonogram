@@ -8,11 +8,11 @@ import java.util.List;
 
 public class UiElementList {
 
-    public static List<UiElement> uiElements;
+    private List<UiElement> uiElements;
 
 
 
-    public static void buildUiElementList() {
+    public void buildUiElementList() {
         uiElements = new ArrayList<>();
 
         // File chooser:
@@ -35,12 +35,16 @@ public class UiElementList {
 
 
 
-    public static void updateAllUiElementPositions(int boxSize) {
+    public void updateAllUiElementPositions(int boxSize) {
         for (int i = 0; i < uiElements.size(); i++) {
             UiElement ui = uiElements.get(i);
 
             ui.updatePositionValues(new Position(Zone.BOTTOM, 0, i, boxSize), 15, 1, boxSize);
         }
+    }
+
+    public List<UiElement> getUiElements() {
+        return uiElements;
     }
 }
 

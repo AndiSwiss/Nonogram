@@ -9,18 +9,16 @@ import processing.core.PApplet;
 
 import java.util.List;
 
-// all Data is stored in the static object Data (in Package Data):
-import static UiElements.UiElementList.uiElements;
-
 
 /**
  * @author Andreas Ambühl
- * @version 0.4d
+ * @version 0.4e
  */
 public class Nonogram extends PApplet {
 
     private InitialData id;
     private DataStorage ds;
+    private UiElementList ul;
 
     //-----------------------------//
     // Processing specific methods //
@@ -33,17 +31,18 @@ public class Nonogram extends PApplet {
     public void setup() {
         id = new InitialData();
         ds = new DataStorage();
+        ul = new UiElementList();
 
         size(id.myWidth, id.myHeight);
         System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
         frameRate(30);
 
-        UiElementList.buildUiElementList();
+        ul.buildUiElementList();
 
 
         String fileName = "src/Examples/nonogram1.txt";
         // set the first example-Ui to selected:
-        uiElements.stream()
+        ul.getUiElements().stream()
                 .filter(ui -> ui.getName().contains("nonogram1"))
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
@@ -61,7 +60,7 @@ public class Nonogram extends PApplet {
     private void loadNewExample(String fileName) {
 
         // reset the drawSolution-Ui to 'not selected':
-        uiElements.stream()
+        ul.getUiElements().stream()
                 .filter(ui -> ui.getName().equals("drawSolution"))
                 .forEach(ui -> ui.setSelected(false));
 
@@ -85,8 +84,8 @@ public class Nonogram extends PApplet {
     // UI-Interactions //
     //-----------------//
     private void drawAllUiElements() {
-        UiElementList.updateAllUiElementPositions(ds.boxSize);
-        uiElements.forEach(this::drawUiElement);
+        ul.updateAllUiElementPositions(ds.boxSize);
+        ul.getUiElements().forEach(this::drawUiElement);
     }
 
     private void drawUiElement(UiElement ui) {
@@ -121,10 +120,10 @@ public class Nonogram extends PApplet {
         // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
 
         // check, if mousePressed was on an UI-Element, and which one:
-        UiElement ui = inWhichUiElementIsIt(ds.mousePressedPos, uiElements);
+        UiElement ui = inWhichUiElementIsIt(ds.mousePressedPos, ul.getUiElements());
 
         if (ui != null) {
-            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY, ds.boxSize), uiElements);
+            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY, ds.boxSize), ul.getUiElements());
 
             if (ui.equals(selectedReleased)) {
 
@@ -143,7 +142,7 @@ public class Nonogram extends PApplet {
         if (ui instanceof UiFileChooser) {
 
             // deselect all elements of this group:
-            for (UiElement uiElement : uiElements) {
+            for (UiElement uiElement : ul.getUiElements()) {
                 if (uiElement instanceof UiFileChooser) {
                     uiElement.setSelected(false);
                 }
@@ -197,7 +196,7 @@ public class Nonogram extends PApplet {
 
         // check whether the solution was already shown, so that I can draw it again:
         boolean solutionWasDrawn = false;
-        for (UiElement ui : uiElements) {
+        for (UiElement ui : ul.getUiElements()) {
             if (ui.getName().contains("drawSolution")) {
                 solutionWasDrawn = ui.isSelected();
             }
