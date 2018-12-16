@@ -19,4 +19,7 @@ public class DataStorage {
     public static List<List<Integer>> sideNumbers;
     public static List<String> solutionFile;
 
+
+    // for tracking the mouse:
+    public static Position mousePressedPos = null;
 }

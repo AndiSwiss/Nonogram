@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Data.DataStorage.*;
-import static Data.InitialData.*;
-
 
 import static Helpers.FileHelpers.getStringsFromAFile;
 import static Helpers.StringHelpers.getIntegersFromString;
@@ -80,8 +78,6 @@ public class InputDataHandler {
             System.out.printf("verticalBoxes: %s\n", verticalBoxes);
             System.out.printf("maxTopNumbers: %s\n", maxTopNumbers);
             System.out.printf("maxSideNumbers: %s\n", maxSideNumbers);
-            System.out.printf("width: %s\n", myWidth);
-            System.out.printf("height: %s\n", myHeight);
         }
     }
 

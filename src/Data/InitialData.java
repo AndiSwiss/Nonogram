@@ -36,6 +36,4 @@ public class InitialData {
     public static final int footerHeight = 1;
     public static final String footerText = "© 2018 by Andreas Ambühl";
 
-    // for tracking the mouse:
-    public static Position mousePressedPos = null;
 }

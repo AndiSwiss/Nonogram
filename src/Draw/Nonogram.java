@@ -30,6 +30,7 @@ public class Nonogram extends PApplet {
     @Override
     public void setup() {
         size(myWidth, myHeight);
+        System.out.printf("width: %s, height: %s\n", myWidth, myHeight);
         frameRate(30);
 
         UiElementList.buildUiElementList();
@@ -45,7 +46,7 @@ public class Nonogram extends PApplet {
         // For testing, whether the defined zones are ok:
 //        Zone.drawAllZoneBoxesForTesting(this);
 
-        // todo: create a nonogram-solver
+        // todo: create a nonogram-solver. Think about the strategies -> see  /src/Examples/nonogram3_strategyPics/*
 
     }
 
