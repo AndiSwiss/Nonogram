@@ -5,7 +5,7 @@ public class Box {
     private int posY;
     private State state;
 
-    public Box(int posX, int posY) {
+    Box(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
         state = State.UNKNOWN;

@@ -3,6 +3,7 @@ package Draw;
 import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
+import NonogramStructure.Box;
 import NonogramStructure.Nonogram;
 import NonogramStructure.NumberLine;
 import Solver.Solver;
@@ -15,12 +16,13 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4m
+ * @version 0.4n
  */
 public class DrawMain extends PApplet {
 
     private InitialData id;
     private Nonogram no;
+    private Nonogram solutionFile;
     private UiElementList ul;
 
     // for tracking the mouse:
@@ -75,9 +77,9 @@ public class DrawMain extends PApplet {
 
         InputDataHandler data = new InputDataHandler();
         no = data.readAllFileInputs(fileName);
-        no.setSolutionFile(data.readSolutionFile(fileName));
+        solutionFile = data.readSolutionFile(fileName, no.getBoxSize());
 
-        data.checkIfInputMatchesSolution(no);
+        data.checkIfInputMatchesSolution(no, solutionFile);
 
         reDrawUi();
 
@@ -275,25 +277,30 @@ public class DrawMain extends PApplet {
         }
     }
 
-    /**
-     * Draws a BLACK box on the playable field. x/y 0/0 is the top-left corner of the playable field.
-     *
-     * @param x x
-     * @param y y
-     */
-    private void drawBox(int x, int y) {
-        drawBox(x, y, id.cBlack);
-    }
-
 
     /**
      * Draws a box on the playable field. x/y 0/0 is the top-left corner of the playable field.
      *
-     * @param x     x
-     * @param y     y
-     * @param color color on the black/white color scale
+     * @param box Box
      */
-    private void drawBox(int x, int y, int color) {
+    private void drawBox(Box box) {
+        int x = box.getPosX();
+        int y = box.getPosY();
+
+        int color;
+        switch (box.getState()) {
+            case UNKNOWN:
+                color = id.cLightGrey2;
+                break;
+            case WHITE:
+                color = id.cWhite;
+                break;
+            case BLACK:
+                color = id.cBlack;
+                break;
+            default:
+                throw new IllegalArgumentException("Undefined state in method drawBox! Color: " + box.getState());
+        }
 
         drawRectangle(Zone.MAIN, x, y, 1, 1, color, 1, id.cBackgroundLine);
 
@@ -520,17 +527,9 @@ public class DrawMain extends PApplet {
      * Draws the solution
      */
     private void drawSolution() {
-        for (int i = 0; i < no.getVerticalBoxesCount(); i++) {
-            String line = no.getSolutionFile().get(i);
-            for (int j = 0; j < no.getHorizontalBoxesCount(); j++) {
-                // if found an element (and j is still inside the line's length:
-                if (j < line.length() && line.charAt(j) != ' ') {
-                    drawBox(j, i);
-                }
-                // else draw a white box:
-                else {
-                    drawBox(j, i, id.cWhite);
-                }
+        for (int y = 0; y < solutionFile.getVerticalBoxesCount(); y++) {
+            for (int x = 0; x < solutionFile.getHorizontalBoxesCount(); x++) {
+                drawBox(solutionFile.getBox(x, y));
             }
         }
     }

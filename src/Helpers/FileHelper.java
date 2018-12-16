@@ -30,6 +30,4 @@ public class FileHelper {
 
         return input;
     }
-
-
 }

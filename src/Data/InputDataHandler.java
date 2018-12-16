@@ -2,9 +2,8 @@ package Data;
 
 import Helpers.FileHelper;
 import Helpers.StringHelper;
-import NonogramStructure.Nonogram;
+import NonogramStructure.*;
 import NonogramStructure.Number;
-import NonogramStructure.NumberLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class InputDataHandler {
     /**
      * Reads all the input-data from the file and stores in Nonogram
      *
-     * @param fileName  FileName including the relative path (src/...)
+     * @param fileName FileName including the relative path (src/...)
      * @return Nonogram, freshly constructed
      */
     public Nonogram readAllFileInputs(String fileName) {
@@ -110,10 +109,34 @@ public class InputDataHandler {
      * @param fileName file to read. The appendix ".txt" gets automatically replaced by "_solution.txt"
      * @return List<String> of the solution file
      */
-    public List<String> readSolutionFile(String fileName) {
+    public Nonogram readSolutionFile(String fileName, int boxSize) {
         fileName = fileName.replace(".txt", "_solution.txt");
         FileHelper fh = new FileHelper();
-        return fh.getStringsFromAFile(fileName);
+        List<String> solutionStrings = fh.getStringsFromAFile(fileName);
+
+        // read the topNumbers and sideNumbers from the file:
+        List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(solutionStrings);
+        List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(solutionStrings);
+
+        Nonogram solution = new Nonogram(fileName, topNumbersFromSolution, sideNumbersFromSolution, boxSize);
+
+        // read the solution and set the boxes in the Nonogram appropriately:
+        List<Line> horizontalLines = solution.getHorizontalLines();
+        for (int y = 0; y < horizontalLines.size(); y++) {
+            Line line = horizontalLines.get(y);
+            String solutionLine = solutionStrings.get(y);
+            List<Box> boxes = line.getBoxes();
+            for (int x = 0; x < boxes.size(); x++) {
+                Box box = boxes.get(x);
+                if (solutionLine.length() > x && solutionLine.charAt(x) != ' ') {
+                    box.setState(State.BLACK);
+                } else {
+                    box.setState(State.WHITE);
+                }
+            }
+        }
+
+        return solution;
     }
 
 
@@ -221,11 +244,11 @@ public class InputDataHandler {
      * @throws IllegalArgumentException If there are differences found (actually the called sub-methods
      *                                  throw those errors).
      */
-    public void checkIfInputMatchesSolution(Nonogram no) {
+    public void checkIfInputMatchesSolution(Nonogram no, Nonogram solutionFile) {
 
 
-        List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(no.getSolutionFile());
-        List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(no.getSolutionFile());
+        List<NumberLine> sideNumbersFromSolution = solutionFile.getSideNumbers();
+        List<NumberLine> topNumbersFromSolution = solutionFile.getTopNumbers();
 
         // check if those lists match the already read lines:
         if (compareTwoListLists(no.getSideNumbers(), sideNumbersFromSolution)) {
@@ -234,8 +257,6 @@ public class InputDataHandler {
         if (compareTwoListLists(no.getTopNumbers(), topNumbersFromSolution)) {
             System.out.println("topNumbers is the same as topNumbersFromSolution.");
         }
-
-
     }
 
     /**

@@ -21,14 +21,11 @@ public class Nonogram {
     private int maxTopNumbers;
     private int maxSideNumbers;
 
-    // todo: change type to 'nonogram' and save elsewhere (such as a private member in the solver, or DrawMain or?)
-    private List<String> solutionFile;
-
     public int boxSize;
 
 
     /**
-     * Constructor
+     * Constructor 1
      *
      * @param title       title
      * @param topNumbers  topNumbers
@@ -87,21 +84,19 @@ public class Nonogram {
     //----------------//
     // Custom Methods //
     //----------------//
+
     /**
      * Changes the boxSize.
+     *
      * @param value A positive value increases the boxSize, a negative value decreases the boxSize.
      */
     public void changeBoxSize(int value) {
         boxSize += value;
     }
 
-    //---------//
-    // Setters //
-    //---------//
-    public void setSolutionFile(List<String> solutionFile) {
-        this.solutionFile = solutionFile;
+    public Box getBox(int x, int y) {
+        return getHorizontalLines().get(y).getBox(x);
     }
-
 
     //---------//
     // Getters //
@@ -116,6 +111,14 @@ public class Nonogram {
 
     public int getVerticalBoxesCount() {
         return verticalBoxesCount;
+    }
+
+    public List<Line> getHorizontalLines() {
+        return horizontalLines;
+    }
+
+    public List<Line> getVerticalLines() {
+        return verticalLines;
     }
 
     public int getMaxTopNumbers() {
@@ -142,14 +145,9 @@ public class Nonogram {
         return result;
     }
 
-    public List<String> getSolutionFile() {
-        return solutionFile;
-    }
-
     public int getBoxSize() {
         return boxSize;
     }
-
 
 
     // todo: write a smart equals method, so that it really makes sense!

@@ -54,12 +54,16 @@ public class Line {
     //----------------//
     // Custom Methods //
     //----------------//
-    public int sizeBoxes() {
+    public int getBoxesSize() {
         return boxes.size();
     }
 
-    public int sizeNumber() {
+    public int getNumbersSize() {
         return numbers.size();
+    }
+
+    public Box getBox(int i) {
+        return boxes.get(i);
     }
 
 
