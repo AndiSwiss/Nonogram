@@ -12,7 +12,7 @@ import java.util.List;
 public class InputDataHandler {
 
     /**
-     * Reads all the input-data from the file and stores in Data/DataStorage (in it's static member fields)
+     * Reads all the input-data from the file and stores in the DataStorage
      *
      * @param fileName  FileName including the relative path (src/...)
      * @param ds        DataStorage

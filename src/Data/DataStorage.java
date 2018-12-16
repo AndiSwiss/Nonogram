@@ -4,8 +4,9 @@ import java.util.List;
 
 /**
  * Data storage for various values, which have to be set, changed or accessed across different classes. <br>
- * -> Easily use them anywhere with the following import-statement: <br>
- * import static Data.InitialData.*;
+ * An instance of this gets created in Nonogram and saved there as a private variable. <br>
+ * If any other class needs access, the Nonogram-class should pass that instance (or just some specific fields)
+ * to that class-constructor or its class-method.
  */
 public class DataStorage {
 
