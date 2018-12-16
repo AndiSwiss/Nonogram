@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4l
+ * @version 0.4m
  */
 public class DrawMain extends PApplet {
 

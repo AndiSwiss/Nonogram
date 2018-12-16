@@ -1,7 +1,7 @@
 package NonogramStructure;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Data storage for various values, which have to be set, changed or accessed across different classes. <br>
@@ -15,10 +15,11 @@ public class Nonogram {
     private int horizontalBoxesCount;
     private int verticalBoxesCount;
 
+    private List<Line> horizontalLines;    // Contains all the lines of Boxes and Numbers - in horizontal direction
+    private List<Line> verticalLines;      // Contains all the lines of Boxes and Numbers - in vertical direction
+
     private int maxTopNumbers;
     private int maxSideNumbers;
-    private List<NumberLine> topNumbers;
-    private List<NumberLine> sideNumbers;
 
     // todo: change type to 'nonogram' and save elsewhere (such as a private member in the solver, or DrawMain or?)
     private List<String> solutionFile;
@@ -36,8 +37,6 @@ public class Nonogram {
      */
     public Nonogram(String title, List<NumberLine> topNumbers, List<NumberLine> sideNumbers, int boxSize) {
         this.title = title;
-        this.topNumbers = topNumbers;
-        this.sideNumbers = sideNumbers;
         this.boxSize = boxSize;
 
         // calculating the amount of horizontal and vertical boxes:
@@ -57,6 +56,31 @@ public class Nonogram {
             if (one.size() > maxSideNumbers) {
                 maxSideNumbers = one.size();
             }
+        }
+
+        // construct all the HORIZONTAL lines:
+        horizontalLines = new ArrayList<>();
+        // save all the created horizontal boxes for use when constructing the vertical boxes:
+        List<List<Box>> horizontalBoxes = new ArrayList<>();
+        for (int lineNumber = 0; lineNumber < verticalBoxesCount; lineNumber++) {
+            List<Box> horizontalBoxLine = new ArrayList<>();
+            for (int i = 0; i < horizontalBoxesCount; i++) {
+                horizontalBoxLine.add(new Box(i, lineNumber));
+            }
+            horizontalLines.add(new Line(horizontalBoxLine, sideNumbers.get(lineNumber), Direction.HORIZONTAL));
+            horizontalBoxes.add(horizontalBoxLine);
+
+        }
+
+        // construct all the VERTICAL lines:
+        verticalLines = new ArrayList<>();
+        for (int columnNumber = 0; columnNumber < horizontalBoxesCount; columnNumber++) {
+            List<Box> verticalBoxLine = new ArrayList<>();
+            for (int i = 0; i < verticalBoxesCount; i++) {
+                Box box = horizontalBoxes.get(i).get(columnNumber);
+                verticalBoxLine.add(box);
+            }
+            verticalLines.add(new Line(verticalBoxLine, topNumbers.get(columnNumber), Direction.VERTICAL));
         }
     }
 
@@ -103,11 +127,19 @@ public class Nonogram {
     }
 
     public List<NumberLine> getTopNumbers() {
-        return topNumbers;
+        List<NumberLine> result = new ArrayList<>();
+        for (Line line : verticalLines) {
+            result.add(line.getNumbers());
+        }
+        return result;
     }
 
     public List<NumberLine> getSideNumbers() {
-        return sideNumbers;
+        List<NumberLine> result = new ArrayList<>();
+        for (Line line : horizontalLines) {
+            result.add(line.getNumbers());
+        }
+        return result;
     }
 
     public List<String> getSolutionFile() {
@@ -120,23 +152,6 @@ public class Nonogram {
 
 
 
-    // todo: rewrite the equals method, so that it really makes sense!
+    // todo: write a smart equals method, so that it really makes sense!
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Nonogram nonogram = (Nonogram) o;
-        return horizontalBoxesCount == nonogram.horizontalBoxesCount &&
-                verticalBoxesCount == nonogram.verticalBoxesCount &&
-                maxTopNumbers == nonogram.maxTopNumbers &&
-                maxSideNumbers == nonogram.maxSideNumbers &&
-                Objects.equals(topNumbers, nonogram.topNumbers) &&
-                Objects.equals(sideNumbers, nonogram.sideNumbers);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(horizontalBoxesCount, verticalBoxesCount, maxTopNumbers, maxSideNumbers, topNumbers, sideNumbers);
-    }
 }
