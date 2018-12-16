@@ -8,6 +8,7 @@ public class Box {
     public Box(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
+        state = State.UNKNOWN;
     }
 
 

@@ -39,34 +39,34 @@ public enum Zone {
             case "MAIN":
                 minX = 1 + no.getMaxSideNumbers();
                 minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers();
-                sizeX = no.getHorizontalBoxes();
-                sizeY = no.getVerticalBoxes();
+                sizeX = no.getHorizontalBoxesCount();
+                sizeY = no.getVerticalBoxesCount();
                 color = id.cLightGrey2;
                 break;
             case "LEFT":
                 minX = 1;
                 minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers();
                 sizeX = no.getMaxSideNumbers();
-                sizeY = no.getVerticalBoxes();
+                sizeY = no.getVerticalBoxesCount();
                 color = id.cBackground;
                 break;
             case "RIGHT":
-                minX = 1 + no.getMaxSideNumbers() + no.getHorizontalBoxes();
+                minX = 1 + no.getMaxSideNumbers() + no.getHorizontalBoxesCount();
                 minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers();
                 sizeX = id.rightSideWidth;
-                sizeY = no.getVerticalBoxes();
+                sizeY = no.getVerticalBoxesCount();
                 color = id.cBackground;
                 break;
             case "TOP":
                 minX = 1 + no.getMaxSideNumbers();
                 minY = 1 + id.headerHeight + 1;
-                sizeX = no.getHorizontalBoxes();
+                sizeX = no.getHorizontalBoxesCount();
                 sizeY = no.getMaxTopNumbers();
                 color = id.cBackground;
                 break;
             case "BOTTOM":
                 minX = 1;
-                minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxes() + 1;
+                minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxesCount() + 1;
                 sizeX = id.myWidth / no.getBoxSize() - 2;
                 sizeY = id.myHeight / no.getBoxSize() - id.footerHeight - minY;
                 color = id.cBackground;

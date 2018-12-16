@@ -12,8 +12,8 @@ import java.util.Objects;
 public class Nonogram {
 
     private String title;
-    private int horizontalBoxes;
-    private int verticalBoxes;
+    private int horizontalBoxesCount;
+    private int verticalBoxesCount;
 
     private int maxTopNumbers;
     private int maxSideNumbers;
@@ -41,8 +41,8 @@ public class Nonogram {
         this.boxSize = boxSize;
 
         // calculating the amount of horizontal and vertical boxes:
-        horizontalBoxes = topNumbers.size();
-        verticalBoxes = sideNumbers.size();
+        horizontalBoxesCount = topNumbers.size();
+        verticalBoxesCount = sideNumbers.size();
 
         // calculating maxTopNumbers and maxSideNumbers
         maxTopNumbers = 0;
@@ -86,12 +86,12 @@ public class Nonogram {
         return title;
     }
 
-    public int getHorizontalBoxes() {
-        return horizontalBoxes;
+    public int getHorizontalBoxesCount() {
+        return horizontalBoxesCount;
     }
 
-    public int getVerticalBoxes() {
-        return verticalBoxes;
+    public int getVerticalBoxesCount() {
+        return verticalBoxesCount;
     }
 
     public int getMaxTopNumbers() {
@@ -127,8 +127,8 @@ public class Nonogram {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Nonogram nonogram = (Nonogram) o;
-        return horizontalBoxes == nonogram.horizontalBoxes &&
-                verticalBoxes == nonogram.verticalBoxes &&
+        return horizontalBoxesCount == nonogram.horizontalBoxesCount &&
+                verticalBoxesCount == nonogram.verticalBoxesCount &&
                 maxTopNumbers == nonogram.maxTopNumbers &&
                 maxSideNumbers == nonogram.maxSideNumbers &&
                 Objects.equals(topNumbers, nonogram.topNumbers) &&
@@ -137,6 +137,6 @@ public class Nonogram {
 
     @Override
     public int hashCode() {
-        return Objects.hash(horizontalBoxes, verticalBoxes, maxTopNumbers, maxSideNumbers, topNumbers, sideNumbers);
+        return Objects.hash(horizontalBoxesCount, verticalBoxesCount, maxTopNumbers, maxSideNumbers, topNumbers, sideNumbers);
     }
 }

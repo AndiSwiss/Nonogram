@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4k
+ * @version 0.4l
  */
 public class DrawMain extends PApplet {
 
@@ -304,7 +304,7 @@ public class DrawMain extends PApplet {
             drawLine(Zone.MAIN, x, y, false, 1, 3, id.cBackgroundLine);
         }
         // on right side of the box, if it is the last one:
-        else if (x == no.getHorizontalBoxes() - 1) {
+        else if (x == no.getHorizontalBoxesCount() - 1) {
             drawLine(Zone.MAIN, x + 1, y, false, 1, 3, id.cBackgroundLine);
         }
 
@@ -313,7 +313,7 @@ public class DrawMain extends PApplet {
             drawLine(Zone.MAIN, x, y, true, 1, 3, id.cBackgroundLine);
         }
         // on right side of the box, if it is the last one:
-        else if (y == no.getVerticalBoxes() - 1) {
+        else if (y == no.getVerticalBoxesCount() - 1) {
             drawLine(Zone.MAIN, x, y + 1, true, 1, 3, id.cBackgroundLine);
         }
     }
@@ -408,7 +408,7 @@ public class DrawMain extends PApplet {
      */
     private void drawEmptyMain() {
         // main box:
-        drawRectangle(Zone.MAIN, 0, 0, no.getHorizontalBoxes(), no.getVerticalBoxes(),
+        drawRectangle(Zone.MAIN, 0, 0, no.getHorizontalBoxesCount(), no.getVerticalBoxesCount(),
                 Zone.MAIN.getColor(), 3, id.cZoneOutline);
 
         // thin lines:
@@ -424,11 +424,11 @@ public class DrawMain extends PApplet {
         drawEmptyMain();
 
         // top box:
-        drawRectangle(Zone.TOP, 0, 0, no.getHorizontalBoxes(), no.getMaxTopNumbers(),
+        drawRectangle(Zone.TOP, 0, 0, no.getHorizontalBoxesCount(), no.getMaxTopNumbers(),
                 Zone.TOP.getColor(), 3, id.cZoneOutline);
 
         // side box:
-        drawRectangle(Zone.LEFT, 0, 0, no.getMaxSideNumbers(), no.getVerticalBoxes(),
+        drawRectangle(Zone.LEFT, 0, 0, no.getMaxSideNumbers(), no.getVerticalBoxesCount(),
                 Zone.LEFT.getColor(), 3, id.cZoneOutline);
 
         // thin lines:
@@ -520,9 +520,9 @@ public class DrawMain extends PApplet {
      * Draws the solution
      */
     private void drawSolution() {
-        for (int i = 0; i < no.getVerticalBoxes(); i++) {
+        for (int i = 0; i < no.getVerticalBoxesCount(); i++) {
             String line = no.getSolutionFile().get(i);
-            for (int j = 0; j < no.getHorizontalBoxes(); j++) {
+            for (int j = 0; j < no.getHorizontalBoxesCount(); j++) {
                 // if found an element (and j is still inside the line's length:
                 if (j < line.length() && line.charAt(j) != ' ') {
                     drawBox(j, i);
