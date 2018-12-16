@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4e
+ * @version 0.4f
  */
 public class Nonogram extends PApplet {
 
@@ -158,19 +158,19 @@ public class Nonogram extends PApplet {
 
 
         if (ui instanceof UiSwitchableOption) {
-            if (ui.isSelected()) {
-                ui.setSelected(false);
-                if (ui.getName().equals("drawSolution")) {
-                    drawEmptyMain();
-                } else if (ui.getName().equals("drawAllZoneBoxes")) {
-                    reDrawUi();
-                }
-            } else {
+            if (!ui.isSelected()) {
                 ui.setSelected(true);
                 if (ui.getName().equals("drawSolution")) {
                     drawSolution();
                 } else if (ui.getName().equals("drawAllZoneBoxes")) {
                     drawAllZoneBoxes();
+                }
+            } else {
+                ui.setSelected(false);
+                if (ui.getName().equals("drawSolution")) {
+                    drawEmptyMain();
+                } else if (ui.getName().equals("drawAllZoneBoxes")) {
+                    reDrawUi();
                 }
             }
 
@@ -194,20 +194,7 @@ public class Nonogram extends PApplet {
 
         System.out.println("New boxSize is " + ds.boxSize);
 
-        // check whether the solution was already shown, so that I can draw it again:
-        boolean solutionWasDrawn = false;
-        for (UiElement ui : ul.getUiElements()) {
-            if (ui.getName().contains("drawSolution")) {
-                solutionWasDrawn = ui.isSelected();
-            }
-        }
-
         reDrawUi();
-
-        // if the solution was drawn previously:
-        if (solutionWasDrawn) {
-            drawSolution();
-        }
     }
 
     /**
@@ -270,6 +257,13 @@ public class Nonogram extends PApplet {
         drawFooter();
         drawDigits();
         drawAllUiElements();
+
+        // redraw the solution if the corresponding Ui-Element was selected:
+        for (UiElement ui : ul.getUiElements()) {
+            if (ui.getName().contains("drawSolution") && ui.isSelected()) {
+                drawSolution();
+            }
+        }
     }
 
     /**
