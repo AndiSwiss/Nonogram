@@ -3,7 +3,7 @@ package NonogramStructure;
 import java.util.List;
 
 public class Line {
-    private NumberLine numbers;
+    private NumberLine numberLine;
     private List<Box> boxes;
     private Direction direction;
     private int lineNumber;
@@ -12,12 +12,12 @@ public class Line {
      * Constructor
      *
      * @param boxes     List<Box>
-     * @param numbers   NumberLine
+     * @param numberLine   NumberLine
      * @param direction Direction
      */
-    Line(List<Box> boxes, NumberLine numbers, Direction direction) {
+    Line(List<Box> boxes, NumberLine numberLine, Direction direction) {
         this.boxes = boxes;
-        this.numbers = numbers;
+        this.numberLine = numberLine;
         this.direction = direction;
 
         if (direction == Direction.HORIZONTAL) {
@@ -59,7 +59,7 @@ public class Line {
     }
 
     public int getNumbersSize() {
-        return numbers.size();
+        return numberLine.size();
     }
 
     public Box getBox(int i) {
@@ -70,8 +70,8 @@ public class Line {
     //---------//
     // Getters //
     //---------//
-    public NumberLine getNumbers() {
-        return numbers;
+    public NumberLine getNumberLine() {
+        return numberLine;
     }
 
     public List<Box> getBoxes() {

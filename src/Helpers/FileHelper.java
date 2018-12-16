@@ -13,20 +13,16 @@ public class FileHelper {
      * @param fileName FileName and path to read from
      * @return List<String> List of the Lines of the file
      */
-    public List<String> getStringsFromAFile(String fileName) {
+    public List<String> getStringsFromAFile(String fileName) throws FileNotFoundException {
         List<String> input;
         input = new ArrayList<>();
         File file = new File(fileName);
-        try {
-            Scanner sc = new Scanner(file);
-            while (sc.hasNext()) {
-                input.add(sc.nextLine());
-            }
-
-            sc.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        Scanner sc = new Scanner(file);
+        while (sc.hasNext()) {
+            input.add(sc.nextLine());
         }
+
+        sc.close();
 
         return input;
     }

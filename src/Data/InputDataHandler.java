@@ -5,6 +5,7 @@ import Helpers.StringHelper;
 import NonogramStructure.*;
 import NonogramStructure.Number;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,40 +18,48 @@ public class InputDataHandler {
      * Reads all the input-data from the file and stores in Nonogram
      *
      * @param fileName FileName including the relative path (src/...)
-     * @return Nonogram, freshly constructed
+     * @return Nonogram, freshly constructed or throws a FileNotFoundException-error, if the specified file was not found
+     *
      */
     public Nonogram readAllFileInputs(String fileName) {
-        List<String> input;
+
         FileHelper fh = new FileHelper();
-        input = fh.getStringsFromAFile(fileName);
+        List<String> input = null;
+        try {
+            input = fh.getStringsFromAFile(fileName);
 
-        String title = null;
-        // reading the title form the file, if set:
-        for (String line : input) {
-            if (line.toLowerCase().contains("title")) {
-                line = line.replace("title: ", "");
-                line = line.replace("Title: ", "");
-                title = line;
-                break;
+            String title = null;
+            // reading the title form the file, if set:
+            for (String line : input) {
+                if (line.toLowerCase().contains("title")) {
+                    line = line.replace("title: ", "");
+                    line = line.replace("Title: ", "");
+                    title = line;
+                    break;
+                }
             }
+
+            // reading the boxSize from the file:
+            int boxSize = 0;
+            for (String line : input) {
+                if (line.toLowerCase().contains("boxsize")) {
+                    StringHelper sh = new StringHelper();
+                    boxSize = sh.getLastIntegerFromString(line);
+                    break;
+                }
+            }
+
+            // read the topNumbers and the sideNumbers:
+            List<NumberLine> topNumbers = readNumbers(input, "topNumbers");
+            List<NumberLine> sideNumbers = readNumbers(input, "sideNumbers");
+
+
+            return new Nonogram(title, topNumbers, sideNumbers, boxSize);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
-        // reading the boxSize from the file:
-        int boxSize = 0;
-        for (String line : input) {
-            if (line.toLowerCase().contains("boxsize")) {
-                StringHelper sh = new StringHelper();
-                boxSize = sh.getLastIntegerFromString(line);
-                break;
-            }
-        }
-
-        // read the topNumbers and the sideNumbers:
-        List<NumberLine> topNumbers = readNumbers(input, "topNumbers");
-        List<NumberLine> sideNumbers = readNumbers(input, "sideNumbers");
-
-
-        return new Nonogram(title, topNumbers, sideNumbers, boxSize);
+        return null;
     }
 
     /**
@@ -107,36 +116,41 @@ public class InputDataHandler {
      * Reads the solution file.
      *
      * @param fileName file to read. The appendix ".txt" gets automatically replaced by "_solution.txt"
-     * @return List<String> of the solution file
+     * @return Nonogram. It returns null, if no solution was found at the specified location!
      */
     public Nonogram readSolutionFile(String fileName, int boxSize) {
         fileName = fileName.replace(".txt", "_solution.txt");
         FileHelper fh = new FileHelper();
-        List<String> solutionStrings = fh.getStringsFromAFile(fileName);
+        List<String> solutionStrings = null;
+        try {
+            solutionStrings = fh.getStringsFromAFile(fileName);
+            // read the topNumbers and sideNumbers from the file:
+            List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(solutionStrings);
+            List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(solutionStrings);
 
-        // read the topNumbers and sideNumbers from the file:
-        List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(solutionStrings);
-        List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(solutionStrings);
+            Nonogram solution = new Nonogram(fileName, topNumbersFromSolution, sideNumbersFromSolution, boxSize);
 
-        Nonogram solution = new Nonogram(fileName, topNumbersFromSolution, sideNumbersFromSolution, boxSize);
-
-        // read the solution and set the boxes in the Nonogram appropriately:
-        List<Line> horizontalLines = solution.getHorizontalLines();
-        for (int y = 0; y < horizontalLines.size(); y++) {
-            Line line = horizontalLines.get(y);
-            String solutionLine = solutionStrings.get(y);
-            List<Box> boxes = line.getBoxes();
-            for (int x = 0; x < boxes.size(); x++) {
-                Box box = boxes.get(x);
-                if (solutionLine.length() > x && solutionLine.charAt(x) != ' ') {
-                    box.setState(State.BLACK);
-                } else {
-                    box.setState(State.WHITE);
+            // read the solution and set the boxes in the Nonogram appropriately:
+            List<Line> horizontalLines = solution.getHorizontalLines();
+            for (int y = 0; y < horizontalLines.size(); y++) {
+                Line line = horizontalLines.get(y);
+                String solutionLine = solutionStrings.get(y);
+                List<Box> boxes = line.getBoxes();
+                for (int x = 0; x < boxes.size(); x++) {
+                    Box box = boxes.get(x);
+                    if (solutionLine.length() > x && solutionLine.charAt(x) != ' ') {
+                        box.setState(State.BLACK);
+                    } else {
+                        box.setState(State.WHITE);
+                    }
                 }
             }
-        }
 
-        return solution;
+            return solution;
+
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
 

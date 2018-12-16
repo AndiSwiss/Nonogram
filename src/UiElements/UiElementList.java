@@ -19,7 +19,7 @@ public class UiElementList {
         uiElements.add(new UiTextbox("fileChooserTitle", "Choose the file:"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram1.txt", "Example 1"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram2.txt", "Example 2"));
-        uiElements.add(new UiTextbox("src/Example/nonogram3.txt", "Example 3: not yet solved thus not selectable!"));
+        uiElements.add(new UiFileChooser("src/Examples/nonogram3.txt", "Example 3"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram4.txt", "Example 4"));
 
 

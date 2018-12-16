@@ -132,7 +132,7 @@ public class Nonogram {
     public List<NumberLine> getTopNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : verticalLines) {
-            result.add(line.getNumbers());
+            result.add(line.getNumberLine());
         }
         return result;
     }
@@ -140,7 +140,7 @@ public class Nonogram {
     public List<NumberLine> getSideNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : horizontalLines) {
-            result.add(line.getNumbers());
+            result.add(line.getNumberLine());
         }
         return result;
     }

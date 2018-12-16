@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4n
+ * @version 0.4o
  */
 public class DrawMain extends PApplet {
 
@@ -48,10 +48,10 @@ public class DrawMain extends PApplet {
         ul.buildUiElementList();
 
 
-        String fileName = "src/Examples/nonogram1.txt";
+        String fileName = "src/Examples/nonogram3.txt";
         // set the first example-Ui to selected:
         ul.getUiElements().stream()
-                .filter(ui -> ui.getName().contains("nonogram1"))
+                .filter(ui -> ui.getName().contains("nonogram3"))
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
 
@@ -79,7 +79,9 @@ public class DrawMain extends PApplet {
         no = data.readAllFileInputs(fileName);
         solutionFile = data.readSolutionFile(fileName, no.getBoxSize());
 
-        data.checkIfInputMatchesSolution(no, solutionFile);
+        if (solutionFile != null) {
+            data.checkIfInputMatchesSolution(no, solutionFile);
+        }
 
         reDrawUi();
 
@@ -172,14 +174,19 @@ public class DrawMain extends PApplet {
             if (!ui.isSelected()) {
                 ui.setSelected(true);
                 if (ui.getName().equals("drawSolution")) {
-                    drawSolution();
+                    if (solutionFile != null) {
+                        drawSolution();
+                    } else {
+                        System.out.println("Solution file not found!");
+                        drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 7, 1);
+                    }
                 } else if (ui.getName().equals("drawAllZoneBoxes")) {
                     drawAllZoneBoxes();
                 }
             } else {
                 ui.setSelected(false);
                 if (ui.getName().equals("drawSolution")) {
-                    drawEmptyMain();
+                    reDrawUi();
                 } else if (ui.getName().equals("drawAllZoneBoxes")) {
                     reDrawUi();
                 }
@@ -407,7 +414,6 @@ public class DrawMain extends PApplet {
         textSize((int) (relativeSize * no.getBoxSize()));
         text(string, x, y);
     }
-
 
 
     /**
