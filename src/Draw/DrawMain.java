@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4o
+ * @version 0.5a
  */
 public class DrawMain extends PApplet {
 
@@ -48,10 +48,10 @@ public class DrawMain extends PApplet {
         ul.buildUiElementList();
 
 
-        String fileName = "src/Examples/nonogram3.txt";
+        String fileName = "src/Examples/nonogram1.txt";
         // set the first example-Ui to selected:
         ul.getUiElements().stream()
-                .filter(ui -> ui.getName().contains("nonogram3"))
+                .filter(ui -> ui.getName().contains("nonogram1"))
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
 

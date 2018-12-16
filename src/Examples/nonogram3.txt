@@ -1,4 +1,4 @@
-title: Pack003: SW Mix M-L, Nr. 12 - NOT SOLVED YET!!
+title: Pack003: SW Mix M-L, Nr. 12
 boxSize: 18
 
 
