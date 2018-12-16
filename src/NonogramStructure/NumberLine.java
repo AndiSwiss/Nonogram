@@ -6,15 +6,18 @@ import java.util.Objects;
 public class NumberLine {
     private List<Number> numbers;
 
+    /**
+     * Constructor
+     * @param numbers List<Number>
+     */
     public NumberLine(List<Number> numbers) {
         this.numbers = numbers;
     }
 
-    public List<Number> getNumbers() {
-        return numbers;
-    }
-
-    /**
+    //----------------//
+    // Custom Methods //
+    //----------------//
+   /**
      * Returns a specific number of the list of the numbers of this line.
      * @param i i
      * @return Number
@@ -34,6 +37,13 @@ public class NumberLine {
 
     public int size() {
         return numbers.size();
+    }
+
+    //---------//
+    // Getters //
+    //---------//
+    public List<Number> getNumbers() {
+        return numbers;
     }
 
 

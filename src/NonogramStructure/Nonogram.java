@@ -60,13 +60,13 @@ public class Nonogram {
         }
     }
 
+    //----------------//
+    // Custom Methods //
+    //----------------//
     /**
      * Changes the boxSize.
      * @param value A positive value increases the boxSize, a negative value decreases the boxSize.
      */
-    //----------------//
-    // Custom Methods //
-    //----------------//
     public void changeBoxSize(int value) {
         boxSize += value;
     }
