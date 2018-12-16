@@ -37,36 +37,36 @@ public enum Zone {
                 color = id.cBackground;
                 break;
             case "MAIN":
-                minX = 1 + no.maxSideNumbers;
-                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers;
-                sizeX = no.horizontalBoxes;
-                sizeY = no.verticalBoxes;
+                minX = 1 + no.getMaxSideNumbers();
+                minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers();
+                sizeX = no.getHorizontalBoxes();
+                sizeY = no.getVerticalBoxes();
                 color = id.cLightGrey2;
                 break;
             case "LEFT":
                 minX = 1;
-                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers;
-                sizeX = no.maxSideNumbers;
-                sizeY = no.verticalBoxes;
+                minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers();
+                sizeX = no.getMaxSideNumbers();
+                sizeY = no.getVerticalBoxes();
                 color = id.cBackground;
                 break;
             case "RIGHT":
-                minX = 1 + no.maxSideNumbers + no.horizontalBoxes;
-                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers;
+                minX = 1 + no.getMaxSideNumbers() + no.getHorizontalBoxes();
+                minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers();
                 sizeX = id.rightSideWidth;
-                sizeY = no.verticalBoxes;
+                sizeY = no.getVerticalBoxes();
                 color = id.cBackground;
                 break;
             case "TOP":
-                minX = 1 + no.maxSideNumbers;
+                minX = 1 + no.getMaxSideNumbers();
                 minY = 1 + id.headerHeight + 1;
-                sizeX = no.horizontalBoxes;
-                sizeY = no.maxTopNumbers;
+                sizeX = no.getHorizontalBoxes();
+                sizeY = no.getMaxTopNumbers();
                 color = id.cBackground;
                 break;
             case "BOTTOM":
                 minX = 1;
-                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers + no.verticalBoxes + 1;
+                minY = 1 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxes() + 1;
                 sizeX = id.myWidth / no.boxSize - 2;
                 sizeY = id.myHeight / no.boxSize - id.footerHeight - minY;
                 color = id.cBackground;

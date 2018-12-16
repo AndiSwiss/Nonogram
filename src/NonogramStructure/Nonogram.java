@@ -12,16 +12,16 @@ import java.util.Objects;
 public class Nonogram {
 
     private String title;
-    public int horizontalBoxes;
-    public int verticalBoxes;
+    private int horizontalBoxes;
+    private int verticalBoxes;
 
-    public int maxTopNumbers;
-    public int maxSideNumbers;
-    public List<NumberLine> topNumbers;
-    public List<NumberLine> sideNumbers;
+    private int maxTopNumbers;
+    private int maxSideNumbers;
+    private List<NumberLine> topNumbers;
+    private List<NumberLine> sideNumbers;
 
     // todo: change type to 'nonogram' and save elsewhere (such as a private member in the solver, or DrawMain or?)
-    public List<String> solutionFile;
+    private List<String> solutionFile;
 
     public int boxSize;
 
@@ -40,7 +40,6 @@ public class Nonogram {
         this.sideNumbers = sideNumbers;
         this.boxSize = boxSize;
 
-        // todo: move this calculation to the nonogram itself - this FileReader should just read the file, that's it!
         // calculating the amount of horizontal and vertical boxes:
         horizontalBoxes = topNumbers.size();
         verticalBoxes = sideNumbers.size();
@@ -61,9 +60,16 @@ public class Nonogram {
         }
     }
 
+    //---------//
+    // Setters //
+    //---------//
+    public void setSolutionFile(List<String> solutionFile) {
+        this.solutionFile = solutionFile;
+    }
 
-    // todo: make everything private!
-
+    //---------//
+    // Getters //
+    //---------//
     public String getTitle() {
         return title;
     }
@@ -100,8 +106,6 @@ public class Nonogram {
         return boxSize;
     }
 
-    // todo: from that you can construct the amount horizontalBoxes, the verticalBoxes
-    // todo: the solutionFile should also have private access, with setter and getter
 
 
     // todo: rewrite the equals method, so that it really makes sense!

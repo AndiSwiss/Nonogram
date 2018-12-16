@@ -224,14 +224,14 @@ public class InputDataHandler {
     public void checkIfInputMatchesSolution(Nonogram no) {
 
 
-        List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(no.solutionFile);
-        List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(no.solutionFile);
+        List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(no.getSolutionFile());
+        List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(no.getSolutionFile());
 
         // check if those lists match the already read lines:
-        if (compareTwoListLists(no.sideNumbers, sideNumbersFromSolution)) {
+        if (compareTwoListLists(no.getSideNumbers(), sideNumbersFromSolution)) {
             System.out.println("sideNumbers is the same as sideNumbersFromSolution.");
         }
-        if (compareTwoListLists(no.topNumbers, topNumbersFromSolution)) {
+        if (compareTwoListLists(no.getTopNumbers(), topNumbersFromSolution)) {
             System.out.println("topNumbers is the same as topNumbersFromSolution.");
         }
 
