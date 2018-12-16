@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.4h
+ * @version 0.4i
  */
 public class DrawMain extends PApplet {
 
@@ -35,7 +35,7 @@ public class DrawMain extends PApplet {
     @Override
     public void setup() {
         id = new InitialData();
-        no = new Nonogram();
+//        no = new Nonogram(); // the nonogram gets initialized in data.readAllFileInputs
         ul = new UiElementList();
 
         size(id.myWidth, id.myHeight);
@@ -73,7 +73,7 @@ public class DrawMain extends PApplet {
                 .forEach(ui -> ui.setSelected(false));
 
         InputDataHandler data = new InputDataHandler();
-        data.readAllFileInputs(fileName, no, true);
+        no = data.readAllFileInputs(fileName, true);
         no.solutionFile = data.readSolutionFile(fileName);
 
         data.checkIfInputMatchesSolution(no);
@@ -538,7 +538,7 @@ public class DrawMain extends PApplet {
      * Draw the title
      */
     private void drawTitle() {
-        drawText(no.title, Zone.HEADER, 0, 0);
+        drawText(no.getTitle(), Zone.HEADER, 0, 0);
     }
 
 

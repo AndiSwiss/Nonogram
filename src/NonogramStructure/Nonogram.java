@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public class Nonogram {
 
-    public String title;
+    private String title;
     public int horizontalBoxes;
     public int verticalBoxes;
 
@@ -21,17 +21,71 @@ public class Nonogram {
     public List<NumberLine> topNumbers;
     public List<NumberLine> sideNumbers;
 
-    // todo: change type to 'nonogram'
+    // todo: change type to 'nonogram' and save elsewhere (such as a private member in the solver, or DrawMain or?)
     public List<String> solutionFile;
 
     public int boxSize;
 
 
-    // todo: create a constructor, which takes the arguments title, topNumbers and sideNumbers and boxSize
+    /**
+     * Constructor
+     *
+     * @param title       title
+     * @param topNumbers  topNumbers
+     * @param sideNumbers sideNumbers
+     * @param boxSize     boxSize
+     */
+    public Nonogram(String title, List<NumberLine> topNumbers, List<NumberLine> sideNumbers, int boxSize) {
+        this.title = title;
+        this.topNumbers = topNumbers;
+        this.sideNumbers = sideNumbers;
+        this.boxSize = boxSize;
+    }
+
+
     // todo: make everything private!
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getHorizontalBoxes() {
+        return horizontalBoxes;
+    }
+
+    public int getVerticalBoxes() {
+        return verticalBoxes;
+    }
+
+    public int getMaxTopNumbers() {
+        return maxTopNumbers;
+    }
+
+    public int getMaxSideNumbers() {
+        return maxSideNumbers;
+    }
+
+    public List<NumberLine> getTopNumbers() {
+        return topNumbers;
+    }
+
+    public List<NumberLine> getSideNumbers() {
+        return sideNumbers;
+    }
+
+    public List<String> getSolutionFile() {
+        return solutionFile;
+    }
+
+    public int getBoxSize() {
+        return boxSize;
+    }
+
     // todo: from that you can construct the amount horizontalBoxes, the verticalBoxes
     // todo: the solutionFile should also have private access, with setter and getter
 
+
+    // todo: rewrite the equals method, so that it really makes sense!
 
     @Override
     public boolean equals(Object o) {

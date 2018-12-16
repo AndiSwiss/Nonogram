@@ -18,37 +18,40 @@ public class InputDataHandler {
      * Reads all the input-data from the file and stores in Nonogram
      *
      * @param fileName  FileName including the relative path (src/...)
-     * @param no        Nonogram
      * @param debugMode If true, then it will print the read data to the terminal.
+     * @return Nonogram, freshly constructed
      */
-    public void readAllFileInputs(String fileName, Nonogram no, boolean debugMode) {
+    public Nonogram readAllFileInputs(String fileName, boolean debugMode) {
         List<String> input;
         FileHelper fh = new FileHelper();
         input = fh.getStringsFromAFile(fileName);
 
+        String title = null;
         // reading the title form the file, if set:
         for (String line : input) {
             if (line.toLowerCase().contains("title")) {
                 line = line.replace("title: ", "");
                 line = line.replace("Title: ", "");
-                no.title = line;
+                title = line;
                 break;
             }
         }
 
         // reading the boxSize from the file:
-        no.boxSize = 0;
+        int boxSize = 0;
         for (String line : input) {
             if (line.toLowerCase().contains("boxsize")) {
                 StringHelper sh = new StringHelper();
-                no.boxSize = sh.getLastIntegerFromString(line);
+                boxSize = sh.getLastIntegerFromString(line);
                 break;
             }
         }
 
         // read the topNumbers and the sideNumbers:
-        no.topNumbers = readNumbers(input, "topNumbers");
-        no.sideNumbers = readNumbers(input, "sideNumbers");
+        List<NumberLine> topNumbers = readNumbers(input, "topNumbers");
+        List<NumberLine> sideNumbers = readNumbers(input, "sideNumbers");
+
+        Nonogram no = new Nonogram(title, topNumbers, sideNumbers, boxSize);
 
         // todo: move this calculation to the nonogram itself - this FileReader should just read the file, that's it!
         // calculating the amount of horizontal and vertical boxes:
@@ -83,6 +86,8 @@ public class InputDataHandler {
             System.out.printf("maxTopNumbers: %s\n", no.maxTopNumbers);
             System.out.printf("maxSideNumbers: %s\n", no.maxSideNumbers);
         }
+
+        return no;
     }
 
     /**
