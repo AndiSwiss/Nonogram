@@ -1,4 +1,4 @@
-package Solver;
+package NonogramStructure;
 
 public class Box {
     private int posX;

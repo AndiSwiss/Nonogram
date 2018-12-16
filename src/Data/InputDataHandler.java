@@ -2,23 +2,24 @@ package Data;
 
 import Helpers.FileHelper;
 import Helpers.StringHelper;
+import NonogramStructure.Nonogram;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reads all data from the given input-File and stores and/or processes them to be stored in /Data/DataStorage
+ * Reads all data from the given input-File and stores and/or processes them to be stored in Nonogram
  */
 public class InputDataHandler {
 
     /**
-     * Reads all the input-data from the file and stores in the DataStorage
+     * Reads all the input-data from the file and stores in Nonogram
      *
      * @param fileName  FileName including the relative path (src/...)
-     * @param ds        DataStorage
+     * @param no        Nonogram
      * @param debugMode If true, then it will print the read data to the terminal.
      */
-    public void readAllFileInputs(String fileName, DataStorage ds, boolean debugMode) {
+    public void readAllFileInputs(String fileName, Nonogram no, boolean debugMode) {
         List<String> input;
         FileHelper fh = new FileHelper();
         input = fh.getStringsFromAFile(fileName);
@@ -28,56 +29,56 @@ public class InputDataHandler {
             if (line.toLowerCase().contains("title")) {
                 line = line.replace("title: ", "");
                 line = line.replace("Title: ", "");
-                ds.title = line;
+                no.title = line;
                 break;
             }
         }
 
         // reading the boxSize from the file:
-        ds.boxSize = 0;
+        no.boxSize = 0;
         for (String line : input) {
             if (line.toLowerCase().contains("boxsize")) {
                 StringHelper sh = new StringHelper();
-                ds.boxSize = sh.getLastIntegerFromString(line);
+                no.boxSize = sh.getLastIntegerFromString(line);
                 break;
             }
         }
 
         // read the topNumbers and the sideNumbers:
-        ds.topNumbers = readNumbers(input, "topNumbers");
-        ds.sideNumbers = readNumbers(input, "sideNumbers");
+        no.topNumbers = readNumbers(input, "topNumbers");
+        no.sideNumbers = readNumbers(input, "sideNumbers");
 
         // calculating the amount of horizontal and vertical boxes:
-        ds.horizontalBoxes = ds.topNumbers.size();
-        ds.verticalBoxes = ds.sideNumbers.size();
+        no.horizontalBoxes = no.topNumbers.size();
+        no.verticalBoxes = no.sideNumbers.size();
 
         // calculating maxTopNumbers and maxSideNumbers
-        ds.maxTopNumbers = 0;
-        for (List<Integer> one : ds.topNumbers) {
-            if (one.size() > ds.maxTopNumbers) {
-                ds.maxTopNumbers = one.size();
+        no.maxTopNumbers = 0;
+        for (List<Integer> one : no.topNumbers) {
+            if (one.size() > no.maxTopNumbers) {
+                no.maxTopNumbers = one.size();
             }
         }
 
-        ds.maxSideNumbers = 0;
-        for (List<Integer> one : ds.sideNumbers) {
-            if (one.size() > ds.maxSideNumbers) {
-                ds.maxSideNumbers = one.size();
+        no.maxSideNumbers = 0;
+        for (List<Integer> one : no.sideNumbers) {
+            if (one.size() > no.maxSideNumbers) {
+                no.maxSideNumbers = one.size();
             }
         }
 
         if (debugMode) {
             System.out.println("\ntopNumbers:");
-            ds.topNumbers.forEach(System.out::println);
+            no.topNumbers.forEach(System.out::println);
             System.out.println("\nsideNumbers:");
-            ds.sideNumbers.forEach(System.out::println);
+            no.sideNumbers.forEach(System.out::println);
 
             System.out.println();
-            System.out.printf("boxSize: %s\n", ds.boxSize);
-            System.out.printf("horizontalBoxes: %s\n", ds.horizontalBoxes);
-            System.out.printf("verticalBoxes: %s\n", ds.verticalBoxes);
-            System.out.printf("maxTopNumbers: %s\n", ds.maxTopNumbers);
-            System.out.printf("maxSideNumbers: %s\n", ds.maxSideNumbers);
+            System.out.printf("boxSize: %s\n", no.boxSize);
+            System.out.printf("horizontalBoxes: %s\n", no.horizontalBoxes);
+            System.out.printf("verticalBoxes: %s\n", no.verticalBoxes);
+            System.out.printf("maxTopNumbers: %s\n", no.maxTopNumbers);
+            System.out.printf("maxSideNumbers: %s\n", no.maxSideNumbers);
         }
     }
 
@@ -223,21 +224,21 @@ public class InputDataHandler {
     /**
      * Checks if sideNumbers and topNumbers are the same as the ones read from the solution file
      *
-     * @param ds DataStorage
+     * @param no Nonogram
      * @throws IllegalArgumentException If there are differences found (actually the called sub-methods
      *                                  throw those errors).
      */
-    public void checkIfInputMatchesSolution(DataStorage ds) {
+    public void checkIfInputMatchesSolution(Nonogram no) {
 
 
-        List<List<Integer>> sideNumbersFromSolution = readSideNumbersFromSolution(ds.solutionFile);
-        List<List<Integer>> topNumbersFromSolution = readTopNumbersFromSolution(ds.solutionFile);
+        List<List<Integer>> sideNumbersFromSolution = readSideNumbersFromSolution(no.solutionFile);
+        List<List<Integer>> topNumbersFromSolution = readTopNumbersFromSolution(no.solutionFile);
 
         // check if those lists match the already read lines:
-        if (compareTwoListLists(ds.sideNumbers, sideNumbersFromSolution)) {
+        if (compareTwoListLists(no.sideNumbers, sideNumbersFromSolution)) {
             System.out.println("sideNumbers is the same as sideNumbersFromSolution.");
         }
-        if (compareTwoListLists(ds.topNumbers, topNumbersFromSolution)) {
+        if (compareTwoListLists(no.topNumbers, topNumbersFromSolution)) {
             System.out.println("topNumbers is the same as topNumbersFromSolution.");
         }
 

@@ -1,7 +1,7 @@
 package Draw;
 
 
-import Data.DataStorage;
+import NonogramStructure.Nonogram;
 import Data.InitialData;
 import processing.core.PApplet;
 
@@ -27,54 +27,54 @@ public enum Zone {
     private int color;
 
 
-    void updateZone(InitialData id, DataStorage ds) {
+    void updateZone(InitialData id, Nonogram no) {
         switch (name()) {
             case "HEADER":
                 minX = 1;
                 minY = 1;
-                sizeX = id.myWidth / ds.boxSize - 2;
+                sizeX = id.myWidth / no.boxSize - 2;
                 sizeY = id.headerHeight;
                 color = id.cBackground;
                 break;
             case "MAIN":
-                minX = 1 + ds.maxSideNumbers;
-                minY = 1 + id.headerHeight + 1 + ds.maxTopNumbers;
-                sizeX = ds.horizontalBoxes;
-                sizeY = ds.verticalBoxes;
+                minX = 1 + no.maxSideNumbers;
+                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers;
+                sizeX = no.horizontalBoxes;
+                sizeY = no.verticalBoxes;
                 color = id.cLightGrey2;
                 break;
             case "LEFT":
                 minX = 1;
-                minY = 1 + id.headerHeight + 1 + ds.maxTopNumbers;
-                sizeX = ds.maxSideNumbers;
-                sizeY = ds.verticalBoxes;
+                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers;
+                sizeX = no.maxSideNumbers;
+                sizeY = no.verticalBoxes;
                 color = id.cBackground;
                 break;
             case "RIGHT":
-                minX = 1 + ds.maxSideNumbers + ds.horizontalBoxes;
-                minY = 1 + id.headerHeight + 1 + ds.maxTopNumbers;
+                minX = 1 + no.maxSideNumbers + no.horizontalBoxes;
+                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers;
                 sizeX = id.rightSideWidth;
-                sizeY = ds.verticalBoxes;
+                sizeY = no.verticalBoxes;
                 color = id.cBackground;
                 break;
             case "TOP":
-                minX = 1 + ds.maxSideNumbers;
+                minX = 1 + no.maxSideNumbers;
                 minY = 1 + id.headerHeight + 1;
-                sizeX = ds.horizontalBoxes;
-                sizeY = ds.maxTopNumbers;
+                sizeX = no.horizontalBoxes;
+                sizeY = no.maxTopNumbers;
                 color = id.cBackground;
                 break;
             case "BOTTOM":
                 minX = 1;
-                minY = 1 + id.headerHeight + 1 + ds.maxTopNumbers + ds.verticalBoxes + 1;
-                sizeX = id.myWidth / ds.boxSize - 2;
-                sizeY = id.myHeight / ds.boxSize - id.footerHeight - minY;
+                minY = 1 + id.headerHeight + 1 + no.maxTopNumbers + no.verticalBoxes + 1;
+                sizeX = id.myWidth / no.boxSize - 2;
+                sizeY = id.myHeight / no.boxSize - id.footerHeight - minY;
                 color = id.cBackground;
                 break;
             case "FOOTER":
                 minX = 0;
-                minY = id.myHeight / ds.boxSize - id.footerHeight;
-                sizeX = id.myWidth / ds.boxSize;
+                minY = id.myHeight / no.boxSize - id.footerHeight;
+                sizeX = id.myWidth / no.boxSize;
                 sizeY = id.footerHeight;
                 color = id.cLightGrey + 1;
                 break;
@@ -82,10 +82,10 @@ public enum Zone {
                     throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());
         }
 
-        minX *= ds.boxSize;
-        minY *= ds.boxSize;
-        sizeX *= ds.boxSize;
-        sizeY *= ds.boxSize;
+        minX *= no.boxSize;
+        minY *= no.boxSize;
+        sizeX *= no.boxSize;
+        sizeY *= no.boxSize;
 
         maxX = minX + sizeX;
         maxY = minY + sizeY;
@@ -96,14 +96,14 @@ public enum Zone {
 
     }
 
-    static void drawAllZoneBoxesForTesting(PApplet p, InitialData id, DataStorage ds) {
+    static void drawAllZoneBoxesForTesting(PApplet p, InitialData id, Nonogram no) {
         p.stroke(id.cGrey);
         p.strokeWeight(1);
         for (Zone z : Zone.values()) {
             p.fill(z.getColor());
             p.rect(z.getMinX(), z.getMinY(), z.getSizeX(), z.getSizeY());
             p.fill(id.cBlack);
-            p.text(z.getName(), z.getMinX() + ds.boxSize, z.getMinY() + ds.boxSize);
+            p.text(z.getName(), z.getMinX() + no.boxSize, z.getMinY() + no.boxSize);
         }
     }
 

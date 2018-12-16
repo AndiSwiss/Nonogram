@@ -1,4 +1,4 @@
-package Data;
+package NonogramStructure;
 
 import java.util.List;
 
@@ -8,10 +8,13 @@ import java.util.List;
  * If any other class needs access, the Nonogram-class should pass that instance (or just some specific fields)
  * to that class-constructor or its class-method.
  */
-public class DataStorage {
+public class Nonogram {
 
     public String title;
+
+    // todo: remove boxSize from this class -> this is in the wrong place!
     public int boxSize;
+
     public int horizontalBoxes;
     public int verticalBoxes;
     public int maxTopNumbers;
@@ -21,6 +24,5 @@ public class DataStorage {
     public List<String> solutionFile;
 
 
-    // for tracking the mouse:
-    public Position mousePressedPos = null;
+
 }

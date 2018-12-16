@@ -1,4 +1,4 @@
-package Solver;
+package NonogramStructure;
 
 public enum State {
     UNKNOWN,

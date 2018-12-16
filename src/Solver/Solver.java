@@ -1,6 +1,6 @@
 package Solver;
 
-import Data.DataStorage;
+import NonogramStructure.Nonogram;
 
 import java.util.List;
 
@@ -11,14 +11,15 @@ public class Solver {
     private int verticalBoxes;
 
 
-    public Solver(DataStorage ds) {
-        this.topNumbers = ds.topNumbers;
-        this.sideNumbers = ds.sideNumbers;
-        this.horizontalBoxes = ds.horizontalBoxes;
-        this.verticalBoxes = ds.verticalBoxes;
+    public Solver(Nonogram no) {
+        this.topNumbers = no.topNumbers;
+        this.sideNumbers = no.sideNumbers;
+        this.horizontalBoxes = no.horizontalBoxes;
+        this.verticalBoxes = no.verticalBoxes;
     }
 
     public void start() {
+
     }
 
     private void solveOneLine(List<Integer> line) {

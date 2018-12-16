@@ -1,4 +1,4 @@
-package Solver;
+package NonogramStructure;
 
 import java.util.List;
 
