@@ -21,6 +21,7 @@ public class UiElementList {
         uiElements.add(new UiFileChooser("src/Examples/nonogram2.txt", "Example 2"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram3.txt", "Example 3"));
         uiElements.add(new UiFileChooser("src/Examples/nonogram4.txt", "Example 4"));
+        uiElements.add(new UiFileChooser("src/Examples/nonogram5.txt", "Example 5"));
 
 
         // Options:

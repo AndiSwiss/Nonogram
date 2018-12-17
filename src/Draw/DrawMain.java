@@ -48,10 +48,10 @@ public class DrawMain extends PApplet {
         ul.buildUiElementList();
 
 
-        String fileName = "src/Examples/nonogram1.txt";
+        String fileName = "src/Examples/nonogram5.txt";
         // set the first example-Ui to selected:
         ul.getUiElements().stream()
-                .filter(ui -> ui.getName().contains("nonogram1"))
+                .filter(ui -> ui.getName().contains("nonogram5"))
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
 
@@ -178,7 +178,7 @@ public class DrawMain extends PApplet {
                         drawSolution();
                     } else {
                         System.out.println("Solution file not found!");
-                        drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 7, 1);
+                        drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
                     }
                 } else if (ui.getName().equals("drawAllZoneBoxes")) {
                     drawAllZoneBoxes();
