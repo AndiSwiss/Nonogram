@@ -1,4 +1,4 @@
-package Tests.Helpers.StringHelpers;
+package Tests.Helpers;
 
 import Helpers.StringHelper;
 import org.junit.jupiter.api.Test;

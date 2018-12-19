@@ -97,4 +97,5 @@ Temporary Items
 
 # cutom gitignores:
 src/Examples/nonogram3_strategyPics
+src/Examples/nonogram4_strategyPics
 UML/**/*.lock

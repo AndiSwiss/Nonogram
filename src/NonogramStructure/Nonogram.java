@@ -117,8 +117,16 @@ public class Nonogram {
         return horizontalLines;
     }
 
+    public Line getHorizontalLine(int i) {
+        return horizontalLines.get(i);
+    }
+
     public List<Line> getVerticalLines() {
         return verticalLines;
+    }
+
+    public Line getVerticalLine(int i) {
+        return verticalLines.get(i);
     }
 
     public int getMaxTopNumbers() {
