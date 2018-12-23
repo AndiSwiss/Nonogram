@@ -27,6 +27,7 @@ class Nonogram4_strategyPics_Test {
         Line horiz2 = new Line(2, 15, Direction.HORIZONTAL);
 
         horiz2.getNumberLine().getNumbers().add(new Number(7));
+        horiz2.getNumberLine().getNumbers().add(new Number(1));
 
         // Box 6 should be filled:
         horiz2.getBox(6).setState(State.BLACK);

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NonogramTest {
 
     @Test
-    void test_toString() {
+    void toString_wholeNonogram() {
         String fileName = "src/Examples/nonogram1.txt";
         InputDataHandler data = new InputDataHandler();
 
@@ -58,7 +58,5 @@ class NonogramTest {
                 "[2, 1]\n";
 
         assertEquals(expected, no.toString());
-
-
     }
 }

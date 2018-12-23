@@ -2,6 +2,8 @@ package Tests.NonogramStructure;
 
 import NonogramStructure.*;
 import NonogramStructure.Number;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -11,8 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LineTest {
 
-    @Test
-    void test_toString() {
+    private static Line line;
+
+    @BeforeEach
+    void setUp() {
         List<Number> numberList = new ArrayList<>();
         numberList.add(new Number(3));
         numberList.add(new Number(2));
@@ -24,13 +28,19 @@ class LineTest {
             boxes.add(new Box(x, lineNumber));
         }
 
-        Line line = new Line(boxes, numberLine, Direction.HORIZONTAL);
+        line = new Line(boxes, numberLine, Direction.HORIZONTAL);
+    }
 
+    @Test
+    void test_toString_simple() {
         String expected = "                         3  2 |░░░░░░░░░░| lineNr=3, dir=HORIZONTAL";
         assertEquals(expected, line.toString());
 
         System.out.println(line);
+    }
 
+    @Test
+    void test_toString_moreComplex() {
         // solve some:
         line.getBox(0).setState(State.WHITE);
         line.getBox(1).setState(State.BLACK);
@@ -42,7 +52,7 @@ class LineTest {
         line.getBox(8).setState(State.BLACK);
         line.getBox(9).setState(State.WHITE);
 
-        expected = "                         ̶3  2 | ▋▋▋ ░░░▋ | lineNr=3, dir=HORIZONTAL";
+        String expected = "                         ̶3  2 | ▋▋▋ ░░░▋ | lineNr=3, dir=HORIZONTAL";
         assertEquals(expected, line.toString());
         System.out.println(line);
 /*
@@ -53,6 +63,5 @@ class LineTest {
                 + " pattern1: 0x" + Integer.toHexString(symbols.charAt(3))
                 + " pattern2: 0x" + Integer.toHexString(symbols.charAt(5)));
 */
-
     }
 }
