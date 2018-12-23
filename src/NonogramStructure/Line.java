@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Line {
-    private NumberLine numbers;
+    private NumberLine numberLine;
     private List<Box> boxes;
     private Direction direction;
     private int lineNumber;
@@ -14,12 +14,12 @@ public class Line {
      * Constructor
      *
      * @param boxes     List<Box>
-     * @param numbers   NumberLine
+     * @param numberLine   NumberLine
      * @param direction Direction
      */
-    public Line(List<Box> boxes, NumberLine numbers, Direction direction) {
+    public Line(List<Box> boxes, NumberLine numberLine, Direction direction) {
         this.boxes = boxes;
-        this.numbers = numbers;
+        this.numberLine = numberLine;
         this.direction = direction;
 
         if (direction == Direction.HORIZONTAL) {
@@ -77,7 +77,7 @@ public class Line {
 
         // create the empty list of numbers:
         List<Number> emptyNumbersList = new ArrayList<>();
-        numbers = new NumberLine(emptyNumbersList);
+        numberLine = new NumberLine(emptyNumbersList);
 
         this.direction = direction;
         this.lineNumber = lineNumber;
@@ -92,7 +92,7 @@ public class Line {
     }
 
     public int getNumbersSize() {
-        return numbers.size();
+        return numberLine.size();
     }
 
     public Box getBox(int i) {
@@ -100,19 +100,19 @@ public class Line {
     }
 
     public boolean areAllNumbersCrossedOut() {
-        return numbers.areAllCrossedOut();
+        return numberLine.areAllCrossedOut();
     }
 
 
     //---------//
     // Getters //
     //---------//
-    public NumberLine getNumbers() {
-        return numbers;
+    public NumberLine getNumberLine() {
+        return numberLine;
     }
 
     public Number getNumber(int i) {
-        return numbers.get(i);
+        return numberLine.get(i);
     }
 
     public List<Box> getBoxes() {
@@ -137,14 +137,14 @@ public class Line {
         if (o == null || getClass() != o.getClass()) return false;
         Line line = (Line) o;
         return lineNumber == line.lineNumber &&
-                Objects.equals(numbers, line.numbers) &&
+                Objects.equals(numberLine, line.numberLine) &&
                 Objects.equals(boxes, line.boxes) &&
                 direction == line.direction;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numbers, boxes, direction, lineNumber);
+        return Objects.hash(numberLine, boxes, direction, lineNumber);
     }
 
     @Override
@@ -168,14 +168,14 @@ public class Line {
 
         StringBuilder numbersString = new StringBuilder();
         // let's assume, that there is a maximum of 10 sideNumbers:
-        for (int i = 0; i < 10 - numbers.size(); i++) {
+        for (int i = 0; i < 10 - numberLine.size(); i++) {
             numbersString.append("   ");
         }
-        for (int i = 0; i < numbers.size(); i++) {
-            if (numbers.get(i).getN() < 10) {
+        for (int i = 0; i < numberLine.size(); i++) {
+            if (numberLine.get(i).getN() < 10) {
                 numbersString.append(' ');
             }
-            numbersString.append(numbers.get(i)).append(' ');
+            numbersString.append(numberLine.get(i)).append(' ');
         }
         return numbersString + "|"
                 + boxString +

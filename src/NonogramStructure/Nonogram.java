@@ -141,25 +141,25 @@ public class Nonogram {
     public List<NumberLine> getTopNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : verticalLines) {
-            result.add(line.getNumbers());
+            result.add(line.getNumberLine());
         }
         return result;
     }
 
     public NumberLine getTopNumberLine(int i) {
-        return verticalLines.get(i).getNumbers();
+        return verticalLines.get(i).getNumberLine();
     }
 
     public List<NumberLine> getSideNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : horizontalLines) {
-            result.add(line.getNumbers());
+            result.add(line.getNumberLine());
         }
         return result;
     }
 
     public NumberLine getSideNumberLine(int i) {
-        return horizontalLines.get(i).getNumbers();
+        return horizontalLines.get(i).getNumberLine();
     }
 
 

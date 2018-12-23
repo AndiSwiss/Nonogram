@@ -1,9 +1,8 @@
 package Tests.Solver;
 
 import Data.InputDataHandler;
-import NonogramStructure.Direction;
-import NonogramStructure.Line;
-import NonogramStructure.Nonogram;
+import NonogramStructure.*;
+import NonogramStructure.Number;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,9 +26,13 @@ class Nonogram4_strategyPics_Test {
     void img_4167() {
         Line horiz2 = new Line(2, 15, Direction.HORIZONTAL);
 
+        horiz2.getNumberLine().getNumbers().add(new Number(7));
+
         // Box 6 should be filled:
+        horiz2.getBox(6).setState(State.BLACK);
 
-
+        System.out.println(horiz2);
+        assertEquals(horiz2, no.getHorizontalLine(2));
     }
 
 }
