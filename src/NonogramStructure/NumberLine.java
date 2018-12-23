@@ -61,4 +61,14 @@ public class NumberLine {
     public int hashCode() {
         return Objects.hash(numbers);
     }
+
+    // todo: write a smart toString-method!
+
+
+    @Override
+    public String toString() {
+        return "NumberLine{" +
+                "numbers=" + numbers +
+                '}';
+    }
 }

@@ -2,6 +2,7 @@ package NonogramStructure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Data storage for various values, which have to be set, changed or accessed across different classes. <br>
@@ -140,7 +141,7 @@ public class Nonogram {
     public List<NumberLine> getTopNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : verticalLines) {
-            result.add(line.getNumberLine());
+            result.add(line.getNumbers());
         }
         return result;
     }
@@ -148,7 +149,7 @@ public class Nonogram {
     public List<NumberLine> getSideNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : horizontalLines) {
-            result.add(line.getNumberLine());
+            result.add(line.getNumbers());
         }
         return result;
     }
@@ -157,7 +158,23 @@ public class Nonogram {
         return boxSize;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Nonogram nonogram = (Nonogram) o;
+        return horizontalBoxesCount == nonogram.horizontalBoxesCount &&
+                verticalBoxesCount == nonogram.verticalBoxesCount &&
+                maxTopNumbers == nonogram.maxTopNumbers &&
+                maxSideNumbers == nonogram.maxSideNumbers &&
+                Objects.equals(horizontalLines, nonogram.horizontalLines) &&
+                Objects.equals(verticalLines, nonogram.verticalLines);
+    }
 
-    // todo: write a smart equals method, so that it really makes sense!
+    @Override
+    public int hashCode() {
+        return Objects.hash(horizontalBoxesCount, verticalBoxesCount, horizontalLines, verticalLines, maxTopNumbers, maxSideNumbers);
+    }
 
+    // todo: write a smart toString-method!
 }

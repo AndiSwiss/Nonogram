@@ -24,25 +24,36 @@ public class Number {
         return n;
     }
 
+    public String getNAsString() {
+        return String.valueOf(n);
+    }
+
     public boolean isCrossedOut() {
         return crossedOut;
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Number number = (Number) o;
-        return n == number.n;
+        return n == number.n &&
+                crossedOut == number.crossedOut;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(n);
+        return Objects.hash(n, crossedOut);
     }
 
+
+    // todo: write a smart toString-method!
     @Override
     public String toString() {
-        return "" + n;
+        return "Number{" +
+                "n=" + n +
+                ", crossedOut=" + crossedOut +
+                '}';
     }
 }

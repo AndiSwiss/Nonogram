@@ -14,7 +14,7 @@ public class Solver {
 
     public void start() {
 
-        boolean successfull = strategy1(no.getVerticalLines().get(3), true);
+        boolean successful = strategy1(no.getVerticalLines().get(3), true);
 
 
     }
@@ -28,7 +28,7 @@ public class Solver {
 
         int numbersTotal = 0;
         int maxNumber = 0;
-        for (Number number : line.getNumberLine().getNumbers()) {
+        for (Number number : line.getNumbers().getNumbers()) {
             numbersTotal += number.getN();
             if (number.getN() > maxNumber) maxNumber = number.getN();
         }
@@ -49,7 +49,7 @@ public class Solver {
             System.out.println("Solver - method strategy1: For line nr " + line.getLineNumber() + " in "
                     + line.getDirection().toString().toLowerCase() + " direction.");
             System.out.print("Numbers in this line are: ");
-            line.getNumberLine().getNumbers().forEach(n -> System.out.print(n + " "));
+            line.getNumbers().getNumbers().forEach(n -> System.out.print(n + " "));
             System.out.println();
             System.out.printf("numbersTotal: %s\n", numbersTotal);
             System.out.printf("line.getBoxesSize(): %s\n", line.getBoxesSize());

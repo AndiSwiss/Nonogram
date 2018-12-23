@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.5a
+ * @version 0.5b
  */
 public class DrawMain extends PApplet {
 
@@ -505,7 +505,7 @@ public class DrawMain extends PApplet {
             for (int j = 0; j < line.size(); j++) {
                 double x = j + (no.getMaxSideNumbers() - line.size()) + 0.5;
 
-                drawText(line.get(j).toString(), Zone.LEFT, x, y, textSize);
+                drawText(line.get(j).getNAsString(), Zone.LEFT, x, y, textSize);
             }
         }
 
@@ -518,7 +518,7 @@ public class DrawMain extends PApplet {
             for (int j = 0; j < line.size(); j++) {
                 double y = j + (no.getMaxTopNumbers() - line.size()) - 0.5;
 
-                drawText(line.get(j).toString(), Zone.TOP, x, y, textSize);
+                drawText(line.get(j).getNAsString(), Zone.TOP, x, y, textSize);
             }
         }
 
