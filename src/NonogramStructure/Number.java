@@ -50,7 +50,6 @@ public class Number {
 
     @Override
     public String toString() {
-
         if (crossedOut) {
             // combining char, see https://en.wikipedia.org/wiki/Strikethrough#Unicode
             char strikethrough = 0x336;
@@ -60,11 +59,8 @@ public class Number {
             } else {
                 return "" + strikethrough + (n / 10) + strikethrough + (n % 10);
             }
-
         } else {
             return "" + n;
         }
-
-
     }
 }

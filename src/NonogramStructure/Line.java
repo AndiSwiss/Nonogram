@@ -111,6 +111,10 @@ public class Line {
         return numbers;
     }
 
+    public Number getNumber(int i) {
+        return numbers.get(i);
+    }
+
     public List<Box> getBoxes() {
         return boxes;
     }
@@ -147,11 +151,25 @@ public class Line {
     // todo: write a smart toString-method!
     @Override
     public String toString() {
-        return "Line{" +
-                "numbers=" + numbers +
-                ", boxes=" + boxes +
-                ", direction=" + direction +
-                ", lineNumber=" + lineNumber +
-                '}';
+        StringBuilder boxString = new StringBuilder();
+        for (Box box : boxes) {
+            switch (box.getState()) {
+                case UNKNOWN:
+                    boxString.append(' ');
+                    break;
+                case BLACK:
+                    boxString.append('\u258b');
+                    break;
+                case WHITE:
+                    boxString.append('\u2591');
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown State in toString-Method of Line: " + box.getState());
+            }
+        }
+        return "Line: " + numbers + " |"
+                + boxString +
+                "| direction=" + direction +
+                ", lineNumber=" + lineNumber;
     }
 }

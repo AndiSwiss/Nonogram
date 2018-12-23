@@ -67,8 +67,6 @@ public class NumberLine {
 
     @Override
     public String toString() {
-        return "NumberLine{" +
-                "numbers=" + numbers +
-                '}';
+        return "" + numbers;
     }
 }
