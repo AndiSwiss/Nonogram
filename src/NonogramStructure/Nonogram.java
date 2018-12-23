@@ -146,6 +146,10 @@ public class Nonogram {
         return result;
     }
 
+    public NumberLine getTopNumberLine(int i) {
+        return verticalLines.get(i).getNumbers();
+    }
+
     public List<NumberLine> getSideNumbers() {
         List<NumberLine> result = new ArrayList<>();
         for (Line line : horizontalLines) {
@@ -153,6 +157,11 @@ public class Nonogram {
         }
         return result;
     }
+
+    public NumberLine getSideNumberLine(int i) {
+        return horizontalLines.get(i).getNumbers();
+    }
+
 
     public int getBoxSize() {
         return boxSize;
@@ -176,5 +185,28 @@ public class Nonogram {
         return Objects.hash(horizontalBoxesCount, verticalBoxesCount, horizontalLines, verticalLines, maxTopNumbers, maxSideNumbers);
     }
 
-    // todo: write a smart toString-method!
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        String header = "Nonogram{" +
+                "title='" + title + '\'' +
+                ", horizontalBoxesCount=" + horizontalBoxesCount +
+                ", verticalBoxesCount=" + verticalBoxesCount +
+                ", maxTopNumbers=" + maxTopNumbers +
+                ", maxSideNumbers=" + maxSideNumbers +
+                ", boxSize=" + boxSize +
+                "}\n";
+        output.append(header);
+        for (Line line : horizontalLines) {
+            output.append(line).append('\n');
+        }
+
+        // and append the vertical lines, but just the numbers:
+        output.append("Vertical lines, just the numbers (since formatting that would be quite hard " +
+                "(especially with numbers greater that 10):\n");
+        for (int i = 0; i < horizontalBoxesCount; i++) {
+            output.append(getTopNumberLine(i)).append('\n');
+        }
+        return output.toString();
+    }
 }

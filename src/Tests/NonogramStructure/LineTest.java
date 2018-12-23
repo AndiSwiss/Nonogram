@@ -26,8 +26,7 @@ class LineTest {
 
         Line line = new Line(boxes, numberLine, Direction.HORIZONTAL);
 
-
-        String expected = "Line: [3, 2] |          | direction=HORIZONTAL, lineNumber=3";
+        String expected = "                         3  2 |░░░░░░░░░░| lineNr=3, dir=HORIZONTAL";
         assertEquals(expected, line.toString());
 
         System.out.println(line);
@@ -43,11 +42,17 @@ class LineTest {
         line.getBox(8).setState(State.BLACK);
         line.getBox(9).setState(State.WHITE);
 
-        char b = '\u258b';
-        char w = '\u2591';
-        expected = "Line: [\u03363, 2] |" + w + b + b + b + w + "   " + b + w + "| direction=HORIZONTAL, lineNumber=3";
+        expected = "                         ̶3  2 | ▋▋▋ ░░░▋ | lineNr=3, dir=HORIZONTAL";
         assertEquals(expected, line.toString());
         System.out.println(line);
+/*
+        String symbols = "̶3 ░ ▋";
+        System.out.println("The following Symbols in Unicode are :" + symbols
+                + " dash: 0x0" + Integer.toHexString(symbols.charAt(0))
+                + " number: 0x00" + Integer.toHexString(symbols.charAt(1))
+                + " pattern1: 0x" + Integer.toHexString(symbols.charAt(3))
+                + " pattern2: 0x" + Integer.toHexString(symbols.charAt(5)));
+*/
 
     }
 }

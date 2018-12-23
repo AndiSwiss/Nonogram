@@ -147,29 +147,39 @@ public class Line {
         return Objects.hash(numbers, boxes, direction, lineNumber);
     }
 
-
-    // todo: write a smart toString-method!
     @Override
     public String toString() {
         StringBuilder boxString = new StringBuilder();
         for (Box box : boxes) {
             switch (box.getState()) {
                 case UNKNOWN:
-                    boxString.append(' ');
+                    boxString.append('\u2591');
                     break;
                 case BLACK:
                     boxString.append('\u258b');
                     break;
                 case WHITE:
-                    boxString.append('\u2591');
+                    boxString.append(' ');
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown State in toString-Method of Line: " + box.getState());
             }
         }
-        return "Line: " + numbers + " |"
+
+        StringBuilder numbersString = new StringBuilder();
+        // let's assume, that there is a maximum of 10 sideNumbers:
+        for (int i = 0; i < 10 - numbers.size(); i++) {
+            numbersString.append("   ");
+        }
+        for (int i = 0; i < numbers.size(); i++) {
+            if (numbers.get(i).getN() < 10) {
+                numbersString.append(' ');
+            }
+            numbersString.append(numbers.get(i)).append(' ');
+        }
+        return numbersString + "|"
                 + boxString +
-                "| direction=" + direction +
-                ", lineNumber=" + lineNumber;
+                "| lineNr=" + lineNumber +
+                ", dir=" + direction;
     }
 }
