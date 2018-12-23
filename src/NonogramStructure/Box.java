@@ -7,15 +7,37 @@ public class Box {
     private int posY;
     private State state;
 
+    private int markL = -1;
+    private int markR = -1;
+    private int markT = -1;
+    private int markB = -1;
+
     public Box(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
         state = State.UNKNOWN;
     }
 
+    //----------------//
+    // Custom methods //
+    //----------------//
+    public boolean hasSameHorizontalMark() {
+        return markL != -1 && markL == markR;
+    }
 
+    public boolean hasSameVerticalMark() {
+        return markT != -1 && markT == markB;
+    }
+
+    //---------------------//
+    // Getters and setters //
+    //---------------------//
     public void setState(State state) {
         this.state = state;
+    }
+
+    public State getState() {
+        return state;
     }
 
     public int getPosX() {
@@ -26,8 +48,37 @@ public class Box {
         return posY;
     }
 
-    public State getState() {
-        return state;
+
+    public int getMarkL() {
+        return markL;
+    }
+
+    public void setMarkL(int markL) {
+        this.markL = markL;
+    }
+
+    public int getMarkR() {
+        return markR;
+    }
+
+    public void setMarkR(int markR) {
+        this.markR = markR;
+    }
+
+    public int getMarkT() {
+        return markT;
+    }
+
+    public void setMarkT(int markT) {
+        this.markT = markT;
+    }
+
+    public int getMarkB() {
+        return markB;
+    }
+
+    public void setMarkB(int markB) {
+        this.markB = markB;
     }
 
     @Override

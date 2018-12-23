@@ -26,7 +26,7 @@ public class NumberLine {
         return numbers.get(i);
     }
 
-    public boolean areAllCrossedOut() {
+    boolean areAllCrossedOut() {
         for (Number n : numbers) {
             if (!n.isCrossedOut()) {
                 return false;
@@ -42,7 +42,7 @@ public class NumberLine {
     //---------//
     // Getters //
     //---------//
-    public List<Number> getNumbers() {
+    List<Number> getNumbers() {
         return numbers;
     }
 

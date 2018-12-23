@@ -111,6 +111,10 @@ public class Line {
         return numberLine;
     }
 
+    public List<Number> getNumbers() {
+        return numberLine.getNumbers();
+    }
+
     public Number getNumber(int i) {
         return numberLine.get(i);
     }

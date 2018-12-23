@@ -1,8 +1,9 @@
 package Solver;
 
-import NonogramStructure.Line;
-import NonogramStructure.Nonogram;
+import NonogramStructure.*;
 import NonogramStructure.Number;
+
+import java.util.List;
 
 public class Solver {
     private Nonogram no;
@@ -14,55 +15,74 @@ public class Solver {
 
     public void start() {
 
-        boolean successful = strategy1(no.getVerticalLines().get(3), true);
+        boolean successful = strategy1(no.getVerticalLines().get(3));
 
 
     }
 
     /**
-     * Strategy 1: look at the line's number and try to figure out if you can draw some boxes:
+     * Strategy 1: look at the EMPTY line's numbers and try to figure out if you can draw some boxes:
+     *
      * @param line Line
      * @return true, if it changed a state of a box. False if not.
      */
-    private boolean strategy1(Line line, boolean debug) {
+    public boolean strategy1(Line line) {
 
-        int numbersTotal = 0;
-        int maxNumber = 0;
-        for (Number number : line.getNumberLine().getNumbers()) {
-            numbersTotal += number.getN();
-            if (number.getN() > maxNumber) maxNumber = number.getN();
+        markLine(line);
+
+        // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):
+        for (Box box : line.getBoxes()) {
+            if (box.hasSameHorizontalMark() || box.hasSameVerticalMark()) {
+                box.setState(State.BLACK);
+            }
         }
 
-        System.out.printf("line.getBoxesSize() - numbersTotal: %s\n", line.getBoxesSize() - numbersTotal);
-        System.out.printf("maxNumber: %s\n", maxNumber);
-
-        // todo: move maxNumber, numberTotal to Class NumberLine, or to class Line
-        // todo: maybe get rid of the class NumberLine, this is just confusing. Handle it all inside the class Line
-
-        // todo: numbersTotal  +  each space between numbers (1 * (amountOfNumbers - 1))
-
-        // todo: start with really small nonograms, which are easy and quickly to solve and to understand
-
-
-
-        if (debug) {
-            System.out.println("Solver - method strategy1: For line nr " + line.getLineNumber() + " in "
-                    + line.getDirection().toString().toLowerCase() + " direction.");
-            System.out.print("Numbers in this line are: ");
-            line.getNumberLine().getNumbers().forEach(n -> System.out.print(n + " "));
-            System.out.println();
-            System.out.printf("numbersTotal: %s\n", numbersTotal);
-            System.out.printf("line.getBoxesSize(): %s\n", line.getBoxesSize());
-
-        }
-
-
-
-        // todo: write the rest of the logic
-
+        // todo: handle the return statement
         return false;
 
 
+    }
+
+    /**
+     * Marks a line with the number (similar to the blue line in the iPhone-app) <br>
+     * Note that -1 in a mark means: no mark. Any other integer stands for the index of the corresponding number.
+     *
+     * @param line Line
+     */
+    public void markLine(Line line) {
+        int position = 0;
+        List<Number> numbers = line.getNumbers();
+
+        // from left (or top)
+        for (int i = 0; i < numbers.size(); i++) {
+            Number number = numbers.get(i);
+            for (int l = 0; l < number.getN(); l++) {
+                if (line.getDirection() == Direction.HORIZONTAL) {
+                    line.getBox(position).setMarkL(i);
+                } else {
+                    line.getBox(position).setMarkT(i);
+                }
+                position++;
+            }
+            // and move one space in between numbers:
+            position++;
+        }
+
+        // from right (or bottom)
+        position = line.getBoxesSize() - 1;
+        for (int i = numbers.size() - 1; i >= 0; i--) {
+            Number number = numbers.get(i);
+            for (int l = 0; l < number.getN(); l++) {
+                if (line.getDirection() == Direction.HORIZONTAL) {
+                    line.getBox(position).setMarkR(i);
+                } else {
+                    line.getBox(position).setMarkB(i);
+                }
+                position--;
+            }
+            // and move one space in between numbers:
+            position--;
+        }
     }
 }
 
