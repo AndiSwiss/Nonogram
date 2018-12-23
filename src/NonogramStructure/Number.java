@@ -48,12 +48,23 @@ public class Number {
     }
 
 
-    // todo: write a smart toString-method!
     @Override
     public String toString() {
-        return "Number{" +
-                "n=" + n +
-                ", crossedOut=" + crossedOut +
-                '}';
+
+        if (crossedOut) {
+            // combining char, see https://en.wikipedia.org/wiki/Strikethrough#Unicode
+            char strikethrough = 0x336;
+
+            if (n < 10) {
+                return "" + strikethrough + n;
+            } else {
+                return "" + strikethrough + (n / 10) + strikethrough + (n % 10);
+            }
+
+        } else {
+            return "" + n;
+        }
+
+
     }
 }
