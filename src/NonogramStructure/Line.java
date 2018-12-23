@@ -131,10 +131,6 @@ public class Line {
         return lineNumber;
     }
 
-
-    // todo: write a smart equals method -> should get useful for comparing a solution file with current progress...
-    // todo: it would be important to throw smart errors, so I can see, WHAT exactly would be different!
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

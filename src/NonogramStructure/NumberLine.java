@@ -8,6 +8,7 @@ public class NumberLine {
 
     /**
      * Constructor
+     *
      * @param numbers List<Number>
      */
     public NumberLine(List<Number> numbers) {
@@ -17,8 +18,10 @@ public class NumberLine {
     //----------------//
     // Custom Methods //
     //----------------//
-   /**
+
+    /**
      * Returns a specific number of the list of the numbers of this line.
+     *
      * @param i i
      * @return Number
      */
@@ -61,9 +64,6 @@ public class NumberLine {
     public int hashCode() {
         return Objects.hash(numbers);
     }
-
-    // todo: write a smart toString-method!
-
 
     @Override
     public String toString() {

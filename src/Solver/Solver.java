@@ -28,17 +28,24 @@ public class Solver {
      */
     public boolean strategy1(Line line) {
 
+        boolean changedSomething = false;
+
         markLine(line);
 
         // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):
         for (Box box : line.getBoxes()) {
             if (box.hasSameHorizontalMark() || box.hasSameVerticalMark()) {
-                box.setState(State.BLACK);
+                if (box.getState() == State.UNKNOWN) {
+                    box.setState(State.BLACK);
+                    changedSomething = true;
+                } else if (box.getState() == State.WHITE) {
+                    throw new IllegalArgumentException("This box was marked white, but with this algorithm, it was" +
+                            "determined to be black! Box: " + box);
+                }
             }
         }
 
-        // todo: handle the return statement
-        return false;
+        return changedSomething;
 
 
     }
