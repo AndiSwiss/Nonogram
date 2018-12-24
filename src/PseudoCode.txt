@@ -1,0 +1,46 @@
+Pseudo code
+
+
+UI-element "run solver" (toggle) -> toggles the runSolver-Variable, which gets checked by the draw()-method.
+private static runSolver = false;
+
+UI-element: "solve all horizontal lines once"
+UI-element: "solve all vertical lines once"
+
+
+
+-> in draw-method: 
+if runSolver = true {
+  boolean successful = "solve all horizontal lines once“;
+  if (successful) {
+    redraw();
+  }
+  boolean successful = "solve all vertical lines once“;
+  if (successful) {
+    redraw();
+  }
+
+  run as long as you can do at the following two with finding a new box (black or white), then stop or do other methods
+  if (!successful) {
+    stop;
+  }
+}
+
+
+
+UI-elements: show amount of boxes in each state:
+- unknown boxes = 40;
+- black boxes = 4;
+- white boxes = 2;
+
+
+
+setCrossedNumbers() {
+  looks for new numbers to cross out
+  (compare with markL, markR, markT, markB  and the State.BLACK)
+
+checkIfNumbersAreStillPossible() {
+  throw new Error, if the numbers don't have enough space anymore
+
+checkWhiteBoxes() {
+  if there is no number-mark in a box (horizontally OR vertically!!!), then it is white!!!

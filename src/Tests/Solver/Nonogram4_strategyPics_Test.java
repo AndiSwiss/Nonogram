@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class Nonogram4_strategyPics_Test {
     private static Nonogram no;
+    private static Solver solver;
 
 
     @BeforeEach
@@ -21,6 +22,7 @@ class Nonogram4_strategyPics_Test {
         InputDataHandler data = new InputDataHandler();
         String fileName = "src/Examples/nonogram5.txt";
         no = data.readAllFileInputs(fileName);
+        solver = new Solver();
     }
 
     @Test
@@ -34,7 +36,6 @@ class Nonogram4_strategyPics_Test {
         horiz2.getBox(6).setState(State.BLACK);
 
         System.out.println(horiz2);
-        Solver solver = new Solver(no);
 
         // since a new BLACK box should have been set, the following should return true:
         assertTrue(solver.strategy1(no.getHorizontalLine(2)));
@@ -52,8 +53,6 @@ class Nonogram4_strategyPics_Test {
 
         System.out.println(horiz3);
 
-        Solver solver = new Solver(no);
-
         // no box should be filled, hence it should return false:
         assertFalse(solver.strategy1(no.getHorizontalLine(3)));
 
@@ -64,11 +63,6 @@ class Nonogram4_strategyPics_Test {
     void allHorizontalLinesFirstRun() {
         System.out.println("\n------------------");
         System.out.println("allHorizontalLines");
-        Solver solver = new Solver(no);
-        for (Line hLine : no.getHorizontalLines()) {
-            solver.strategy1(hLine);
-            System.out.println(hLine);
-        }
 
         Line horiz2 = new Line(2, 15, Direction.HORIZONTAL);
         horiz2.getBox(6).setState(State.BLACK);
@@ -89,6 +83,11 @@ class Nonogram4_strategyPics_Test {
             horiz17.getBox(8 + i).setState(State.BLACK);
         }
 
+        solver.strategy1AllHorizontal(no);
+        // print them:
+        for (Line hLine : no.getHorizontalLines()) {
+            System.out.println(hLine);
+        }
 
         for (int i = 0; i < no.getVerticalBoxesCount(); i++) {
             if (i == 2) {
@@ -110,14 +109,16 @@ class Nonogram4_strategyPics_Test {
     void allVerticalLinesFirstRun() {
         System.out.println("\n----------------");
         System.out.println("allVerticalLines");
-        Solver solver = new Solver(no);
-        for (Line vLine : no.getVerticalLines()) {
-            solver.strategy1(vLine);
-            System.out.println(vLine);
-        }
 
         Line vertical9 = new Line(9, 20, Direction.VERTICAL);
         vertical9.getBox(8).setState(State.BLACK);
+
+        solver.strategy1AllVertical(no);
+        // print them:
+        for (Line vLine : no.getVerticalLines()) {
+            System.out.println(vLine);
+        }
+
 
         for (int i = 0; i < no.getHorizontalBoxesCount(); i++) {
             if (i == 9) {

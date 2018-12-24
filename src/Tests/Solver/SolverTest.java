@@ -24,9 +24,7 @@ class SolverTest {
         String fileName = "src/Examples/nonogram5.txt";
         no = data.readAllFileInputs(fileName);
         hLine2 = no.getHorizontalLine(2);
-        solver = new Solver(no);
-
-
+        solver = new Solver();
     }
 
 

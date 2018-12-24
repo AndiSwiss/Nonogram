@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6b
+ * @version 0.6c
  */
 public class DrawMain extends PApplet {
 
@@ -57,8 +57,8 @@ public class DrawMain extends PApplet {
 
 
         // todo: create a nonogram-solver. Think about the strategies -> see  /src/Examples/nonogram3_strategyPics/*
-        Solver solver = new Solver(no);
-        solver.start();
+        Solver solver = new Solver();
+        solver.start(no);
 
 
     }

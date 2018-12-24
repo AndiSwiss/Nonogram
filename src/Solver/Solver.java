@@ -6,18 +6,38 @@ import NonogramStructure.Number;
 import java.util.List;
 
 public class Solver {
-    private Nonogram no;
+
+    public void start(Nonogram no) {
+
+        boolean horSuccess = strategy1AllHorizontal(no);
+        boolean verSuccess = strategy1AllVertical(no);
 
 
-    public Solver(Nonogram no) {
-        this.no = no;
+
     }
 
-    public void start() {
+    public boolean strategy1AllHorizontal(Nonogram no) {
+        boolean changedSomething = false;
 
-        boolean successful = strategy1(no.getVerticalLines().get(3));
+        for (Line hLine : no.getHorizontalLines()) {
+            boolean change = strategy1(hLine);
+            if (change) {
+                changedSomething = true;
+            }
+        }
+        return changedSomething;
+    }
 
+    public boolean strategy1AllVertical(Nonogram no) {
+        boolean changedSomething = false;
 
+        for (Line vLine : no.getVerticalLines()) {
+            boolean change = strategy1(vLine);
+            if (change) {
+                changedSomething = true;
+            }
+        }
+        return changedSomething;
     }
 
     /**
