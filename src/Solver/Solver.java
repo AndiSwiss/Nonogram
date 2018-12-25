@@ -84,7 +84,6 @@ public class Solver {
         // from left (or top)
         for (int numberIndex = 0; numberIndex < numbers.size(); numberIndex++) {
             Number number = numbers.get(numberIndex);
-
             // check if no BLACK box is on the left (or top) side, if there is, move one block:
             position = moveForwardIfABlackBoxIsOnThePositionToCheck(line, position, position - 1);
 
@@ -94,7 +93,10 @@ public class Solver {
             position = moveForwardIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(line, position, number);
 
             // mark the number
+            System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " + line.getLineNumber()
+                    + " the number " + number.getN() + " at positions: ");
             for (int l = 0; l < number.getN(); l++) {
+                System.out.print(position + " ");
                 if (line.getDirection() == Direction.HORIZONTAL) {
                     line.getBox(position).setMarkL(numberIndex);
                 } else {
@@ -102,6 +104,7 @@ public class Solver {
                 }
                 position++;
             }
+            System.out.println();
             // and move one space in between numbers:
             position++;
         }
@@ -109,6 +112,7 @@ public class Solver {
 
         // todo: repeat the same code from above, but in reverse order!
         // from right (or bottom)
+/*
         position = line.getBoxesSize() - 1;
         for (int i = numbers.size() - 1; i >= 0; i--) {
             Number number = numbers.get(i);
@@ -123,6 +127,7 @@ public class Solver {
             // and move one space in between numbers:
             position--;
         }
+*/
     }
 
     private int moveForwardIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(Line line, int position, Number number) {
@@ -178,6 +183,9 @@ public class Solver {
                 System.out.print("A BLACK box was found in moveForwardIfABlackBoxIsOnThePositionToCheck(..) " +
                         "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the " + text + " side at position " + positionToCheck + ".");
 
+
+                // todo: delete the following code if it is sure wrong...
+/*
                 // figure out the new position:
                 if (positionToCheck - currentPosition < 0) {
                     currentPosition++;
@@ -187,6 +195,10 @@ public class Solver {
                     currentPosition = positionToCheck;
                     System.out.println(" Moved position forward to: " + currentPosition);
                 }
+*/
+                // todo: corrected code (see above)...
+                // move the position:
+                currentPosition++;
             }
         }
         return currentPosition;

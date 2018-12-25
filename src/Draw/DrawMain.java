@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6e
+ * @version 0.6f
  */
 public class DrawMain extends PApplet {
 
@@ -171,23 +171,27 @@ public class DrawMain extends PApplet {
         if (ui instanceof UiSwitchableOption) {
             if (!ui.isSelected()) {
                 ui.setSelected(true);
-                if (ui.getName().equals("drawSolution")) {
-                    if (solutionFile != null) {
-                        drawNonogram(solutionFile);
-                    } else {
-                        System.out.println("Solution file not found!");
-                        drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
-                    }
-                } else if (ui.getName().equals("drawAllZoneBoxes")) {
-                    drawAllZoneBoxes();
+                switch (ui.getName()) {
+                    case "drawSolution":
+                        if (solutionFile != null) {
+                            drawNonogram(solutionFile);
+                        } else {
+                            System.out.println("Solution file not found!");
+                            drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
+                        }
+                        break;
+                    case "drawAllZoneBoxes":
+                        drawAllZoneBoxes();
+                        break;
+                    case "showMarks":
+                        drawMarks();
+                        break;
+                    default:
+                        throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
                 }
             } else {
                 ui.setSelected(false);
-                if (ui.getName().equals("drawSolution")) {
-                    reDrawUi();
-                } else if (ui.getName().equals("drawAllZoneBoxes")) {
-                    reDrawUi();
-                }
+                reDrawUi();
             }
 
             // draw the UiElement again to see the effect of the selection:
@@ -195,17 +199,44 @@ public class DrawMain extends PApplet {
         }
 
         if (ui instanceof UiClickableOption) {
-            if (ui.getName().equals("makeSmaller")) {
-                changeUiSize(-1);
-            } else if (ui.getName().equals("makeLarger")) {
-                changeUiSize(1);
-            } else if (ui.getName().equals("solverHorizontalOnce")) {
-                solver.strategy1AllHorizontal(no);
-            } else if (ui.getName().equals("solverVerticalOnce")) {
-                solver.strategy1AllVertical(no);
+            switch (ui.getName()) {
+                case "makeSmaller":
+                    changeUiSize(-1);
+                    break;
+                case "makeLarger":
+                    changeUiSize(1);
+                    break;
+                case "solverHorizontalOnce":
+                    solver.strategy1AllHorizontal(no);
+                    break;
+                case "solverVerticalOnce":
+                    solver.strategy1AllVertical(no);
+                    break;
+                default:
+                    throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
             }
 
             reDrawUi();
+        }
+    }
+
+    private void drawMarks() {
+        for (int x = 0; x < no.getHorizontalBoxesCount(); x++) {
+            for (int y = 0; y < no.getVerticalBoxesCount(); y++) {
+                Box box = no.getBox(x, y);
+                if (box.getMarkL() != -1) {
+                    drawLine(Zone.MAIN, x, y + 0.2, true, 1, 2, id.cBlack);
+                }
+                if (box.getMarkR() != -1) {
+                    drawLine(Zone.MAIN, x, y + 0.8, true, 1, 2, id.cBlack);
+                }
+                if (box.getMarkT() != -1) {
+                    drawLine(Zone.MAIN, x + 0.2, y, false, 1, 2, id.cBlack);
+                }
+                if (box.getMarkB() != -1) {
+                    drawLine(Zone.MAIN, x + 0.8, y, false, 1, 2, id.cBlack);
+                }
+            }
         }
     }
 
@@ -278,18 +309,24 @@ public class DrawMain extends PApplet {
 
         // redraw the solution if the corresponding Ui-Element was selected:
         // If that option was not selected, redraw the nonogram:
-        boolean drawSolution = false;
+        boolean drawSolutionSelected = false;
+        boolean drawMarksSelected = false;
         for (UiElement ui : ul.getUiElements()) {
             if (ui.getName().contains("drawSolution") && ui.isSelected()) {
-                drawSolution = true;
-                break;
+                drawSolutionSelected = true;
+            } else if (ui.getName().contains("showMarks") && ui.isSelected()) {
+                drawMarksSelected = true;
             }
         }
 
-        if (drawSolution) {
+        if (drawSolutionSelected) {
             drawNonogram(solutionFile);
         } else {
             drawNonogram(no);
+        }
+
+        if (drawMarksSelected) {
+            drawMarks();
         }
 
     }
@@ -376,12 +413,12 @@ public class DrawMain extends PApplet {
      * @param strokeWeight line thickness
      * @param strokeColor  line color
      */
-    private void drawLine(Zone zone, int x, int y, boolean horizontal, int length, int strokeWeight, int strokeColor) {
+    private void drawLine(Zone zone, double x, double y, boolean horizontal, int length, int strokeWeight, int strokeColor) {
         strokeWeight(strokeWeight);
         stroke(strokeColor);
 
-        int x2;
-        int y2;
+        double x2;
+        double y2;
 
         if (horizontal) {
             x2 = zone.getMinX() + no.getBoxSize() * (x + length);
@@ -393,9 +430,9 @@ public class DrawMain extends PApplet {
 
         }
 
-        line(zone.getMinX() + no.getBoxSize() * x,
-                zone.getMinY() + no.getBoxSize() * y,
-                x2, y2)
+        line(zone.getMinX() + (int) (no.getBoxSize() * x),
+                zone.getMinY() + (int) (no.getBoxSize() * y),
+                (int) x2, (int) y2)
         ;
     }
 

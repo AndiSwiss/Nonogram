@@ -27,6 +27,7 @@ public class UiElementList {
         uiElements.add(new UiTextbox("SolverTitle", "Solver:"));
         uiElements.add(new UiClickableOption("solverHorizontalOnce", "Run horizontal solver once"));
         uiElements.add(new UiClickableOption("solverVerticalOnce", "Run vertical solver once"));
+        uiElements.add(new UiSwitchableOption("showMarks", "Show marks"));
 
         // Options:
         uiElements.add(new UiTextbox("optionsTitle", "Options:"));
