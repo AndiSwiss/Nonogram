@@ -1,6 +1,8 @@
 package UiElements;
 
+import Draw.DrawBasicObjects;
 import Draw.DrawMain;
+import Draw.Drawer;
 import Draw.Zone;
 import NonogramStructure.Nonogram;
 import Solver.Solver;
@@ -8,6 +10,7 @@ import Solver.Solver;
 public class UiAction {
 
     public void actionForUiElement(DrawMain drawMain, UiElement ui) {
+        Drawer drawer = drawMain.getDrawer();
 
         // receiving the elements needed for this method:
         UiElementList ul = drawMain.getUl();
@@ -40,28 +43,29 @@ public class UiAction {
                 switch (ui.getName()) {
                     case "drawSolution":
                         if (solutionFile != null) {
-                            drawMain.drawNonogram(solutionFile);
+                            drawer.drawNonogram(solutionFile);
                         } else {
                             System.out.println("Solution file not found!");
-                            drawMain.drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
+                            DrawBasicObjects basicObjects = new DrawBasicObjects(drawMain, no);
+                            basicObjects.drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
                         }
                         break;
                     case "drawAllZoneBoxes":
                         Zone.drawAllZoneBoxesForTesting(drawMain, no);
                         break;
                     case "showMarks":
-                        drawMain.drawMarks();
+                        drawer.drawMarks();
                         break;
                     default:
                         throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
                 }
             } else {
                 ui.setSelected(false);
-                drawMain.reDrawUi();
+                drawer.reDrawUi();
             }
 
             // draw the UiElement again to see the effect of the selection:
-            drawMain.drawUiElement(ui);
+            drawer.drawUiElement(ui);
         }
 
         if (ui instanceof UiClickableOption) {
@@ -82,7 +86,7 @@ public class UiAction {
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
             }
 
-            drawMain.reDrawUi();
+            drawer.reDrawUi();
         }
     }
 }
