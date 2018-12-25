@@ -62,6 +62,36 @@ public class UiElementList {
         }
     }
 
+
+
+    /**
+     * @param pos        Position in question
+     * @return Returns the uiElement, in which the searched position is in, or null if it is in no uiElement
+     */
+    public UiElement inWhichUiElementIsIt(Position pos) {
+
+        // Zone of the mouse:
+        Zone posZone = pos.getZone();
+
+        if (posZone != null) {
+            for (UiElement ui : uiElements) {
+
+                // only continue, if the UiElement is in the same zone like mouse:
+                if (ui.getZone() == posZone) {
+
+                    // compare the absolute values:
+                    if (pos.getAbsX() >= ui.getAbsStartX()
+                            && pos.getAbsX() <= ui.getAbsEndX()
+                            && pos.getAbsY() >= ui.getAbsStartY()
+                            && pos.getAbsY() <= ui.getAbsEndY()) {
+                        return ui;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public List<UiElement> getUiElements() {
         return uiElements;
     }

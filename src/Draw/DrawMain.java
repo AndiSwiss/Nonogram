@@ -10,12 +10,10 @@ import UiElements.UiElement;
 import UiElements.UiElementList;
 import processing.core.PApplet;
 
-import java.util.List;
-
 
 /**
  * @author Andreas Ambühl
- * @version 0.6l
+ * @version 0.6m
  */
 public class DrawMain extends PApplet {
 
@@ -74,7 +72,6 @@ public class DrawMain extends PApplet {
 
         drawer = new Drawer(this, no, solutionFile, ul);
         drawer.reDrawUi();
-
     }
 
     @Override
@@ -96,10 +93,10 @@ public class DrawMain extends PApplet {
         // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
 
         // check, if mousePressed was on an UI-Element, and which one:
-        UiElement ui = inWhichUiElementIsIt(mousePressedPos, ul.getUiElements());
+        UiElement ui = ul.inWhichUiElementIsIt(mousePressedPos);
 
         if (ui != null) {
-            UiElement selectedReleased = inWhichUiElementIsIt(new Position(mouseX, mouseY, no.getBoxSize()), ul.getUiElements());
+            UiElement selectedReleased = ul.inWhichUiElementIsIt(new Position(mouseX, mouseY, no.getBoxSize()));
 
             if (ui.equals(selectedReleased)) {
 
@@ -114,42 +111,6 @@ public class DrawMain extends PApplet {
         mousePressedPos = null;
     }
 
-
-
-    public void changeUiSize(int value) {
-        no.changeBoxSize(value);
-
-        System.out.println("New boxSize is " + no.getBoxSize());
-    }
-
-    /**
-     * @param pos        Position in question
-     * @param uiElements List of the UI-Elements
-     * @return Returns the uiElement, in which the searched position is in, or null if it is in no uiElement
-     */
-    private UiElement inWhichUiElementIsIt(Position pos, List<UiElement> uiElements) {
-
-        // Zone of the mouse:
-        Zone posZone = pos.getZone();
-
-        if (posZone != null) {
-            for (UiElement ui : uiElements) {
-
-                // only continue, if the UiElement is in the same zone like mouse:
-                if (ui.getZone() == posZone) {
-
-                    // compare the absolute values:
-                    if (pos.getAbsX() >= ui.getAbsStartX()
-                            && pos.getAbsX() <= ui.getAbsEndX()
-                            && pos.getAbsY() >= ui.getAbsStartY()
-                            && pos.getAbsY() <= ui.getAbsEndY()) {
-                        return ui;
-                    }
-                }
-            }
-        }
-        return null;
-    }
 
     @Override
     public void keyPressed() {

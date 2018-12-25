@@ -71,10 +71,12 @@ public class UiAction {
         if (ui instanceof UiClickableOption) {
             switch (ui.getName()) {
                 case "makeSmaller":
-                    drawMain.changeUiSize(-1);
+                    no.changeBoxSize(-1);
+                    System.out.println("New boxSize is " + no.getBoxSize());
                     break;
                 case "makeLarger":
-                    drawMain.changeUiSize(1);
+                    no.changeBoxSize(1);
+                    System.out.println("New boxSize is " + no.getBoxSize());
                     break;
                 case "solverHorizontalOnce":
                     solver.strategy1AllHorizontal(no);
