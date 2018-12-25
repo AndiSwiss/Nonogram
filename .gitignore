@@ -95,7 +95,10 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/osx,intellij
 
-# cutom gitignores:
-src/Examples/nonogram3_strategyPics
-src/Examples/nonogram4_strategyPics
+# custom gitignores:
+Examples/**/*.jpg
+Examples/**/*.jpeg
+Examples/**/*.png
+Examples/**/*.tiff
+
 UML/**/*.lock

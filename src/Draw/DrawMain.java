@@ -13,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6n
+ * @version 0.6o
  */
 public class DrawMain extends PApplet {
 
@@ -47,7 +47,7 @@ public class DrawMain extends PApplet {
 
         ul.buildUiElementList();
 
-        String fileName = "src/Examples/" + id.initialFileToOpen + ".txt";
+        String fileName = "Examples/" + id.initialFileToOpen + ".txt";
         // set the chosen example-Ui to selected:
         ul.getUiElements().stream()
                 .filter(ui -> ui.getName().contains(id.initialFileToOpen))

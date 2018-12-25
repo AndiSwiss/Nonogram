@@ -17,7 +17,7 @@ public class InputDataHandler {
     /**
      * Reads all the input-data from the file and stores in Nonogram
      *
-     * @param fileName FileName including the relative path (src/...)
+     * @param fileName FileName including the relative path (/Examples/...)
      * @return Nonogram, freshly constructed or throws a FileNotFoundException-error, if the specified file was not found
      *
      */

@@ -20,7 +20,7 @@ class Nonogram4_strategyPics_Test {
     @BeforeEach
     void setUp() {
         InputDataHandler data = new InputDataHandler();
-        String fileName = "src/Examples/nonogram5.txt";
+        String fileName = "Examples/nonogram5.txt";
         no = data.readAllFileInputs(fileName);
         solver = new Solver();
     }

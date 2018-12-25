@@ -1,45 +1,39 @@
-# Cool
+# Nonogram-solver
 
-> - You can create very nice looking files like this
+> Created by Andreas Ambühl in 2018 <br>
+> _© by Andreas Ambühl_
 
-With normal text
+## Start
 
-> lines <br>
-> at <br>
-> the <br>
-> side
+Please use the method `public static void main(String[] args)` in class src/Draw/DrawMain.java to 
+start this application.
 
-## smaller headers
+#### Structure
 
-Some text
+For information about the structure, see also the 
+UML-class-diagrams in the folder /UML
 
-### even smaller header
+#### Examples
+There are various examples of nonograms to be uses inside 
+this code. They are in the folder /Examples:
 
-Some text
-
-#### very small header
-
-
-1. **bold text**
-
-   Normal text with some `code items for(int i=0;i<10;i++)`. <br>
-   _Italic text_ can also be displayed. <br>
-   **bold text** <p>
-   And `<p>` will generate a new paragraph. <br>
-   `for this code-formatting, use the button on top of the screen!`
+1. **small size example** _(b/w)_
+   - With solution-file
    
-1. **automatic numbering**, if there are not too many spaces in between 
-the different numbers
+1. **small size example** _(b/w)_
+   - With solution-file
+   
+1. **medium size example** _(b/w)_
+   - With**out** solution-file
+   - With strategy pictures
+  
+1. **medium size example** _(b/w)_
+   - With solution-file
+   - With strategy pictures
 
-1. **3rd element**
+1. **small size example** (b/w)
+   - With**out** solution-file
 
-
-1. **And a new numbering**, when two or more empty lines in between!
-
-1. **and much more**
-
-## Lists
-- with 
-  - and sub menus
-  - nice
-- and much more...
+#### Color examples
+These examples are in the folder /Examples/Color_Examples:
+1. **small size example** _(color)_
