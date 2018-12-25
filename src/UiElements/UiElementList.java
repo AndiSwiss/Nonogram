@@ -1,7 +1,7 @@
 package UiElements;
 
 import Data.Position;
-import Draw.Zone;
+import Data.Zone;
 
 import java.util.ArrayList;
 import java.util.List;

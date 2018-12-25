@@ -1,7 +1,5 @@
 package Data;
 
-import Draw.Zone;
-
 import java.util.Objects;
 
 public class Position {

@@ -1,6 +1,7 @@
 package Draw;
 
 import Data.InitialData;
+import Data.Zone;
 import NonogramStructure.Box;
 import NonogramStructure.Nonogram;
 import NonogramStructure.NumberLine;

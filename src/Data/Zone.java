@@ -1,8 +1,7 @@
-package Draw;
+package Data;
 
 
 import NonogramStructure.Nonogram;
-import Data.InitialData;
 import processing.core.PApplet;
 
 /**
@@ -27,7 +26,7 @@ public enum Zone {
     private int color;
 
 
-    void updateZone(InitialData id, Nonogram no) {
+    public void updateZone(InitialData id, Nonogram no) {
         switch (name()) {
             case "HEADER":
                 minX = 1;

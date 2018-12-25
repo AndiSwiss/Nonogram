@@ -3,7 +3,7 @@ package UiElements;
 import Draw.DrawBasicObjects;
 import Draw.DrawMain;
 import Draw.Drawer;
-import Draw.Zone;
+import Data.Zone;
 import NonogramStructure.Nonogram;
 import Solver.Solver;
 
@@ -43,7 +43,7 @@ public class UiAction {
                 switch (ui.getName()) {
                     case "drawSolution":
                         if (solutionFile != null) {
-                            drawer.drawNonogram(solutionFile);
+                            drawer.reDrawUi();
                         } else {
                             System.out.println("Solution file not found!");
                             DrawBasicObjects basicObjects = new DrawBasicObjects(drawMain, no);
