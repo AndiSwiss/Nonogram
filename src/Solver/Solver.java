@@ -49,11 +49,19 @@ public class Solver {
      */
     public boolean strategy1(Line line) {
 
-
         markLine(line);
 
-        boolean changedSomething = false;
+        boolean changedSomething = markBoxesWhichHaveSameMarksInOppositeDirection(line);
 
+        return changedSomething;
+    }
+
+    /**
+     * @param line Line
+     * @return True, if a new box was marked BLACK
+     */
+    private boolean markBoxesWhichHaveSameMarksInOppositeDirection(Line line) {
+        boolean changedSomething = false;
         // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):
         for (Box box : line.getBoxes()) {
             if (box.hasSameHorizontalMark() || box.hasSameVerticalMark()) {
@@ -66,10 +74,7 @@ public class Solver {
                 }
             }
         }
-
         return changedSomething;
-
-
     }
 
     /**
@@ -94,13 +99,14 @@ public class Solver {
         }
 
         // from left (or top)
-        for (int numberIndex = 0; numberIndex < numbers.size(); numberIndex++) {
-            Number number;
+        for (int i = 0; i < numbers.size(); i++) {
+            int numberIndex;
             if (forward) {
-                number = numbers.get(numberIndex);
+                numberIndex = i;
             } else {
-                number = numbers.get(numbers.size() - 1 - numberIndex);
+                numberIndex = numbers.size() - 1 - i;
             }
+            Number number = numbers.get(numberIndex);
 
             System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
             // check if no BLACK box is on the left (or top) side, if there is, move one block:
