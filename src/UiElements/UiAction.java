@@ -7,7 +7,15 @@ import Solver.Solver;
 
 public class UiAction {
 
-    public void action(DrawMain drawMain, UiElement ui, UiElementList ul, Nonogram no, Nonogram solutionFile, Solver solver) {
+    public void actionForUiElement(DrawMain drawMain, UiElement ui) {
+
+        // receiving the elements needed for this method:
+        UiElementList ul = drawMain.getUl();
+        Nonogram no = drawMain.getNo();
+        Nonogram solutionFile = drawMain.getSolutionFile();
+        Solver solver = drawMain.getSolver();
+
+
         if (ui instanceof UiFileChooser) {
 
             // deselect all elements of this group:

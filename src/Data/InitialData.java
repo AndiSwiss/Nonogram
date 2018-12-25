@@ -37,4 +37,7 @@ public class InitialData {
     public final int footerHeight = 1;
     public final String footerText = "© 2018 by Andreas Ambühl";
 
+    // various:
+    public final String initialFileToOpen = "nonogram5";
+
 }

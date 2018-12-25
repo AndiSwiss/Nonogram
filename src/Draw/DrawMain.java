@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6i
+ * @version 0.6j
  */
 public class DrawMain extends PApplet {
 
@@ -49,10 +49,10 @@ public class DrawMain extends PApplet {
         ul.buildUiElementList();
 
 
-        String fileName = "src/Examples/nonogram5.txt";
-        // set the first example-Ui to selected:
+        String fileName = "src/Examples/" + id.initialFileToOpen + ".txt";
+        // set the chosen example-Ui to selected:
         ul.getUiElements().stream()
-                .filter(ui -> ui.getName().contains("nonogram5"))
+                .filter(ui -> ui.getName().contains(id.initialFileToOpen))
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
         solver = new Solver();
@@ -137,7 +137,7 @@ public class DrawMain extends PApplet {
                 System.out.println("UiElement is successfully clicked: " + ui);
 
                 UiAction uiAction = new UiAction();
-                uiAction.action(this, ui, ul, no, solutionFile, solver);
+                uiAction.actionForUiElement(this, ui);
             }
         }
 
@@ -535,5 +535,24 @@ public class DrawMain extends PApplet {
         drawText(id.footerText, Zone.FOOTER, 1, -0.2, 0.75, id.cDarkGrey);
     }
 
+    //---------//
+    // Getters //
+    //---------//
 
+
+    public Nonogram getNo() {
+        return no;
+    }
+
+    public Nonogram getSolutionFile() {
+        return solutionFile;
+    }
+
+    public UiElementList getUl() {
+        return ul;
+    }
+
+    public Solver getSolver() {
+        return solver;
+    }
 }
