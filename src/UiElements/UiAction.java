@@ -47,7 +47,7 @@ public class UiAction {
                         }
                         break;
                     case "drawAllZoneBoxes":
-                        drawMain.drawAllZoneBoxes();
+                        Zone.drawAllZoneBoxesForTesting(drawMain, no);
                         break;
                     case "showMarks":
                         drawMain.drawMarks();

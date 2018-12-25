@@ -58,11 +58,6 @@ public class DrawMain extends PApplet {
         solver = new Solver();
     }
 
-    public void drawAllZoneBoxes() {
-        Zone.drawAllZoneBoxesForTesting(this, id, no);
-    }
-
-
     public void loadNewExample(String fileName) {
 
         // reset the drawSolution-Ui to 'not selected':

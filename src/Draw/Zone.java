@@ -96,7 +96,8 @@ public enum Zone {
 
     }
 
-    static void drawAllZoneBoxesForTesting(PApplet p, InitialData id, Nonogram no) {
+    public static void drawAllZoneBoxesForTesting(PApplet p, Nonogram no) {
+        InitialData id = new InitialData();
         p.stroke(id.cGrey);
         p.strokeWeight(1);
         for (Zone z : Zone.values()) {
