@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6f
+ * @version 0.6g
  */
 public class DrawMain extends PApplet {
 
@@ -221,20 +221,21 @@ public class DrawMain extends PApplet {
     }
 
     private void drawMarks() {
+        int markColor = id.cDarkGrey;
         for (int x = 0; x < no.getHorizontalBoxesCount(); x++) {
             for (int y = 0; y < no.getVerticalBoxesCount(); y++) {
                 Box box = no.getBox(x, y);
                 if (box.getMarkL() != -1) {
-                    drawLine(Zone.MAIN, x, y + 0.2, true, 1, 2, id.cBlack);
+                    drawLine(Zone.MAIN, x, y + 0.2, true, 1, 2, markColor);
                 }
                 if (box.getMarkR() != -1) {
-                    drawLine(Zone.MAIN, x, y + 0.8, true, 1, 2, id.cBlack);
+                    drawLine(Zone.MAIN, x, y + 0.8, true, 1, 2, markColor);
                 }
                 if (box.getMarkT() != -1) {
-                    drawLine(Zone.MAIN, x + 0.2, y, false, 1, 2, id.cBlack);
+                    drawLine(Zone.MAIN, x + 0.2, y, false, 1, 2, markColor);
                 }
                 if (box.getMarkB() != -1) {
-                    drawLine(Zone.MAIN, x + 0.8, y, false, 1, 2, id.cBlack);
+                    drawLine(Zone.MAIN, x + 0.8, y, false, 1, 2, markColor);
                 }
             }
         }

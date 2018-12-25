@@ -49,9 +49,10 @@ public class Solver {
      */
     public boolean strategy1(Line line) {
 
-        boolean changedSomething = false;
 
         markLine(line);
+
+        boolean changedSomething = false;
 
         // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):
         for (Box box : line.getBoxes()) {
@@ -78,127 +79,152 @@ public class Solver {
      * @param line Line
      */
     public void markLine(Line line) {
-        int position = 0;
+        markLineInOneDirection(line, true);
+        markLineInOneDirection(line, false);
+    }
+
+    private void markLineInOneDirection(Line line, boolean forward) {
         List<Number> numbers = line.getNumbers();
+
+        int position;
+        if (forward) {
+            position = 0;
+        } else {
+            position = line.getBoxesSize() - 1;
+        }
 
         // from left (or top)
         for (int numberIndex = 0; numberIndex < numbers.size(); numberIndex++) {
-            Number number = numbers.get(numberIndex);
+            Number number;
+            if (forward) {
+                number = numbers.get(numberIndex);
+            } else {
+                number = numbers.get(numbers.size() - 1 - numberIndex);
+            }
+
+            System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
             // check if no BLACK box is on the left (or top) side, if there is, move one block:
-            position = moveForwardIfABlackBoxIsOnThePositionToCheck(line, position, position - 1);
+            int positionToCheck;
+            if (forward) {
+                positionToCheck = position - 1;
+            } else {
+                positionToCheck = position + 1;
+            }
+            position = moveIfABlackBoxIsOnThePositionToCheck(line, position, positionToCheck, forward);
 
             // check if there is enough (non-WHITE!) space for placing the mark for the number:
             // else move the position and repeat the loop:
             // & check if no BLACK box is on the right (or bottom) side. If there is, move one block and repeat this whole loop:
-            position = moveForwardIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(line, position, number);
+            position = moveIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(line, position, number, forward);
 
             // mark the number
             System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " + line.getLineNumber()
                     + " the number " + number.getN() + " at positions: ");
             for (int l = 0; l < number.getN(); l++) {
                 System.out.print(position + " ");
+                Box box = line.getBox(position);
                 if (line.getDirection() == Direction.HORIZONTAL) {
-                    line.getBox(position).setMarkL(numberIndex);
+                    if (forward) {
+                        box.setMarkL(numberIndex);
+                    } else {
+                        box.setMarkR(numberIndex);
+                    }
                 } else {
-                    line.getBox(position).setMarkT(numberIndex);
+                    if (forward) {
+                        box.setMarkT(numberIndex);
+                    } else {
+                        box.setMarkB(numberIndex);
+                    }
                 }
-                position++;
+
+                if (forward) {
+                    position++;
+                } else {
+                    position--;
+                }
             }
             System.out.println();
             // and move one space in between numbers:
-            position++;
-        }
-
-
-        // todo: repeat the same code from above, but in reverse order!
-        // from right (or bottom)
-/*
-        position = line.getBoxesSize() - 1;
-        for (int i = numbers.size() - 1; i >= 0; i--) {
-            Number number = numbers.get(i);
-            for (int l = 0; l < number.getN(); l++) {
-                if (line.getDirection() == Direction.HORIZONTAL) {
-                    line.getBox(position).setMarkR(i);
-                } else {
-                    line.getBox(position).setMarkB(i);
-                }
+            if (forward) {
+                position++;
+            } else {
                 position--;
             }
-            // and move one space in between numbers:
-            position--;
         }
-*/
     }
 
-    private int moveForwardIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(Line line, int position, Number number) {
+    private int moveIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(Line line, int position, Number number, boolean forward) {
         for (int l = 0; l < number.getN(); l++) {
             // if a WHITE box was found:
-            if (line.getBox(position + l).getState() == State.WHITE) {
-                System.out.println("A white box was found on the left (or top) at position " + (position + l) + ", so the code moved forward to that new position + 1");
-                // advance to the next non-white position:
-                position += l + 1;
+
+            int positionToCheck;
+            if (forward) {
+                positionToCheck = position + l;
+            } else {
+                positionToCheck = position - l;
+            }
+
+            if (line.getBox(positionToCheck).getState() == State.WHITE) {
+                System.out.println("A white box was found on the left (or top) at position " + positionToCheck + ", " +
+                        "so the code moved " + (forward ? "forward" : "backward") + " to that new position + 1");
+                if (forward) {
+                    // advance to the next non-white position:
+                    position += l + 1;
+                } else {
+                    // advance in reverse direction to the next non-white position:
+                    position -= l + 1;
+                }
                 // repeat this whole loop again
                 l = 0;
             }
 
-            // check if no BLACK box is on the right (or bottom) side of the current number. If there is, move block and repeat this whole loop:
-            int newPosition = moveForwardIfABlackBoxIsOnThePositionToCheck(line, position, position + l + 1);
+            // check if no BLACK box is on the right (or bottom) side of the current number (or on the left (or top) for reversed direction).
+            // If there is, move block and repeat this whole loop:
+            if (forward) {
+                positionToCheck++;
+            } else {
+                positionToCheck--;
+            }
+            int newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, position, positionToCheck, forward);
             if (newPosition != position) {
                 position = newPosition;
                 // repeat the whole loop from the beginning:
                 l = 0;
             }
-
         }
         return position;
     }
 
-    private int moveForwardIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck) {
+    private int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck, boolean forward) {
 
+        // stop checking, if the checking is at the beginning or the end:
+        if (positionToCheck < 0 || positionToCheck >= line.getBoxesSize()) {
+            return currentPosition;
+        }
+
+        // error checking
         if (positionToCheck == currentPosition) {
             throw new IllegalArgumentException("Error! positionToCheck == currentPosition = " + positionToCheck);
-        } else if (positionToCheck >= line.getBoxesSize()) {
-            throw new IllegalArgumentException("Error! positionToCheck >= line.getBoxesSize()!  positionToCheck = " + positionToCheck +
-                    " LineNr " + line.getLineNumber() + " direction " + line.getDirection());
         }
 
         String text;
         if (positionToCheck - currentPosition < 0) {
-            if (line.getDirection() == Direction.HORIZONTAL) {
-                text = "left";
-            } else {
-                text = "top";
-            }
+            if (line.getDirection() == Direction.HORIZONTAL) text = "left";
+            else text = "top";
         } else {
-            if (line.getDirection() == Direction.HORIZONTAL) {
-                text = "right";
-
-            } else {
-                text = "bottom";
-            }
+            if (line.getDirection() == Direction.HORIZONTAL) text = "right";
+            else text = "bottom";
         }
 
-        if (positionToCheck >= 0) {
-            if (line.getBox(positionToCheck).getState() == State.BLACK) {
-                System.out.print("A BLACK box was found in moveForwardIfABlackBoxIsOnThePositionToCheck(..) " +
-                        "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the " + text + " side at position " + positionToCheck + ".");
+        if (line.getBox(positionToCheck).getState() == State.BLACK) {
+            System.out.print("A BLACK box was found in moveIfABlackBoxIsOnThePositionToCheck(..) " +
+                    "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the " + text + " side at position " + positionToCheck + ".");
 
-
-                // todo: delete the following code if it is sure wrong...
-/*
-                // figure out the new position:
-                if (positionToCheck - currentPosition < 0) {
-                    currentPosition++;
-                    System.out.println(" Moved position forward by one block: " + currentPosition);
-                } else {
-                    // move to the checked position:
-                    currentPosition = positionToCheck;
-                    System.out.println(" Moved position forward to: " + currentPosition);
-                }
-*/
-                // todo: corrected code (see above)...
-                // move the position:
+            // move the position:
+            if (forward) {
                 currentPosition++;
+            } else {
+                currentPosition--;
             }
         }
         return currentPosition;
