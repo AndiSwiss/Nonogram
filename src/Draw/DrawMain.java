@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6d
+ * @version 0.6e
  */
 public class DrawMain extends PApplet {
 
@@ -24,6 +24,7 @@ public class DrawMain extends PApplet {
     private Nonogram no;
     private Nonogram solutionFile;
     private UiElementList ul;
+    private Solver solver;
 
     // for tracking the mouse:
     private Position mousePressedPos = null;
@@ -57,9 +58,7 @@ public class DrawMain extends PApplet {
 
 
         // todo: create a nonogram-solver. Think about the strategies -> see  /src/Examples/nonogram3_strategyPics/*
-        Solver solver = new Solver();
-        solver.start(no);
-
+        solver = new Solver();
 
     }
 
@@ -174,7 +173,7 @@ public class DrawMain extends PApplet {
                 ui.setSelected(true);
                 if (ui.getName().equals("drawSolution")) {
                     if (solutionFile != null) {
-                        drawSolution();
+                        drawNonogram(solutionFile);
                     } else {
                         System.out.println("Solution file not found!");
                         drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
@@ -196,13 +195,17 @@ public class DrawMain extends PApplet {
         }
 
         if (ui instanceof UiClickableOption) {
-            if (ui.getName().toLowerCase().contains("smaller")) {
+            if (ui.getName().equals("makeSmaller")) {
                 changeUiSize(-1);
-
-
-            } else if (ui.getName().toLowerCase().contains("larger")) {
+            } else if (ui.getName().equals("makeLarger")) {
                 changeUiSize(1);
+            } else if (ui.getName().equals("solverHorizontalOnce")) {
+                solver.strategy1AllHorizontal(no);
+            } else if (ui.getName().equals("solverVerticalOnce")) {
+                solver.strategy1AllVertical(no);
             }
+
+            reDrawUi();
         }
     }
 
@@ -210,8 +213,6 @@ public class DrawMain extends PApplet {
         no.changeBoxSize(value);
 
         System.out.println("New boxSize is " + no.getBoxSize());
-
-        reDrawUi();
     }
 
     /**
@@ -276,11 +277,21 @@ public class DrawMain extends PApplet {
         drawAllUiElements();
 
         // redraw the solution if the corresponding Ui-Element was selected:
+        // If that option was not selected, redraw the nonogram:
+        boolean drawSolution = false;
         for (UiElement ui : ul.getUiElements()) {
             if (ui.getName().contains("drawSolution") && ui.isSelected()) {
-                drawSolution();
+                drawSolution = true;
+                break;
             }
         }
+
+        if (drawSolution) {
+            drawNonogram(solutionFile);
+        } else {
+            drawNonogram(no);
+        }
+
     }
 
 
@@ -529,12 +540,12 @@ public class DrawMain extends PApplet {
 
 
     /**
-     * Draws the solution
+     * Draws a nonogram (the nonogram or the solutionFile)
      */
-    private void drawSolution() {
-        for (int y = 0; y < solutionFile.getVerticalBoxesCount(); y++) {
-            for (int x = 0; x < solutionFile.getHorizontalBoxesCount(); x++) {
-                drawBox(solutionFile.getBox(x, y));
+    private void drawNonogram(Nonogram nonogram) {
+        for (int y = 0; y < nonogram.getVerticalBoxesCount(); y++) {
+            for (int x = 0; x < nonogram.getHorizontalBoxesCount(); x++) {
+                drawBox(nonogram.getBox(x, y));
             }
         }
     }

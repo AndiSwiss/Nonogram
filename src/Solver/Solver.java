@@ -10,7 +10,7 @@ public class Solver {
     public void start(Nonogram no) {
 
         boolean horSuccess = strategy1AllHorizontal(no);
-        boolean verSuccess = strategy1AllVertical(no);
+//        boolean verSuccess = strategy1AllVertical(no);
 
         // todo: add a separate method which checks, whether a box has no marks AND is not in between the same marking-number. If found, mark box State.WHITE
 
@@ -153,7 +153,8 @@ public class Solver {
         if (positionToCheck == currentPosition) {
             throw new IllegalArgumentException("Error! positionToCheck == currentPosition = " + positionToCheck);
         } else if (positionToCheck >= line.getBoxesSize()) {
-            throw new IllegalArgumentException("Error! positionToCheck >= line.getBoxesSize()!  positionToCheck = " + positionToCheck);
+            throw new IllegalArgumentException("Error! positionToCheck >= line.getBoxesSize()!  positionToCheck = " + positionToCheck +
+                    " LineNr " + line.getLineNumber() + " direction " + line.getDirection());
         }
 
         String text;
@@ -174,15 +175,17 @@ public class Solver {
 
         if (positionToCheck >= 0) {
             if (line.getBox(positionToCheck).getState() == State.BLACK) {
-                System.out.println("A BLACK box was found in moveForwardIfABlackBoxIsOnThePositionToCheck(..) " +
-                        "on the " + text + " side at position " + positionToCheck + ".");
+                System.out.print("A BLACK box was found in moveForwardIfABlackBoxIsOnThePositionToCheck(..) " +
+                        "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the " + text + " side at position " + positionToCheck + ".");
 
                 // figure out the new position:
                 if (positionToCheck - currentPosition < 0) {
                     currentPosition++;
+                    System.out.println(" Moved position forward by one block: " + currentPosition);
                 } else {
                     // move to the checked position:
                     currentPosition = positionToCheck;
+                    System.out.println(" Moved position forward to: " + currentPosition);
                 }
             }
         }
