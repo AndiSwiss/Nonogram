@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author Andreas Ambühl
- * @version 0.6h
+ * @version 0.6i
  */
 public class DrawMain extends PApplet {
 
@@ -44,7 +44,7 @@ public class DrawMain extends PApplet {
 
         size(id.myWidth, id.myHeight);
         System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
-        frameRate(30);
+        frameRate(10);
 
         ul.buildUiElementList();
 
@@ -55,19 +55,15 @@ public class DrawMain extends PApplet {
                 .filter(ui -> ui.getName().contains("nonogram5"))
                 .forEach(ui -> ui.setSelected(true));
         loadNewExample(fileName);
-
-
-        // todo: create a nonogram-solver. Think about the strategies -> see  /src/Examples/nonogram3_strategyPics/*
         solver = new Solver();
-
     }
 
-    private void drawAllZoneBoxes() {
+    public void drawAllZoneBoxes() {
         Zone.drawAllZoneBoxesForTesting(this, id, no);
     }
 
 
-    private void loadNewExample(String fileName) {
+    public void loadNewExample(String fileName) {
 
         // reset the drawSolution-Ui to 'not selected':
         ul.getUiElements().stream()
@@ -99,7 +95,7 @@ public class DrawMain extends PApplet {
         ul.getUiElements().forEach(this::drawUiElement);
     }
 
-    private void drawUiElement(UiElement ui) {
+    public void drawUiElement(UiElement ui) {
 
         int color;
         if (ui.isSelected()) {
@@ -140,7 +136,8 @@ public class DrawMain extends PApplet {
 
                 System.out.println("UiElement is successfully clicked: " + ui);
 
-                uiAction(ui);
+                UiAction uiAction = new UiAction();
+                uiAction.action(this, ui, ul, no, solutionFile, solver);
             }
         }
 
@@ -148,79 +145,7 @@ public class DrawMain extends PApplet {
         mousePressedPos = null;
     }
 
-    private void uiAction(UiElement ui) {
-
-        if (ui instanceof UiFileChooser) {
-
-            // deselect all elements of this group:
-            for (UiElement uiElement : ul.getUiElements()) {
-                if (uiElement instanceof UiFileChooser) {
-                    uiElement.setSelected(false);
-                }
-            }
-
-            // select the active element:
-            ui.setSelected(true);
-
-            // load the chosen example:
-            String fileName = ui.getName();
-            loadNewExample(fileName);
-        }
-
-
-        if (ui instanceof UiSwitchableOption) {
-            if (!ui.isSelected()) {
-                ui.setSelected(true);
-                switch (ui.getName()) {
-                    case "drawSolution":
-                        if (solutionFile != null) {
-                            drawNonogram(solutionFile);
-                        } else {
-                            System.out.println("Solution file not found!");
-                            drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
-                        }
-                        break;
-                    case "drawAllZoneBoxes":
-                        drawAllZoneBoxes();
-                        break;
-                    case "showMarks":
-                        drawMarks();
-                        break;
-                    default:
-                        throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
-                }
-            } else {
-                ui.setSelected(false);
-                reDrawUi();
-            }
-
-            // draw the UiElement again to see the effect of the selection:
-            drawUiElement(ui);
-        }
-
-        if (ui instanceof UiClickableOption) {
-            switch (ui.getName()) {
-                case "makeSmaller":
-                    changeUiSize(-1);
-                    break;
-                case "makeLarger":
-                    changeUiSize(1);
-                    break;
-                case "solverHorizontalOnce":
-                    solver.strategy1AllHorizontal(no);
-                    break;
-                case "solverVerticalOnce":
-                    solver.strategy1AllVertical(no);
-                    break;
-                default:
-                    throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
-            }
-
-            reDrawUi();
-        }
-    }
-
-    private void drawMarks() {
+    public void drawMarks() {
         int markColor = id.cDarkGrey;
         for (int x = 0; x < no.getHorizontalBoxesCount(); x++) {
             for (int y = 0; y < no.getVerticalBoxesCount(); y++) {
@@ -241,7 +166,7 @@ public class DrawMain extends PApplet {
         }
     }
 
-    private void changeUiSize(int value) {
+    public void changeUiSize(int value) {
         no.changeBoxSize(value);
 
         System.out.println("New boxSize is " + no.getBoxSize());
@@ -294,7 +219,7 @@ public class DrawMain extends PApplet {
     // Custom Draw Methods //
     //---------------------//
 
-    private void reDrawUi() {
+    public void reDrawUi() {
         background(id.cBackground);
 
         // first update the zones with the new values:
@@ -448,7 +373,7 @@ public class DrawMain extends PApplet {
     /**
      * Overloaded method
      */
-    private void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize) {
+    public void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize) {
         drawText(string, zone, boxX, boxY, relativeSize, id.cBlack);
     }
 
@@ -580,7 +505,7 @@ public class DrawMain extends PApplet {
     /**
      * Draws a nonogram (the nonogram or the solutionFile)
      */
-    private void drawNonogram(Nonogram nonogram) {
+    public void drawNonogram(Nonogram nonogram) {
         for (int y = 0; y < nonogram.getVerticalBoxesCount(); y++) {
             for (int x = 0; x < nonogram.getHorizontalBoxesCount(); x++) {
                 drawBox(nonogram.getBox(x, y));

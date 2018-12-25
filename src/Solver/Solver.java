@@ -10,7 +10,7 @@ public class Solver {
     public void start(Nonogram no) {
 
         boolean horSuccess = strategy1AllHorizontal(no);
-//        boolean verSuccess = strategy1AllVertical(no);
+        boolean verSuccess = strategy1AllVertical(no);
 
         // todo: add a separate method which checks, whether a box has no marks AND is not in between the same marking-number. If found, mark box State.WHITE
 
