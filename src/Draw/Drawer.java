@@ -1,5 +1,6 @@
 package Draw;
 
+import Data.Align;
 import Data.InitialData;
 import Data.Zone;
 import NonogramStructure.Box;
@@ -96,7 +97,8 @@ public class Drawer {
         basicObjects.drawRectangle(ui.getZone(), ui.getRelStartX(), ui.getRelStartY(),
                 ui.getRelSizeX(), ui.getRelSizeY(), color, 0, color);
         if (ui.getMessage().length() > 0) {
-            basicObjects.drawText(ui.getMessage(), ui.getZone(), ui.getRelStartX() + 1, ui.getRelStartY() - 0.2, 0.8);
+            basicObjects.drawText(ui.getMessage(), ui.getZone(),
+                    ui.getRelStartX() + 1, ui.getRelStartY() - 0.2, 0.8);
         }
     }
 
@@ -141,8 +143,6 @@ public class Drawer {
      */
     private void drawDigits() {
         double textSize = 0.7;
-        p.textAlign(p.CENTER, p.CENTER);
-        p.fill(id.cDarkGrey2);
 
         // sideNumbers:
         for (int i = 0; i < no.getSideNumbers().size(); i++) {
@@ -152,7 +152,8 @@ public class Drawer {
             for (int j = 0; j < line.size(); j++) {
                 double x = j + (no.getMaxSideNumbers() - line.size()) + 0.5;
 
-                basicObjects.drawText(line.get(j).getNAsString(), Zone.LEFT, x, y, textSize);
+                basicObjects.drawText(line.get(j).getNAsString(), Zone.LEFT, x, y, textSize, id.cDarkGrey2,
+                        Align.CENTER, true);
             }
         }
 
@@ -165,7 +166,8 @@ public class Drawer {
             for (int j = 0; j < line.size(); j++) {
                 double y = j + (no.getMaxTopNumbers() - line.size()) - 0.5;
 
-                basicObjects.drawText(line.get(j).getNAsString(), Zone.TOP, x, y, textSize);
+                basicObjects.drawText(line.get(j).getNAsString(), Zone.TOP, x, y, textSize, id.cDarkGrey2,
+                        Align.CENTER, true);
             }
         }
 
@@ -268,5 +270,10 @@ public class Drawer {
             basicObjects.drawLine(zone, x, y, horizontal, length, weight, id.cBackgroundLine);
             weight = 1;
         }
+    }
+
+    public void drawTextEntryPopUp(String message) {
+        PopUp popUp = new PopUp(basicObjects, no.getBoxSize());
+        popUp.textEntryPopUp(message);
     }
 }

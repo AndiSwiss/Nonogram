@@ -14,7 +14,8 @@ public enum Zone {
     RIGHT(),
     TOP(),
     BOTTOM(),
-    FOOTER();
+    FOOTER(),
+    POPUP();
 
     private String name;
     private int minX;
@@ -77,8 +78,16 @@ public enum Zone {
                 sizeY = id.footerHeight;
                 color = id.cLightGrey + 1;
                 break;
-                default:
-                    throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());
+            case "POPUP":
+                // same as BOTTOM, but x + 2, y + 2:
+                minX = 3;
+                minY = 3 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxesCount() + 1;
+                sizeX = 30;
+                sizeY = 6;
+                color = id.cLightGrey2;
+                break;
+            default:
+                throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());
         }
 
         minX *= no.getBoxSize();

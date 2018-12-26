@@ -1,5 +1,6 @@
 package Draw;
 
+import Data.Align;
 import Data.InitialData;
 import Data.Zone;
 import NonogramStructure.Box;
@@ -69,22 +70,22 @@ public class DrawBasicObjects {
      * Draws a rectangle in a specific zone.
      *
      * @param zone         zone
-     * @param x            x relative to zone (is automatically multiplied by boxSize)
-     * @param y            y relative to zone (is automatically multiplied by boxSize)
-     * @param sizeX        horizontal size
-     * @param sizeY        vertical size
+     * @param boxX            boxX relative to zone (is automatically multiplied by boxSize)
+     * @param boxY            boxY relative to zone (is automatically multiplied by boxSize)
+     * @param boxSizeX        horizontal size
+     * @param boxSizeY        vertical size
      * @param fillColor    color for the fill
      * @param strokeWeight line thickness
      * @param strokeColor  line color
      */
-    void drawRectangle(Zone zone, int x, int y, int sizeX, int sizeY, int fillColor, int strokeWeight, int strokeColor) {
+    void drawRectangle(Zone zone, int boxX, int boxY, int boxSizeX, int boxSizeY, int fillColor, int strokeWeight, int strokeColor) {
         p.fill(fillColor);
         p.strokeWeight(strokeWeight);
         p.stroke(strokeColor);
-        p.rect(zone.getMinX() + x * no.getBoxSize(),
-                zone.getMinY() + y * no.getBoxSize(),
-                no.getBoxSize() * sizeX,
-                no.getBoxSize() * sizeY);
+        p.rect(zone.getMinX() + boxX * no.getBoxSize(),
+                zone.getMinY() + boxY * no.getBoxSize(),
+                no.getBoxSize() * boxSizeX,
+                no.getBoxSize() * boxSizeY);
     }
 
 
@@ -92,14 +93,14 @@ public class DrawBasicObjects {
      * Draw a horizontal or a vertical line inside a specific zone.
      *
      * @param zone         zone
-     * @param x            x relative to zone (is automatically multiplied by boxSize)
-     * @param y            y relative to zone (is automatically multiplied by boxSize)
+     * @param boxX            boxX relative to zone (is automatically multiplied by boxSize)
+     * @param boxY            boxY relative to zone (is automatically multiplied by boxSize)
      * @param horizontal   true for horizontal, false for vertical
-     * @param length       length
+     * @param boxLength       boxLength
      * @param strokeWeight line thickness
      * @param strokeColor  line color
      */
-    void drawLine(Zone zone, double x, double y, boolean horizontal, int length, int strokeWeight, int strokeColor) {
+    void drawLine(Zone zone, double boxX, double boxY, boolean horizontal, int boxLength, int strokeWeight, int strokeColor) {
         p.strokeWeight(strokeWeight);
         p.stroke(strokeColor);
 
@@ -107,17 +108,17 @@ public class DrawBasicObjects {
         double y2;
 
         if (horizontal) {
-            x2 = zone.getMinX() + no.getBoxSize() * (x + length);
-            y2 = zone.getMinY() + no.getBoxSize() * y;
+            x2 = zone.getMinX() + no.getBoxSize() * (boxX + boxLength);
+            y2 = zone.getMinY() + no.getBoxSize() * boxY;
 
         } else {
-            x2 = zone.getMinX() + no.getBoxSize() * x;
-            y2 = zone.getMinY() + no.getBoxSize() * (y + length);
+            x2 = zone.getMinX() + no.getBoxSize() * boxX;
+            y2 = zone.getMinY() + no.getBoxSize() * (boxY + boxLength);
 
         }
 
-        p.line(zone.getMinX() + (int) (no.getBoxSize() * x),
-                zone.getMinY() + (int) (no.getBoxSize() * y),
+        p.line(zone.getMinX() + (int) (no.getBoxSize() * boxX),
+                zone.getMinY() + (int) (no.getBoxSize() * boxY),
                 (int) x2, (int) y2)
         ;
     }
@@ -130,7 +131,7 @@ public class DrawBasicObjects {
      * Overloaded method
      */
     public void drawText(String string, Zone zone, double boxX, double boxY) {
-        drawText(string, zone, boxX, boxY, 1);
+        drawText(string, zone, boxX, boxY, 1, id.cBlack, Align.LEFT, false);
     }
 
 
@@ -138,18 +139,43 @@ public class DrawBasicObjects {
      * Overloaded method
      */
     public void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize) {
-        drawText(string, zone, boxX, boxY, relativeSize, id.cBlack);
+        drawText(string, zone, boxX, boxY, relativeSize, id.cBlack, Align.LEFT, false);
     }
 
-
+    /**
+     * Overloaded method
+     */
     public void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize, int color) {
+        drawText(string, zone, boxX, boxY, relativeSize, color, Align.LEFT, false);
+    }
+
+    public void drawText(String string, Zone zone, double boxX, double boxY, double relativeSize, int color, Align hAlign, boolean verticallyCentered) {
+        // save the style for easy resetting later:
+        p.pushStyle();
+        // style settings
+
+        int verticalAlignment = verticallyCentered ? p.CENTER : p.BASELINE;
+
         p.fill(color);
+        switch (hAlign) {
+            case LEFT:
+                p.textAlign(p.LEFT, verticalAlignment);
+                break;
+            case RIGHT:
+                p.textAlign(p.RIGHT, verticalAlignment);
+                break;
+            case CENTER:
+                p.textAlign(p.CENTER, verticalAlignment);
+        }
 
         int x = zone.getMinX() + (int) (boxX * no.getBoxSize());
         int y = zone.getMinY() + (int) ((boxY + 1) * no.getBoxSize());
 
         p.textSize((int) (relativeSize * no.getBoxSize()));
         p.text(string, x, y);
+
+        // reset the style:
+        p.popStyle();
     }
 
 

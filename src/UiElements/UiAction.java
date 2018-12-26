@@ -9,6 +9,8 @@ import Solver.Solver;
 
 public class UiAction {
 
+    private boolean popUpIsActive = false;
+
     public void actionForUiElement(DrawMain drawMain, UiElement ui) {
         Drawer drawer = drawMain.getDrawer();
 
@@ -84,11 +86,21 @@ public class UiAction {
                 case "solverVerticalOnce":
                     solver.strategy1AllVertical(no);
                     break;
+                case "solverOneHorizontalLine":
+                    // todo: popup for entry of the line-nr
+                    // todo: reroute the key-inputs (and also the mouse-inputs)!
+                    drawer.drawTextEntryPopUp("Line-number:");
+                    popUpIsActive = true;
+
+                    break;
+
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
             }
 
-            drawer.reDrawUi();
+            if (!popUpIsActive) {
+                drawer.reDrawUi();
+            }
         }
     }
 }
