@@ -9,7 +9,6 @@ import Solver.Solver;
 
 public class UiAction {
 
-    private boolean popUpIsActive = false;
 
     public void actionForUiElement(DrawMain drawMain, UiElement ui) {
         Drawer drawer = drawMain.getDrawer();
@@ -86,21 +85,33 @@ public class UiAction {
                 case "solverVerticalOnce":
                     solver.strategy1AllVertical(no);
                     break;
-                case "solverOneHorizontalLine":
-                    // todo: popup for entry of the line-nr
-                    // todo: reroute the key-inputs (and also the mouse-inputs)!
-                    drawer.drawTextEntryPopUp("Line-number:");
-                    popUpIsActive = true;
-
-                    break;
-
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
             }
 
-            if (!popUpIsActive) {
-                drawer.reDrawUi();
+            drawer.reDrawUi();
+        }
+
+        if (ui instanceof UiPopUpInvoker) {
+            switch (ui.getName()) {
+                case "solverOneHorizontalLine":
+                    // todo: popup for entry of the line-nr
+                    // todo: reroute the key-inputs (and also the mouse-inputs)!
+                    drawer.drawTextEntryPopUp("Enter horizontal line-number:");
+                    break;
+
+                case "solverOneVerticalLine":
+                    // todo: popup for entry of the line-nr
+                    drawer.drawTextEntryPopUp("Enter vertical line-number:");
+
+
+                    break;
+                default:
+                    throw new IllegalArgumentException("unknown UiPopUpInvoker with name " + ui.getName());
             }
+
+
+
         }
     }
 }

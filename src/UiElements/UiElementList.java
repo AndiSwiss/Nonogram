@@ -27,8 +27,8 @@ public class UiElementList {
         uiElements.add(new UiTextbox("SolverTitle", "Solver:"));
         uiElements.add(new UiClickableOption("solverHorizontalOnce", "Run horizontal solver once"));
         uiElements.add(new UiClickableOption("solverVerticalOnce", "Run vertical solver once"));
-        uiElements.add(new UiClickableOption("solverOneHorizontalLine", "Solve the following horizontal line: "));
-        uiElements.add(new UiClickableOption("solverOneVerticalLine", "Solve the following vertical line: "));
+        uiElements.add(new UiPopUpInvoker("solverOneHorizontalLine", "Solve one following horizontal..."));
+        uiElements.add(new UiPopUpInvoker("solverOneVerticalLine", "Solve one following vertical line..."));
         uiElements.add(new UiSwitchableOption("showMarks", "Show marks"));
 
         // Options:
@@ -63,9 +63,8 @@ public class UiElementList {
     }
 
 
-
     /**
-     * @param pos        Position in question
+     * @param pos Position in question
      * @return Returns the uiElement, in which the searched position is in, or null if it is in no uiElement
      */
     public UiElement inWhichUiElementIsIt(Position pos) {
