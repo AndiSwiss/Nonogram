@@ -9,6 +9,8 @@ import Solver.Solver;
 
 public class UiAction {
 
+    private boolean popupIsActive = false;
+    private int lineNumberForActionForKeyPressed;
 
     public void actionForUiElement(DrawMain drawMain, UiElement ui) {
         Drawer drawer = drawMain.getDrawer();
@@ -64,7 +66,6 @@ public class UiAction {
                 ui.setSelected(false);
                 drawer.reDrawUi();
             }
-
             // draw the UiElement again to see the effect of the selection:
             drawer.drawUiElement(ui);
         }
@@ -88,30 +89,80 @@ public class UiAction {
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
             }
-
             drawer.reDrawUi();
         }
 
         if (ui instanceof UiPopUpInvoker) {
             switch (ui.getName()) {
                 case "solverOneHorizontalLine":
-                    // todo: popup for entry of the line-nr
-                    // todo: reroute the key-inputs (and also the mouse-inputs)!
                     drawer.drawTextEntryPopUp("Enter horizontal line-number:");
                     break;
-
                 case "solverOneVerticalLine":
-                    // todo: popup for entry of the line-nr
                     drawer.drawTextEntryPopUp("Enter vertical line-number:");
-
-
                     break;
                 default:
                     throw new IllegalArgumentException("unknown UiPopUpInvoker with name " + ui.getName());
             }
 
+            popupIsActive = true;
+            //initialize the lineNumber:
+            lineNumberForActionForKeyPressed = 0;
 
+        }
+    }
 
+    public void actionForKeyPressed(char key) {
+
+        if (popupIsActive) {
+
+            if (key >= '0' && key <= '9') {
+                lineNumberForActionForKeyPressed *= 10;
+                lineNumberForActionForKeyPressed += key - '0';
+
+                // todo: show the entered number in the UI
+
+                System.out.println("current lineNumber " + lineNumberForActionForKeyPressed);
+            }
+
+            // ending:
+            if (key == 10) {
+                popupIsActive = false;
+                // todo: call the corresponding uiAction...
+            }
+        } else {
+
+            // ASCII-values: According to https://en.wikipedia.org/wiki/ASCII
+            switch (key) {
+                case 8:
+                    // int-value for ASCII Backspace:
+                    System.out.println("Backspace was pressed");
+                    break;
+                case 10:
+                    // int-value for ASCII Enter:
+                    System.out.println("Line feed (Enter) was pressed");
+                    break;
+                case 27:
+                    // int-value for ASCII Escape:
+                    // (but Escape also quits the processing-app!)
+                    System.out.println("Escape was pressed");
+                    break;
+                case 'y':
+                    // for dialogs, don't use Escape, instead use 'y', 'n' and 'c' (in questions like "do you want to save this file"?
+                    System.out.println("'y' (\u0332yes) was pressed");
+                    break;
+                case 'n':
+                    System.out.println("'n' (\u0332no) was pressed");
+                    break;
+                case 'c':
+                    System.out.println("'c' (\u0332cancel) was pressed");
+                    break;
+            }
+
+            // numbers:
+            if (key >= '0' && key <= '9') {
+                int n = key - '0';
+                System.out.println(n + " was pressed");
+            }
         }
     }
 }

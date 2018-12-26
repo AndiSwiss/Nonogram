@@ -82,8 +82,8 @@ public enum Zone {
                 // same as BOTTOM, but x + 2, y + 2:
                 minX = 3;
                 minY = 3 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxesCount() + 1;
-                sizeX = 30;
-                sizeY = 6;
+                sizeX = 25;
+                sizeY = 5;
                 color = id.cLightGrey2;
                 break;
             default:

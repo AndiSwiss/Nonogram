@@ -13,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.7b
+ * @version 0.7c
  */
 public class DrawMain extends PApplet {
 
@@ -23,6 +23,8 @@ public class DrawMain extends PApplet {
     private UiElementList ul;
     private Solver solver;
     private Drawer drawer;
+    private UiAction uiAction;
+
 
     // for tracking the mouse:
     private Position mousePressedPos = null;
@@ -39,7 +41,7 @@ public class DrawMain extends PApplet {
         id = new InitialData();
         ul = new UiElementList();
         solver = new Solver();
-
+        uiAction = new UiAction();
 
         size(id.myWidth, id.myHeight);
         System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
@@ -102,7 +104,6 @@ public class DrawMain extends PApplet {
 
                 System.out.println("UiElement is successfully clicked: " + ui);
 
-                UiAction uiAction = new UiAction();
                 uiAction.actionForUiElement(this, ui);
             }
         }
@@ -114,6 +115,9 @@ public class DrawMain extends PApplet {
 
     @Override
     public void keyPressed() {
+        uiAction.actionForKeyPressed(key);
+
+/*
         if (keyCode == UP) {
             //
         } else if (keyCode == DOWN) {
@@ -123,6 +127,7 @@ public class DrawMain extends PApplet {
         } else if (keyCode == LEFT) {
             //
         }
+*/
     }
 
 
