@@ -83,8 +83,8 @@ public enum Zone {
                 minX = 3;
                 minY = 3 + id.headerHeight + 1 + no.getMaxTopNumbers() + no.getVerticalBoxesCount() + 1;
                 sizeX = 25;
-                sizeY = 5;
-                color = id.cLightGrey2;
+                sizeY = 6;
+                color = id.cLightGrey3;
                 break;
             default:
                 throw new IllegalArgumentException("ERROR in updateZone() in enum Zone: undefined Zone: " + name());

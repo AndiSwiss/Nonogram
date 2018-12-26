@@ -18,16 +18,24 @@ class PopUp {
 
 
     void textEntryPopUp(String message) {
+        // full box:
         basicObjects.drawRectangle(Zone.POPUP, 0, 0, Zone.POPUP.getSizeX() / boxSize,
-                Zone.POPUP.getSizeY() / boxSize, id.cLightGrey3, 3, id.cLightGrey);
+                Zone.POPUP.getSizeY() / boxSize, Zone.POPUP.getColor(), 3, id.cLightGrey);
+
+        // text-message:
         basicObjects.drawText(message, Zone.POPUP, 1, 1);
+
+        // after the text-message:
+        basicObjects.drawRectangle(Zone.POPUP, 16, 1, 3, 1, id.cLightGrey2, 1, id.cLightGrey2);
+
+        // buttons:
         button("... and press enter", Align.RIGHT, true);
 //        button("Cancel", Align.LEFT, false);
     }
 
     private void button(String message, Align horizontalAlign, boolean selectedForEnter) {
         int x;
-        int y = 3;
+        int y = 4;
         int buttonLength = 11;
 
         // x-values for the rectangle:

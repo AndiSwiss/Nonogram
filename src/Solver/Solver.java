@@ -15,6 +15,7 @@ public class Solver {
         // todo: add a separate method which checks, whether a box has no marks AND is not in between the same marking-number. If found, mark box State.WHITE
 
 
+        // todo: there is a problem, when strategy1AllHorizontal() or strategy1AllVertical() is running twice on some examples -> investigate!
     }
 
     public boolean strategy1AllHorizontal(Nonogram no) {

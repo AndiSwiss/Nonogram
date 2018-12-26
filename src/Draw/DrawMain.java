@@ -13,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.7c
+ * @version 0.7d
  */
 public class DrawMain extends PApplet {
 
@@ -41,7 +41,6 @@ public class DrawMain extends PApplet {
         id = new InitialData();
         ul = new UiElementList();
         solver = new Solver();
-        uiAction = new UiAction();
 
         size(id.myWidth, id.myHeight);
         System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
@@ -74,6 +73,8 @@ public class DrawMain extends PApplet {
 
         drawer = new Drawer(this, no, solutionFile, ul);
         drawer.reDrawUi();
+        uiAction = new UiAction(this);
+
     }
 
     @Override
@@ -104,7 +105,7 @@ public class DrawMain extends PApplet {
 
                 System.out.println("UiElement is successfully clicked: " + ui);
 
-                uiAction.actionForUiElement(this, ui);
+                uiAction.actionForUiElement(ui);
             }
         }
 

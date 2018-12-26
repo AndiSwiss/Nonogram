@@ -1,5 +1,6 @@
 package UiElements;
 
+import Data.InitialData;
 import Draw.DrawBasicObjects;
 import Draw.DrawMain;
 import Draw.Drawer;
@@ -9,17 +10,33 @@ import Solver.Solver;
 
 public class UiAction {
 
-    private boolean popupIsActive = false;
+    private String popUpIsActiveFor;
     private int lineNumberForActionForKeyPressed;
+    private UiElementList ul;
+    private Drawer drawer;
+    private DrawMain drawMain;
+    private Nonogram no;
+    private Nonogram solutionFile;
+    private Solver solver;
+    private DrawBasicObjects basicObjects;
+    private InitialData id;
 
-    public void actionForUiElement(DrawMain drawMain, UiElement ui) {
-        Drawer drawer = drawMain.getDrawer();
+
+    public UiAction(DrawMain drawMain) {
+        this.drawMain = drawMain;
 
         // receiving the elements needed for this method:
-        UiElementList ul = drawMain.getUl();
-        Nonogram no = drawMain.getNo();
-        Nonogram solutionFile = drawMain.getSolutionFile();
-        Solver solver = drawMain.getSolver();
+        drawer = drawMain.getDrawer();
+        ul = drawMain.getUl();
+        no = drawMain.getNo();
+        solutionFile = drawMain.getSolutionFile();
+        solver = drawMain.getSolver();
+
+        basicObjects = new DrawBasicObjects(drawMain, no);
+        id = new InitialData();
+    }
+
+    public void actionForUiElement(UiElement ui) {
 
 
         if (ui instanceof UiFileChooser) {
@@ -49,7 +66,6 @@ public class UiAction {
                             drawer.reDrawUi();
                         } else {
                             System.out.println("Solution file not found!");
-                            DrawBasicObjects basicObjects = new DrawBasicObjects(drawMain, no);
                             basicObjects.drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
                         }
                         break;
@@ -96,41 +112,55 @@ public class UiAction {
             switch (ui.getName()) {
                 case "solverOneHorizontalLine":
                     drawer.drawTextEntryPopUp("Enter horizontal line-number:");
+                    popUpIsActiveFor = "solverOneHorizontalLine";
+                    //initialize the lineNumber:
+                    lineNumberForActionForKeyPressed = 0;
                     break;
                 case "solverOneVerticalLine":
                     drawer.drawTextEntryPopUp("Enter vertical line-number:");
+                    popUpIsActiveFor = "solverOneVerticalLine";
+                    //initialize the lineNumber:
+                    lineNumberForActionForKeyPressed = 0;
                     break;
                 default:
                     throw new IllegalArgumentException("unknown UiPopUpInvoker with name " + ui.getName());
             }
-
-            popupIsActive = true;
-            //initialize the lineNumber:
-            lineNumberForActionForKeyPressed = 0;
-
         }
     }
 
     public void actionForKeyPressed(char key) {
 
-        if (popupIsActive) {
+        if (popUpIsActiveFor != null) {
 
             if (key >= '0' && key <= '9') {
+                int number = key - '0';
                 lineNumberForActionForKeyPressed *= 10;
-                lineNumberForActionForKeyPressed += key - '0';
+                lineNumberForActionForKeyPressed += number;
 
-                // todo: show the entered number in the UI
 
-                System.out.println("current lineNumber " + lineNumberForActionForKeyPressed);
+                // Show the entered number in the UI.
+                // By looking at the String of the number, I can see the amount of digits it has. I can use that as the x-value:
+                int x = String.valueOf(lineNumberForActionForKeyPressed).length();
+                basicObjects.drawText("" + number, Zone.POPUP, 16 + (x * 0.6), 1, 1);
+
+                checkIfLineNumberIsTooBigAndShowMessageAndResetEnteredLineNumber();
             }
 
-            // ending:
+            // ending with the Enter-key (ASCII-value 10):
             if (key == 10) {
-                popupIsActive = false;
-                // todo: call the corresponding uiAction...
+                // call the corresponding uiAction...
+                if (popUpIsActiveFor.equals("solverOneHorizontalLine")) {
+                    solver.strategy1(no.getHorizontalLine(lineNumberForActionForKeyPressed));
+                } else if (popUpIsActiveFor.equals("solverOneVerticalLine")) {
+                    solver.strategy1(no.getVerticalLine(lineNumberForActionForKeyPressed));
+                }
+                // resetting:
+                popUpIsActiveFor = null;
+                drawer.reDrawUi();
             }
         } else {
 
+            // Just for reference
             // ASCII-values: According to https://en.wikipedia.org/wiki/ASCII
             switch (key) {
                 case 8:
@@ -157,12 +187,37 @@ public class UiAction {
                     System.out.println("'c' (\u0332cancel) was pressed");
                     break;
             }
-
             // numbers:
             if (key >= '0' && key <= '9') {
                 int n = key - '0';
                 System.out.println(n + " was pressed");
             }
+        }
+    }
+
+    private void checkIfLineNumberIsTooBigAndShowMessageAndResetEnteredLineNumber() {
+        boolean horizontal = popUpIsActiveFor.equals("solverOneHorizontalLine");
+        boolean ok;
+        if (horizontal) {
+            ok = lineNumberForActionForKeyPressed < no.getHorizontalBoxesCount();
+        } else {
+            ok = lineNumberForActionForKeyPressed < no.getVerticalBoxesCount();
+        }
+
+        // redraw original popUp-box, show an error message and reset the entered values:
+        if (!ok) {
+            if (horizontal) {
+                drawer.drawTextEntryPopUp("Enter horizontal line-number:");
+            } else {
+                drawer.drawTextEntryPopUp("Enter vertical line-number:");
+            }
+
+            // error message:
+            String message = "'" + lineNumberForActionForKeyPressed + "' is not a valid LineNumber, try again";
+            basicObjects.drawText(message, Zone.POPUP, 8, 2, 0.8, id.cDarkGrey2);
+
+            // init values:
+            lineNumberForActionForKeyPressed = 0;
         }
     }
 }
