@@ -94,7 +94,7 @@ public class Solver {
         line.setContainsMarks(true);
     }
 
-    private void markLineInOneDirection(Line line, boolean forward) {
+    public void markLineInOneDirection(Line line, boolean forward) {
         List<Number> numbers = line.getNumbers();
 
         System.out.println("---- Creating Marks in " +
@@ -174,17 +174,6 @@ public class Solver {
                     }
 
                     for (int j = start; j <= end; j++) {
-                        // todo: delete current marks if they get changed!! otherwise, they will get duplicated, such as in example 5:
-                        //  If you run the solver for:
-                        //  - horizontal line 8
-                        //  - vertical line 9
-                        //  - horizontal line 8 again, then the old marks are still there after the correct new marking -> handle that!
-
-                        // todo: for the above scenario, it just works for the number index 2. The others are not deleted
-                        //  and also for the following scenario, an error "Index -1 out-of-bounds for length 20" is thrown:
-                        //  - vertical line 9
-                        //  - horizontal line 15
-                        //  - vertical line 9
                         deleteAMarkIfItEqualsTheGivenNumberIndex(line, forward, j, numberIndex);
                     }
                 }
