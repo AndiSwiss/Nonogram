@@ -9,6 +9,7 @@ public class Line {
     private List<Box> boxes;
     private Direction direction;
     private int lineNumber;
+    private boolean containsMarks;
 
     /**
      * Constructor
@@ -129,6 +130,14 @@ public class Line {
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public boolean containsMarks() {
+        return containsMarks;
+    }
+
+    public void setContainsMarks(boolean containsMarks) {
+        this.containsMarks = containsMarks;
     }
 
     @Override
