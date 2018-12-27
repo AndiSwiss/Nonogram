@@ -199,9 +199,9 @@ public class UiAction {
         boolean horizontal = popUpIsActiveFor.equals("solverOneHorizontalLine");
         boolean ok;
         if (horizontal) {
-            ok = lineNumberForActionForKeyPressed < no.getHorizontalBoxesCount();
-        } else {
             ok = lineNumberForActionForKeyPressed < no.getVerticalBoxesCount();
+        } else {
+            ok = lineNumberForActionForKeyPressed < no.getHorizontalBoxesCount();
         }
 
         // redraw original popUp-box, show an error message and reset the entered values:

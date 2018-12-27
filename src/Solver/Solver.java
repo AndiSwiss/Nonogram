@@ -12,10 +12,12 @@ public class Solver {
         boolean horSuccess = strategy1AllHorizontal(no);
         boolean verSuccess = strategy1AllVertical(no);
 
-        // todo: add a separate method which checks, whether a box has no marks AND is not in between the same marking-number. If found, mark box State.WHITE
+        // todo: add a separate method which checks, whether a box has no marks AND is not in between the same
+        //  marking-number. If found, mark box State.WHITE
 
 
-        // todo: there is a problem, when strategy1AllHorizontal() or strategy1AllVertical() is running twice on some examples -> investigate!
+        // todo: there is a problem, when strategy1AllHorizontal() or strategy1AllVertical() is running twice on
+        //  some examples -> investigate!
     }
 
     public boolean strategy1AllHorizontal(Nonogram no) {
@@ -85,6 +87,12 @@ public class Solver {
      * @param line Line
      */
     public void markLine(Line line) {
+
+        // todo: delete current marks if they get changed!! otherwise, they will get duplicated, such as in example 5:
+        //  If you run the solver for:
+        //  - horizontal line 8
+        //  - vertical line 9
+        //  - horizontal line 8 again, then the old marks are still there after the correct new marking -> handle that!
         markLineInOneDirection(line, true);
         markLineInOneDirection(line, false);
     }
@@ -109,20 +117,37 @@ public class Solver {
             }
             Number number = numbers.get(numberIndex);
 
-            System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
-            // check if no BLACK box is on the left (or top) side, if there is, move one block:
-            int positionToCheck;
-            if (forward) {
-                positionToCheck = position - 1;
-            } else {
-                positionToCheck = position + 1;
-            }
-            position = moveIfABlackBoxIsOnThePositionToCheck(line, position, positionToCheck, forward);
+            int newPosition = position;
 
-            // check if there is enough (non-WHITE!) space for placing the mark for the number:
-            // else move the position and repeat the loop:
-            // & check if no BLACK box is on the right (or bottom) side. If there is, move one block and repeat this whole loop:
-            position = moveIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(line, position, number, forward);
+            do {
+                // renew position (important after running one time through this do-while-loop:
+                position = newPosition;
+
+                System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
+                // check if no BLACK box is on the left (or top) side, if there is, move one block:
+                int positionToCheck;
+                if (forward) {
+                    positionToCheck = newPosition - 1;
+                } else {
+                    positionToCheck = newPosition + 1;
+                }
+                newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, newPosition, positionToCheck, forward);
+
+                // check if there is enough (non-WHITE!) space for placing the mark for the number:
+                // else move the position and repeat the loop:
+                newPosition = moveIfAWhiteSpaceWasFound(line, newPosition, number, forward);
+
+                // check if no BLACK box is on the right (or bottom) side OF THE WHOLE NUMBER.
+                // If there is, move to that position and repeat this whole loop:
+                if (forward) {
+                    positionToCheck = newPosition + number.getN();
+                } else {
+                    positionToCheck = newPosition - number.getN();
+                }
+                newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, newPosition, positionToCheck, forward);
+            } while (newPosition != position);
+
+            position = newPosition;
 
             // mark the number
             System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " + line.getLineNumber()
@@ -160,7 +185,7 @@ public class Solver {
         }
     }
 
-    private int moveIfAWhiteSpaceWasFoundOrIfABlackBoxIsOnTheRightOrBottomSide(Line line, int position, Number number, boolean forward) {
+    private int moveIfAWhiteSpaceWasFound(Line line, int position, Number number, boolean forward) {
         for (int l = 0; l < number.getN(); l++) {
             // if a WHITE box was found:
 
@@ -182,20 +207,6 @@ public class Solver {
                     position -= l + 1;
                 }
                 // repeat this whole loop again
-                l = 0;
-            }
-
-            // check if no BLACK box is on the right (or bottom) side of the current number (or on the left (or top) for reversed direction).
-            // If there is, move block and repeat this whole loop:
-            if (forward) {
-                positionToCheck++;
-            } else {
-                positionToCheck--;
-            }
-            int newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, position, positionToCheck, forward);
-            if (newPosition != position) {
-                position = newPosition;
-                // repeat the whole loop from the beginning:
                 l = 0;
             }
         }
@@ -224,8 +235,10 @@ public class Solver {
         }
 
         if (line.getBox(positionToCheck).getState() == State.BLACK) {
-            System.out.print("A BLACK box was found in moveIfABlackBoxIsOnThePositionToCheck(..) " +
-                    "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the " + text + " side at position " + positionToCheck + ".");
+            System.out.println("A BLACK box was found in moveIfABlackBoxIsOnThePositionToCheck(..) " +
+                    "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the "
+                    + text + " side. currentPosition=" + currentPosition + ", positionToCheck=" + positionToCheck +
+                    ", forward=" + forward);
 
             // move the position:
             if (forward) {
