@@ -116,19 +116,26 @@ public class Solver {
                 numberIndex = numbers.size() - 1 - i;
             }
             Number number = numbers.get(numberIndex);
+            System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
 
             if (line.containsMarks()) {
-                // move forward to the existing mark:
-                while (numberIndex != getMarkInTCorrectDirectionFromABox(line, position, forward)) {
-                    System.out.println("Moved directly to the previous mark-position: " +
-                            ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
-                            " Line-Nr=" + line.getLineNumber() +
-                            ", oldPosition=" + position + ", forward=" + forward + ", numberIndex=" + numberIndex);
+                // if not already past the mark, move forward to the existing mark
+                //  -> that was the problem in SolverTest/markLineInOneDirection_problem2()
+                // so: first check, if already past the mark:
+                boolean passed = checkIfAlreadyPassedTheMark(line, position, numberIndex, forward);
+                if (!passed) {
+                    // move forward to the existing mark,
+                    while (numberIndex != getMarkInTCorrectDirectionFromABox(line, position, forward)) {
+                        System.out.println("Moved directly to the previous mark-position: " +
+                                ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
+                                " Line-Nr=" + line.getLineNumber() +
+                                ", oldPosition=" + position + ", forward=" + forward + ", numberIndex=" + numberIndex);
 
-                    if (forward) {
-                        position++;
-                    } else {
-                        position--;
+                        if (forward) {
+                            position++;
+                        } else {
+                            position--;
+                        }
                     }
                 }
             }
@@ -138,7 +145,6 @@ public class Solver {
                 // renew position (important after running one time through this do-while-loop):
                 position = newPosition;
 
-                System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
                 // check if no BLACK box is on the left (or top) side, if there is, move one block:
                 int positionToCheck;
                 if (forward) {
@@ -194,7 +200,45 @@ public class Solver {
         }
     }
 
-    public void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, boolean forward, int position, int numberIndex) {
+    private boolean checkIfAlreadyPassedTheMark(Line line, int position, int numberIndex, boolean forward) {
+        int start;
+        int end;
+        if (forward) {
+            start = 0;
+            end = position;
+        } else {
+            start = position;
+            end = line.getBoxesSize() - 1;
+        }
+        for (int i = start; i <= end; i++) {
+            Box box = line.getBox(i);
+            if (line.getDirection() == Direction.HORIZONTAL) {
+                if (forward) {
+                    if (box.getMarkL() == numberIndex) {
+                        return true;
+                    }
+                } else {
+                    if (box.getMarkR() == numberIndex) {
+                        return true;
+                    }
+                }
+            } else {
+                if (forward) {
+                    if (box.getMarkT() == numberIndex) {
+                        return true;
+                    }
+                } else {
+                    if (box.getMarkB() == numberIndex) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, boolean forward, int position,
+                                                         int numberIndex) {
         Box box = line.getBox(position);
         if (line.getDirection() == Direction.HORIZONTAL) {
             if (forward) {
@@ -244,7 +288,8 @@ public class Solver {
         }
     }
 
-    public int markANumberAndAdvancePosition(Line line, boolean forward, int position, int numberIndex, Number number) {
+    public int markANumberAndAdvancePosition(Line line, boolean forward, int position, int numberIndex, Number
+            number) {
         System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " + line.getLineNumber()
                 + " the number " + number.getN() + " at positions: ");
         for (int l = 0; l < number.getN(); l++) {
@@ -300,7 +345,8 @@ public class Solver {
         return position;
     }
 
-    public int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck, boolean forward) {
+    public int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck,
+                                                     boolean forward) {
 
         // stop checking, if the checking is at the beginning or the end:
         if (positionToCheck < 0 || positionToCheck >= line.getBoxesSize()) {

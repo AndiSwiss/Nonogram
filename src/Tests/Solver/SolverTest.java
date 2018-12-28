@@ -133,11 +133,12 @@ class SolverTest {
 
     @Test
     void markLineInOneDirection_problem1() {
-        // todo: delete current marks if they get changed!! otherwise, they will get duplicated, such as in example 5:
+        // delete current marks if they get changed!! otherwise, they will get duplicated, such as in example 5:
         //  If you run the solver for:
         //  - horizontal line 8
         //  - vertical line 9
         //  - horizontal line 8 again, then just the first mark gets moved, but the others not!
+        // -> solved in version v0.7h (it was a very simple problem, see commit message)
         solver.strategy1(hLine8);
 
         assertEquals(3, hLine8.getBox(13).getMarkR());
@@ -177,6 +178,23 @@ class SolverTest {
         //  - vertical line 9
         //  - horizontal line 15
         //  - vertical line 9
+        // solved in version v0.7i (problem -> see changes in commit)
+
+        solver.strategy1(vLine9);
+        solver.strategy1(hLine15);
+        solver.strategy1(vLine9);
+
+        assertEquals(-1, vLine9.getBox(4).getMarkB());
+        assertEquals(0, vLine9.getBox(5).getMarkB());
+        assertEquals(-1, vLine9.getBox(6).getMarkB());
+    }
+
+    @Test
+    void markLineInOneDirection_problem3() {
+        // todo: in the file solution1 there is still an error thrown, if
+        //  - run horizontal solver once
+        //  - run vertical solver once
+        //  - run horizontal solver once
 
         assertEquals(200, 15, "to be implemented");
     }
