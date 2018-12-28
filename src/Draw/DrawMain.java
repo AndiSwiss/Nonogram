@@ -13,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.7f
+ * @version 0.7g
  */
 public class DrawMain extends PApplet {
 

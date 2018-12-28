@@ -14,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * Disable not yet implemented methods with the annotation  @Disabled("Not Yet implemented")
  */
 class SolverTest {
-    private static Nonogram no;
     private static Line hLine2;  // horizontal line 2
     private static Line hLine15; // horizontal line 15
     private static Line hLine17; // horizontal line 17
+    private static Line vLine9;  // vertical line 9
     private static Solver solver;
 
 
@@ -25,10 +25,11 @@ class SolverTest {
     void setUp() {
         InputDataHandler data = new InputDataHandler();
         String fileName = "Examples/nonogram5.txt";
-        no = data.readAllFileInputs(fileName);
+        Nonogram no = data.readAllFileInputs(fileName);
         hLine2 = no.getHorizontalLine(2);
         hLine15 = no.getHorizontalLine(15);
         hLine17 = no.getHorizontalLine(17);
+        vLine9 = no.getVerticalLine(9);
         solver = new Solver();
     }
 
@@ -83,6 +84,17 @@ class SolverTest {
                 assertEquals(State.BLACK, hLine15.getBox(i).getState());
             }
         }
+    }
+
+    @Test
+    void markBoxesWhichHaveSameMarksInOppositeDirection_horizontalLine15_withWhiteBox() {
+        solver.markLine(hLine17);
+
+        // mark a box white AFTER marking the line -> should throw an error later on:
+        hLine17.getBox(3).setState(State.WHITE);
+
+        assertThrows(IllegalArgumentException.class, () -> solver.markBoxesWhichHaveSameMarksInOppositeDirection(hLine17));
+        System.out.println(hLine17);
     }
 
     @Test
@@ -142,31 +154,70 @@ class SolverTest {
 
     @Test
     void deleteAMarkIfItEqualsTheGivenNumberIndex() {
-        assertEquals(200, 15, "to be implemented");
+        solver.markLine(hLine2);
+
+        // that should create the following markL:
+        for (int i = 0; i < 7; i++) {
+            assertEquals(0, hLine2.getBox(i).getMarkL());
+        }
+        assertEquals(1, hLine2.getBox(8).getMarkL());
+
+        // now run the actual method to test:
+        solver.deleteAMarkIfItEqualsTheGivenNumberIndex(hLine2, true, 5, 0);
+
+        assertEquals(0, hLine2.getBox(4).getMarkL());
+        // deleted mark:
+        assertEquals(-1, hLine2.getBox(5).getMarkL());
+        assertEquals(0, hLine2.getBox(6).getMarkL());
     }
 
     @Test
-    @Disabled("Not Yet implemented")
     void getMarkInTCorrectDirectionFromABox() {
-        assertEquals(200, 15, "to be implemented");
+        solver.markLine(hLine15);
+        solver.markBoxesWhichHaveSameMarksInOppositeDirection(hLine15);
+        solver.markLine(vLine9);
+
+        assertEquals(0, solver.getMarkInTCorrectDirectionFromABox(hLine15, 5, false));
+        assertEquals(-1, solver.getMarkInTCorrectDirectionFromABox(hLine15, 5, true));
+
+        assertEquals(-1, solver.getMarkInTCorrectDirectionFromABox(hLine15, 14, true));
+        assertEquals(1, solver.getMarkInTCorrectDirectionFromABox(hLine15, 14, false));
+
+        assertEquals(1, solver.getMarkInTCorrectDirectionFromABox(vLine9, 5, true));
+        assertEquals(0, solver.getMarkInTCorrectDirectionFromABox(vLine9, 5, false));
     }
 
     @Test
-    @Disabled("Not Yet implemented")
     void markANumberAndAdvancePosition() {
-        assertEquals(200, 15, "to be implemented");
+        int pos = solver.markANumberAndAdvancePosition(hLine15, true, 4, 1, hLine15.getNumber(1));
+
+        assertEquals(12, pos);
+
+        for (int i = 4; i < 12; i++) {
+            assertEquals(1, hLine15.getBox(i).getMarkL());
+        }
+        assertEquals(-1, hLine15.getBox(3).getMarkL());
+        assertEquals(-1, hLine15.getBox(12).getMarkL());
     }
 
     @Test
-    @Disabled("Not Yet implemented")
     void moveIfAWhiteSpaceWasFound() {
-        assertEquals(200, 15, "to be implemented");
+        vLine9.getBox(12).setState(State.WHITE);
+
+        int pos = solver.moveIfAWhiteSpaceWasFound(vLine9, 14, vLine9.getNumber(2), false);
+
+        assertEquals(11, pos);
     }
 
     @Test
-    @Disabled("Not Yet implemented")
     void moveIfABlackBoxIsOnThePositionToCheck() {
-        assertEquals(200, 15, "to be implemented");
-    }
+        hLine15.getBox(1).setState(State.BLACK);
+        int pos = solver.moveIfABlackBoxIsOnThePositionToCheck(hLine15, 2, 1, true);
+        assertEquals(3, pos);
 
+
+        vLine9.getBox(10).setState(State.BLACK);
+        pos = solver.moveIfABlackBoxIsOnThePositionToCheck(vLine9, 14, 10, false);
+        assertEquals(13, pos);
+    }
 }

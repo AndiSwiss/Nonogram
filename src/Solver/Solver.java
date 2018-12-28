@@ -72,7 +72,7 @@ public class Solver {
                     box.setState(State.BLACK);
                     changedSomething = true;
                 } else if (box.getState() == State.WHITE) {
-                    throw new IllegalArgumentException("This box was marked white, but with this algorithm, it was" +
+                    throw new IllegalArgumentException("This box had State.WHITE, but with this algorithm, it was" +
                             "determined to be black! Box: " + box);
                 }
             }
@@ -194,7 +194,7 @@ public class Solver {
         }
     }
 
-    private void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, boolean forward, int position, int numberIndex) {
+    public void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, boolean forward, int position, int numberIndex) {
         Box box = line.getBox(position);
         if (line.getDirection() == Direction.HORIZONTAL) {
             if (forward) {
@@ -227,7 +227,7 @@ public class Solver {
         }
     }
 
-    private int getMarkInTCorrectDirectionFromABox(Line line, int position, boolean forward) {
+    public int getMarkInTCorrectDirectionFromABox(Line line, int position, boolean forward) {
         Box box = line.getBox(position);
         if (line.getDirection() == Direction.HORIZONTAL) {
             if (forward) {
@@ -244,7 +244,7 @@ public class Solver {
         }
     }
 
-    private int markANumberAndAdvancePosition(Line line, boolean forward, int position, int numberIndex, Number number) {
+    public int markANumberAndAdvancePosition(Line line, boolean forward, int position, int numberIndex, Number number) {
         System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " + line.getLineNumber()
                 + " the number " + number.getN() + " at positions: ");
         for (int l = 0; l < number.getN(); l++) {
@@ -272,7 +272,7 @@ public class Solver {
         return position;
     }
 
-    private int moveIfAWhiteSpaceWasFound(Line line, int position, Number number, boolean forward) {
+    public int moveIfAWhiteSpaceWasFound(Line line, int position, Number number, boolean forward) {
         for (int l = 0; l < number.getN(); l++) {
             // if a WHITE box was found:
 
@@ -285,7 +285,7 @@ public class Solver {
 
             if (line.getBox(positionToCheck).getState() == State.WHITE) {
                 System.out.println("A white box was found on the left (or top) at position " + positionToCheck + ", " +
-                        "so the code moved " + (forward ? "forward" : "backward") + " to that new position + 1");
+                        "so the code moved " + (forward ? "forward" : "backward") + " to that new position +/- 1");
                 if (forward) {
                     // advance to the next non-white position:
                     position += l + 1;
@@ -300,7 +300,7 @@ public class Solver {
         return position;
     }
 
-    private int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck, boolean forward) {
+    public int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck, boolean forward) {
 
         // stop checking, if the checking is at the beginning or the end:
         if (positionToCheck < 0 || positionToCheck >= line.getBoxesSize()) {
