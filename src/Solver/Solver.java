@@ -170,7 +170,7 @@ public class Solver {
                         end = newPosition - 1;
                     } else {
                         start = newPosition + 1;
-                        end = position;
+                        end = line.getBoxesSize() - 1;
                     }
 
                     for (int j = start; j <= end; j++) {

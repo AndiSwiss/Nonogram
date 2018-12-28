@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class SolverTest {
     private static Line hLine2;  // horizontal line 2
+    private static Line hLine8;  // horizontal line 8
     private static Line hLine15; // horizontal line 15
     private static Line hLine17; // horizontal line 17
     private static Line vLine9;  // vertical line 9
@@ -27,6 +28,7 @@ class SolverTest {
         String fileName = "Examples/nonogram5.txt";
         Nonogram no = data.readAllFileInputs(fileName);
         hLine2 = no.getHorizontalLine(2);
+        hLine8 = no.getHorizontalLine(8);
         hLine15 = no.getHorizontalLine(15);
         hLine17 = no.getHorizontalLine(17);
         vLine9 = no.getVerticalLine(9);
@@ -135,9 +137,37 @@ class SolverTest {
         //  If you run the solver for:
         //  - horizontal line 8
         //  - vertical line 9
-        //  - horizontal line 8 again, then the old marks are still there after the correct new marking -> handle that!
+        //  - horizontal line 8 again, then just the first mark gets moved, but the others not!
+        solver.strategy1(hLine8);
 
-        assertEquals(200, 15, "to be implemented");
+        assertEquals(3, hLine8.getBox(13).getMarkR());
+        assertEquals(-1, hLine8.getBox(12).getMarkR());
+        assertEquals(2, hLine8.getBox(11).getMarkR());
+        assertEquals(2, hLine8.getBox(10).getMarkR());
+        assertEquals(-1, hLine8.getBox(9).getMarkR());
+        assertEquals(1, hLine8.getBox(8).getMarkR());
+        assertEquals(1, hLine8.getBox(7).getMarkR());
+        assertEquals(-1, hLine8.getBox(6).getMarkR());
+        assertEquals(0, hLine8.getBox(5).getMarkR());
+        assertEquals(0, hLine8.getBox(4).getMarkR());
+        assertEquals(-1, hLine8.getBox(3).getMarkR());
+
+        solver.strategy1(vLine9);
+        // running the solver again for hLine8, that should move the marks for number 2 / 1 / 0:
+        solver.strategy1(hLine8);
+        assertEquals(3, hLine8.getBox(13).getMarkR());
+        assertEquals(-1, hLine8.getBox(12).getMarkR());
+        assertEquals(-1, hLine8.getBox(11).getMarkR());
+        assertEquals(2, hLine8.getBox(10).getMarkR());
+        assertEquals(2, hLine8.getBox(9).getMarkR());
+        assertEquals(-1, hLine8.getBox(8).getMarkR());
+        assertEquals(1, hLine8.getBox(7).getMarkR());
+        assertEquals(1, hLine8.getBox(6).getMarkR());
+        assertEquals(-1, hLine8.getBox(5).getMarkR());
+        assertEquals(0, hLine8.getBox(4).getMarkR());
+        assertEquals(0, hLine8.getBox(3).getMarkR());
+        assertEquals(-1, hLine8.getBox(2).getMarkR());
+
     }
 
     @Test
