@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Run all tests in the whole project or all test in a certain package easily with a test-configurations of JUnit! <br>
  * Disable not yet implemented methods with the annotation  @Disabled("Not Yet implemented")
  */
-class SolverTest {
+class SolverTest_On_Nonogram5 {
     private static Line hLine2;  // horizontal line 2
     private static Line hLine8;  // horizontal line 8
     private static Line hLine15; // horizontal line 15
@@ -173,12 +173,12 @@ class SolverTest {
 
     @Test
     void markLineInOneDirection_problem2() {
-        // todo: for the above scenario, it just works for the number index 2. The others are not deleted
+        // for the above scenario, it just works for the number index 2. The others are not deleted
         //  and also for the following scenario, an error "Index -1 out-of-bounds for length 20" is thrown:
         //  - vertical line 9
         //  - horizontal line 15
         //  - vertical line 9
-        // solved in version v0.7i (problem -> see changes in commit)
+        // solved in version v0.7h (problem -> see changes in commit)
 
         solver.strategy1(vLine9);
         solver.strategy1(hLine15);
@@ -187,16 +187,6 @@ class SolverTest {
         assertEquals(-1, vLine9.getBox(4).getMarkB());
         assertEquals(0, vLine9.getBox(5).getMarkB());
         assertEquals(-1, vLine9.getBox(6).getMarkB());
-    }
-
-    @Test
-    void markLineInOneDirection_problem3() {
-        // todo: in the file solution1 there is still an error thrown, if
-        //  - run horizontal solver once
-        //  - run vertical solver once
-        //  - run horizontal solver once
-
-        assertEquals(200, 15, "to be implemented");
     }
 
 

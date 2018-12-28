@@ -18,6 +18,15 @@ public class Solver {
 
         // todo: there is a problem, when strategy1AllHorizontal() or strategy1AllVertical() is running twice on
         //  some examples -> investigate!
+
+
+        // todo: drastically simplify everything by:
+        //  - In order to handle the solver-elements just once, I have to get a line-getter 'reversed' in Line.java
+        //  -> so I would not have to reverse loops anymore
+        //  - And in order to get rid of horizontal/vertical checking, just do the following:
+        //  - create a line-getter 'forward' and one line-getter 'reverse'
+        //  - + create a getMarkForBox(int i) and setMarkForBox(int i, int mark)
+        //  - -> that would automatically return the correct mark (markL / markR / markT / markB)
     }
 
     public boolean strategy1AllHorizontal(Nonogram no) {
@@ -118,7 +127,24 @@ public class Solver {
             Number number = numbers.get(numberIndex);
             System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
 
+            LabelBreakForCheck:
             if (line.containsMarks()) {
+                // first check, whether the number still exists (it might have been erased by another number-marking
+                // -> this happened as documented in SolverTest_On_Nonogram1.markLineInOneDirection_problem3()
+                boolean foundTheMark = false;
+                for (int j = 0; j < line.getBoxesSize(); j++) {
+                    if (numberIndex == getMarkInTCorrectDirectionFromABox(line, j, forward)) {
+                        foundTheMark = true;
+                    }
+                }
+                if (!foundTheMark) {
+                    System.out.println("Breaking out to 'LabelBreakForCheck:', because for the following mark was not found: " +
+                            ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
+                            " Line-Nr=" + line.getLineNumber() +
+                            ", oldPosition=" + position + ", forward=" + forward + ", numberIndex=" + numberIndex);
+                    break LabelBreakForCheck;
+                }
+
                 // if not already past the mark, move forward to the existing mark
                 //  -> that was the problem in SolverTest/markLineInOneDirection_problem2()
                 // so: first check, if already past the mark:
@@ -126,7 +152,7 @@ public class Solver {
                 if (!passed) {
                     // move forward to the existing mark,
                     while (numberIndex != getMarkInTCorrectDirectionFromABox(line, position, forward)) {
-                        System.out.println("Moved directly to the previous mark-position: " +
+                        System.out.println("Moved towards the previous mark-position: " +
                                 ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
                                 " Line-Nr=" + line.getLineNumber() +
                                 ", oldPosition=" + position + ", forward=" + forward + ", numberIndex=" + numberIndex);
@@ -200,7 +226,7 @@ public class Solver {
         }
     }
 
-    private boolean checkIfAlreadyPassedTheMark(Line line, int position, int numberIndex, boolean forward) {
+    public boolean checkIfAlreadyPassedTheMark(Line line, int position, int numberIndex, boolean forward) {
         int start;
         int end;
         if (forward) {

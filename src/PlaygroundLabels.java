@@ -33,5 +33,19 @@ public class PlaygroundLabels {
         }
 
         System.out.println("The end");
+
+
+        LabelJumpOutOfIf:
+        if (true) {
+            for (int i = 0; i < 5; i++) {
+                if (i == 2) {
+                    System.out.println("jump out of the if!");
+                    break LabelJumpOutOfIf;
+                }
+            }
+
+            System.out.println("Other stuff -> this should never be reached!!!");
+        }
+        System.out.println("The 2nd end");
     }
 }
