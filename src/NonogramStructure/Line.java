@@ -171,9 +171,9 @@ public class Line {
     }
 
 
-    //---------//
-    // Getters //
-    //---------//
+    //-------------------//
+    // Getters & Setters //
+    //-------------------//
     public NumberLine getNumberLine() {
         return numberLine;
     }
@@ -215,6 +215,10 @@ public class Line {
                 Objects.equals(numberLine, line.numberLine) &&
                 Objects.equals(boxes, line.boxes) &&
                 direction == line.direction;
+    }
+
+    public boolean isLineReversed() {
+        return lineIsReversed;
     }
 
     @Override

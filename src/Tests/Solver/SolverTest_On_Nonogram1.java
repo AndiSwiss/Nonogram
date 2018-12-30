@@ -61,7 +61,7 @@ class SolverTest_On_Nonogram1 {
         solver.strategy1(vLine8);
 //        solver.strategy1(hLine9);
 
-        boolean passed = solver.checkIfAlreadyPassedTheMark(hLine9, 10, 1, true);
+        boolean passed = solver.checkIfAlreadyPassedTheMark(hLine9, 10, 1);
         assertTrue(passed);
     }
 

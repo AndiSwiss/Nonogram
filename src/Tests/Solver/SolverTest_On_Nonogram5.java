@@ -101,7 +101,7 @@ class SolverTest_On_Nonogram5 {
 
     @Test
     void markLineInOneDirection_horizontalLine2() {
-        solver.markLineInOneDirection(hLine2, true);
+        solver.markLineInOneDirection(hLine2);
 
         // this line contains 7 and 1 as digits, so the following output is expected:
         for (int i = 0; i < 7; i++) {
@@ -116,7 +116,7 @@ class SolverTest_On_Nonogram5 {
 
     @Test
     void markLineInOneDirection_horizontalLine2_reverse() {
-        solver.markLineInOneDirection(hLine2, false);
+        solver.markLineInOneDirection(hLine2.reversed());
 
 
         // this line contains 7 and 1 as digits, so the following output is expected:
@@ -201,7 +201,7 @@ class SolverTest_On_Nonogram5 {
         assertEquals(1, hLine2.getBox(8).getMarkL());
 
         // now run the actual method to test:
-        solver.deleteAMarkIfItEqualsTheGivenNumberIndex(hLine2, true, 5, 0);
+        solver.deleteAMarkIfItEqualsTheGivenNumberIndex(hLine2, 5, 0);
 
         assertEquals(0, hLine2.getBox(4).getMarkL());
         // deleted mark:
@@ -210,24 +210,8 @@ class SolverTest_On_Nonogram5 {
     }
 
     @Test
-    void getMarkInTCorrectDirectionFromABox() {
-        solver.markLine(hLine15);
-        solver.markBoxesWhichHaveSameMarksInOppositeDirection(hLine15);
-        solver.markLine(vLine9);
-
-        assertEquals(0, solver.getMarkInTCorrectDirectionFromABox(hLine15, 5, false));
-        assertEquals(-1, solver.getMarkInTCorrectDirectionFromABox(hLine15, 5, true));
-
-        assertEquals(-1, solver.getMarkInTCorrectDirectionFromABox(hLine15, 14, true));
-        assertEquals(1, solver.getMarkInTCorrectDirectionFromABox(hLine15, 14, false));
-
-        assertEquals(1, solver.getMarkInTCorrectDirectionFromABox(vLine9, 5, true));
-        assertEquals(0, solver.getMarkInTCorrectDirectionFromABox(vLine9, 5, false));
-    }
-
-    @Test
     void markANumberAndAdvancePosition() {
-        int pos = solver.markANumberAndAdvancePosition(hLine15, true, 4, 1, hLine15.getNumber(1));
+        int pos = solver.markANumberAndAdvancePosition(hLine15, 4, 1, hLine15.getNumber(1));
 
         assertEquals(12, pos);
 
@@ -242,7 +226,7 @@ class SolverTest_On_Nonogram5 {
     void moveIfAWhiteSpaceWasFound() {
         vLine9.getBox(12).setState(State.WHITE);
 
-        int pos = solver.moveIfAWhiteSpaceWasFound(vLine9, 14, vLine9.getNumber(2), false);
+        int pos = solver.moveIfAWhiteSpaceWasFound(vLine9, 14, vLine9.getNumber(2));
 
         assertEquals(11, pos);
     }
@@ -250,12 +234,16 @@ class SolverTest_On_Nonogram5 {
     @Test
     void moveIfABlackBoxIsOnThePositionToCheck() {
         hLine15.getBox(1).setState(State.BLACK);
-        int pos = solver.moveIfABlackBoxIsOnThePositionToCheck(hLine15, 2, 1, true);
+        int pos = solver.moveIfABlackBoxIsOnThePositionToCheck(hLine15, 2, 1);
         assertEquals(3, pos);
 
 
         vLine9.getBox(10).setState(State.BLACK);
-        pos = solver.moveIfABlackBoxIsOnThePositionToCheck(vLine9, 14, 10, false);
+
+        // reversed:
+        Line vLine9Reversed = vLine9.reversed();
+
+        pos = solver.moveIfABlackBoxIsOnThePositionToCheck(vLine9Reversed, 14, 10);
         assertEquals(13, pos);
     }
 }

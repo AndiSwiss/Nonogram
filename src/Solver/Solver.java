@@ -16,17 +16,10 @@ public class Solver {
         //  marking-number. If found, mark box State.WHITE
 
 
-        // todo: there is a problem, when strategy1AllHorizontal() or strategy1AllVertical() is running twice on
-        //  some examples -> investigate!
-
-
-        // todo: drastically simplify everything by:
-        //  - In order to handle the solver-elements just once, I have to get a line-getter 'reversed' in Line.java
-        //  -> so I would not have to reverse loops anymore
-        //  - And in order to get rid of horizontal/vertical checking, just do the following:
-        //  - create a line-getter 'forward' and one line-getter 'reverse'
-        //  - + create a getMarkForBox(int i) and setMarkForBox(int i, int mark)
-        //  - -> that would automatically return the correct mark (markL / markR / markT / markB)
+        // todo: after changing the whole Solver-code to include line.reversed() and line.getMarkForBox() and
+        //  line.setMarkForBox(), the code basically works, except:
+        //  - SolverTests are failing, since they apply the new logic in some wrong ways
+        //  - markBoxesWhichHaveSameMarksInOppositeDirection doesn't work correctly -> adapt to the new logic!
     }
 
     public boolean strategy1AllHorizontal(Nonogram no) {
@@ -102,33 +95,23 @@ public class Solver {
      */
     public void markLine(Line line) {
 
-        markLineInOneDirection(line, true);
-        markLineInOneDirection(line, false);
+        markLineInOneDirection(line);
+
+        Line reversed = line.reversed();
+        markLineInOneDirection(reversed);
 
         line.setContainsMarks(true);
     }
 
-    public void markLineInOneDirection(Line line, boolean forward) {
+    public void markLineInOneDirection(Line line) {
         List<Number> numbers = line.getNumbers();
 
-        System.out.println("---- Creating Marks in " +
-                ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
-                "line " + line.getLineNumber() + ", forward=" + forward + " ----");
-        int position;
-        if (forward) {
-            position = 0;
-        } else {
-            position = line.getBoxesSize() - 1;
-        }
+        System.out.println("---- Creating Marks in " + line.getDirection() + "line " + line.getLineNumber() +
+                ", isLineReversed=" + line.isLineReversed() + " ----");
+        int position = 0;
 
         // from left (or top)
-        for (int i = 0; i < numbers.size(); i++) {
-            int numberIndex;
-            if (forward) {
-                numberIndex = i;
-            } else {
-                numberIndex = numbers.size() - 1 - i;
-            }
+        for (int numberIndex = 0; numberIndex < numbers.size(); numberIndex++) {
             Number number = numbers.get(numberIndex);
             System.out.println("checking number " + number.getN() + " (number index=" + numberIndex + ")");
 
@@ -138,35 +121,30 @@ public class Solver {
                 // -> this happened as documented in SolverTest_On_Nonogram1.markLineInOneDirection_problem3()
                 boolean foundTheMark = false;
                 for (int j = 0; j < line.getBoxesSize(); j++) {
-                    if (numberIndex == getMarkInTCorrectDirectionFromABox(line, j, forward)) {
+                    if (numberIndex == line.getMarkForBox(j)) {
                         foundTheMark = true;
                     }
                 }
                 if (!foundTheMark) {
                     System.out.println("Breaking out to 'LabelBreakForCheck:', because for the following mark was not found: " +
-                            ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
-                            " Line-Nr=" + line.getLineNumber() +
-                            ", oldPosition=" + position + ", forward=" + forward + ", numberIndex=" + numberIndex);
+                            line.getDirection() + " Line-Nr=" + line.getLineNumber() +
+                            ", oldPosition=" + position + ", isLineReversed=" + line.isLineReversed() +
+                            ", numberIndex=" + numberIndex);
                     break LabelBreakForCheck;
                 }
 
                 // if not already past the mark, move forward to the existing mark
                 //  -> that was the problem in SolverTest/markLineInOneDirection_problem2()
                 // so: first check, if already past the mark:
-                boolean passed = checkIfAlreadyPassedTheMark(line, position, numberIndex, forward);
+                boolean passed = checkIfAlreadyPassedTheMark(line, position, numberIndex);
                 if (!passed) {
                     // move forward to the existing mark,
-                    while (numberIndex != getMarkInTCorrectDirectionFromABox(line, position, forward)) {
+                    while (numberIndex != line.getMarkForBox(position)) {
+                        position++;
                         System.out.println("Moved towards the previous mark-position: " +
-                                ((line.getDirection() == Direction.HORIZONTAL) ? "horizontal" : "vertical") +
-                                " Line-Nr=" + line.getLineNumber() +
-                                ", oldPosition=" + position + ", forward=" + forward + ", numberIndex=" + numberIndex);
-
-                        if (forward) {
-                            position++;
-                        } else {
-                            position--;
-                        }
+                                line.getDirection() + " Line-Nr=" + line.getLineNumber() +
+                                ", newPosition=" + position + ", isLineReversed=" + line.isLineReversed() +
+                                ", numberIndex=" + numberIndex);
                     }
                 }
             }
@@ -177,41 +155,22 @@ public class Solver {
                 position = newPosition;
 
                 // check if no BLACK box is on the left (or top) side, if there is, move one block:
-                int positionToCheck;
-                if (forward) {
-                    positionToCheck = newPosition - 1;
-                } else {
-                    positionToCheck = newPosition + 1;
-                }
-                newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, newPosition, positionToCheck, forward);
+                int positionToCheck = newPosition - 1;
+                newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, newPosition, positionToCheck);
 
                 // check if there is enough (non-WHITE!) space for placing the mark for the number:
                 // else move the position and repeat the loop:
-                newPosition = moveIfAWhiteSpaceWasFound(line, newPosition, number, forward);
+                newPosition = moveIfAWhiteSpaceWasFound(line, newPosition, number);
 
                 // check if no BLACK box is on the right (or bottom) side OF THE WHOLE NUMBER.
                 // If there is, move to that position and repeat this whole loop:
-                if (forward) {
-                    positionToCheck = newPosition + number.getN();
-                } else {
-                    positionToCheck = newPosition - number.getN();
-                }
-                newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, newPosition, positionToCheck, forward);
+                positionToCheck = newPosition + number.getN();
+                newPosition = moveIfABlackBoxIsOnThePositionToCheck(line, newPosition, positionToCheck);
 
                 if (line.containsMarks()) {
                     // delete wrong marks:
-                    int start;
-                    int end;
-                    if (forward) {
-                        start = 0;
-                        end = newPosition - 1;
-                    } else {
-                        start = newPosition + 1;
-                        end = line.getBoxesSize() - 1;
-                    }
-
-                    for (int j = start; j <= end; j++) {
-                        deleteAMarkIfItEqualsTheGivenNumberIndex(line, forward, j, numberIndex);
+                    for (int j = 0; j < newPosition; j++) {
+                        deleteAMarkIfItEqualsTheGivenNumberIndex(line, j, numberIndex);
                     }
                 }
 
@@ -220,155 +179,58 @@ public class Solver {
             position = newPosition;
 
             // mark the number and advance the position:
-            position = markANumberAndAdvancePosition(line, forward, position, numberIndex, number);
+            position = markANumberAndAdvancePosition(line, position, numberIndex, number);
             System.out.println();
             // and move one space in between numbers:
-            if (forward) {
-                position++;
-            } else {
-                position--;
-            }
+            position++;
         }
     }
 
-    public boolean checkIfAlreadyPassedTheMark(Line line, int position, int numberIndex, boolean forward) {
-        int start;
-        int end;
-        if (forward) {
-            start = 0;
-            end = position;
-        } else {
-            start = position;
-            end = line.getBoxesSize() - 1;
-        }
-        for (int i = start; i <= end; i++) {
-            Box box = line.getBox(i);
-            if (line.getDirection() == Direction.HORIZONTAL) {
-                if (forward) {
-                    if (box.getMarkL() == numberIndex) {
-                        return true;
-                    }
-                } else {
-                    if (box.getMarkR() == numberIndex) {
-                        return true;
-                    }
-                }
-            } else {
-                if (forward) {
-                    if (box.getMarkT() == numberIndex) {
-                        return true;
-                    }
-                } else {
-                    if (box.getMarkB() == numberIndex) {
-                        return true;
-                    }
-                }
+    public boolean checkIfAlreadyPassedTheMark(Line line, int position, int numberIndex) {
+        for (int i = 0; i <= position; i++) {
+            if (line.getMarkForBox(i) == numberIndex) {
+                return true;
             }
         }
         return false;
     }
 
-    public void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, boolean forward, int position,
-                                                         int numberIndex) {
-        Box box = line.getBox(position);
-        if (line.getDirection() == Direction.HORIZONTAL) {
-            if (forward) {
-                if (box.getMarkL() == numberIndex) {
-                    box.setMarkL(-1);
-                    System.out.println("Deleted a mark: horizontal line-nr " + line.getLineNumber() + ", position=" +
-                            position + ", numberIndex=" + numberIndex + " forward = true");
-                }
-            } else {
-                if (box.getMarkR() == numberIndex) {
-                    box.setMarkR(-1);
-                    System.out.println("Deleted a mark: horizontal line-nr " + line.getLineNumber() + ", position=" +
-                            position + ", numberIndex=" + numberIndex + " forward = false");
-                }
-            }
-        } else {
-            if (forward) {
-                if (box.getMarkT() == numberIndex) {
-                    box.setMarkT(-1);
-                    System.out.println("Deleted a mark: vertical line-nr " + line.getLineNumber() + ", position=" +
-                            position + ", numberIndex=" + numberIndex + " forward = true");
-                }
-            } else {
-                if (box.getMarkB() == numberIndex) {
-                    box.setMarkB(-1);
-                    System.out.println("Deleted a mark: vertical line-nr " + line.getLineNumber() + ", position=" +
-                            position + ", numberIndex=" + numberIndex + " forward = false");
-                }
-            }
+    public void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, int position, int numberIndex) {
+
+        if (line.getMarkForBox(position) == numberIndex) {
+            // delete the mark (by setting it to minus 1):
+            line.setMarkForBox(position, -1);
+            System.out.println("Deleted a mark: " + line.getDirection() + " line-nr " + line.getLineNumber() +
+                    ", position=" + position + ", numberIndex=" + numberIndex +
+                    ". isLineReversed=" + line.isLineReversed());
         }
     }
 
-    public int getMarkInTCorrectDirectionFromABox(Line line, int position, boolean forward) {
-        Box box = line.getBox(position);
-        if (line.getDirection() == Direction.HORIZONTAL) {
-            if (forward) {
-                return box.getMarkL();
-            } else {
-                return box.getMarkR();
-            }
-        } else {
-            if (forward) {
-                return box.getMarkT();
-            } else {
-                return box.getMarkB();
-            }
-        }
-    }
 
-    public int markANumberAndAdvancePosition(Line line, boolean forward, int position, int numberIndex, Number
-            number) {
-        System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " + line.getLineNumber()
-                + " the number " + number.getN() + " at positions: ");
+    public int markANumberAndAdvancePosition(Line line, int position, int numberIndex, Number number) {
+        System.out.print("marking in the " + line.getDirection().toString().toLowerCase() + " line nr " +
+                line.getLineNumber() + " the number " + number.getN() + " at positions: ");
         for (int l = 0; l < number.getN(); l++) {
             System.out.print(position + " ");
-            Box box = line.getBox(position);
-            if (line.getDirection() == Direction.HORIZONTAL) {
-                if (forward) {
-                    box.setMarkL(numberIndex);
-                } else {
-                    box.setMarkR(numberIndex);
-                }
-            } else {
-                if (forward) {
-                    box.setMarkT(numberIndex);
-                } else {
-                    box.setMarkB(numberIndex);
-                }
-            }
-            if (forward) {
-                position++;
-            } else {
-                position--;
-            }
+            line.setMarkForBox(position, numberIndex);
+
+            position++;
         }
         return position;
     }
 
-    public int moveIfAWhiteSpaceWasFound(Line line, int position, Number number, boolean forward) {
+    public int moveIfAWhiteSpaceWasFound(Line line, int position, Number number) {
         for (int l = 0; l < number.getN(); l++) {
             // if a WHITE box was found:
 
-            int positionToCheck;
-            if (forward) {
-                positionToCheck = position + l;
-            } else {
-                positionToCheck = position - l;
-            }
+            int positionToCheck = position + l;
 
             if (line.getBox(positionToCheck).getState() == State.WHITE) {
                 System.out.println("A white box was found on the left (or top) at position " + positionToCheck + ", " +
-                        "so the code moved " + (forward ? "forward" : "backward") + " to that new position +/- 1");
-                if (forward) {
-                    // advance to the next non-white position:
-                    position += l + 1;
-                } else {
-                    // advance in reverse direction to the next non-white position:
-                    position -= l + 1;
-                }
+                        "so the code moved forward to that new position + 1. lineNumber=" + line.getLineNumber() +
+                        ", isLineReversed=" + line.isLineReversed() + ", ");
+                // advance to the next non-white position:
+                position += l + 1;
                 // repeat this whole loop again
                 l = 0;
             }
@@ -376,8 +238,7 @@ public class Solver {
         return position;
     }
 
-    public int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck,
-                                                     boolean forward) {
+    public int moveIfABlackBoxIsOnThePositionToCheck(Line line, int currentPosition, int positionToCheck) {
 
         // stop checking, if the checking is at the beginning or the end:
         if (positionToCheck < 0 || positionToCheck >= line.getBoxesSize()) {
@@ -403,14 +264,10 @@ public class Solver {
             System.out.println("A BLACK box was found in moveIfABlackBoxIsOnThePositionToCheck(..) " +
                     "in " + line.getDirection().toString().toLowerCase() + " line-nr " + line.getLineNumber() + " on the "
                     + text + " side. currentPosition=" + currentPosition + ", positionToCheck=" + positionToCheck +
-                    ", forward=" + forward);
+                    ", isLineReversed=" + line.isLineReversed());
 
             // move the position:
-            if (forward) {
-                currentPosition++;
-            } else {
-                currentPosition--;
-            }
+            currentPosition++;
         }
         return currentPosition;
     }
