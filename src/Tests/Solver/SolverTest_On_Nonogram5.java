@@ -186,7 +186,7 @@ class SolverTest_On_Nonogram5 {
 
     @Test
     void markLineInOneDirection_problem2() {
-        // for the above scenario, it just works for the number index 2. The others are not deleted
+        // In nonogram5, for the above scenario, it just works for the number index 2. The others are not deleted
         //  and also for the following scenario, an error "Index -1 out-of-bounds for length 20" is thrown:
         //  - vertical line 9
         //  - horizontal line 15
@@ -194,12 +194,27 @@ class SolverTest_On_Nonogram5 {
         // solved in version v0.7h (problem -> see changes in commit)
 
         solver.strategy1(vLine9);
+
+        // only box 8 should yet have been solved:
+        assertEquals(State.UNKNOWN, vLine9.getBox(7).getState());
+        assertEquals(State.BLACK, vLine9.getBox(8).getState());
+        assertEquals(State.UNKNOWN, vLine9.getBox(9).getState());
+
         solver.strategy1(hLine15);
+
+
         solver.strategy1(vLine9);
 
         assertEquals(-1, vLine9.getBox(4).getMarkB());
-        assertEquals(0, vLine9.getBox(5).getMarkB());
+        assertEquals(2, vLine9.getBox(5).getMarkB());
         assertEquals(-1, vLine9.getBox(6).getMarkB());
+
+        // now, also the box 7 should be solved:
+        // only box 8 should yet have been solved:
+        assertEquals(State.UNKNOWN, vLine9.getBox(6).getState());
+        assertEquals(State.BLACK, vLine9.getBox(7).getState());
+        assertEquals(State.BLACK, vLine9.getBox(8).getState());
+        assertEquals(State.UNKNOWN, vLine9.getBox(9).getState());
     }
 
 
@@ -239,9 +254,21 @@ class SolverTest_On_Nonogram5 {
     void moveIfAWhiteSpaceWasFound() {
         vLine9.getBox(12).setState(State.WHITE);
 
-        int pos = solver.moveIfAWhiteSpaceWasFound(vLine9, 14, vLine9.getNumber(2));
+        int pos = solver.moveIfAWhiteSpaceWasFound(vLine9, 10, vLine9.getNumber(2));
 
-        assertEquals(11, pos);
+        assertEquals(13, pos);
+    }
+
+    @Test
+    void moveIfAWhiteSpaceWasFound_reversed() {
+        vLine9.getBox(12).setState(State.WHITE); // equals to the reversed box = 7
+
+        Line vLine9Reversed = vLine9.reversed();
+
+        // remember: position is also reversed (from the bottom!)
+        int pos = solver.moveIfAWhiteSpaceWasFound(vLine9Reversed, 5, vLine9.getNumber(1));
+
+        assertEquals(8, pos);
     }
 
     @Test
@@ -251,12 +278,13 @@ class SolverTest_On_Nonogram5 {
         assertEquals(3, pos);
 
 
-        vLine9.getBox(10).setState(State.BLACK);
+        vLine9.getBox(15).setState(State.BLACK); // equals to the reversed box = 4
 
         // reversed:
         Line vLine9Reversed = vLine9.reversed();
 
-        pos = solver.moveIfABlackBoxIsOnThePositionToCheck(vLine9Reversed, 14, 10);
-        assertEquals(13, pos);
+        // remember: position is also reversed (from the bottom!)
+        pos = solver.moveIfABlackBoxIsOnThePositionToCheck(vLine9Reversed, 0, 4);
+        assertEquals(1, pos);
     }
 }

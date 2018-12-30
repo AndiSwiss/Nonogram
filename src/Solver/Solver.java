@@ -14,12 +14,6 @@ public class Solver {
 
         // todo: add a separate method which checks, whether a box has no marks AND is not in between the same
         //  marking-number. If found, mark box State.WHITE
-
-
-        // todo: after changing the whole Solver-code to include line.reversed() and line.getMarkForBox() and
-        //  line.setMarkForBox(), the code basically works, except:
-        //  - SolverTests are failing, since they apply the new logic in some wrong ways
-        //  - markBoxesWhichHaveSameMarksInOppositeDirection doesn't work correctly -> adapt to the new logic!
     }
 
     public boolean strategy1AllHorizontal(Nonogram no) {
