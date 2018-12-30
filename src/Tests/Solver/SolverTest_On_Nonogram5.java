@@ -118,17 +118,16 @@ class SolverTest_On_Nonogram5 {
     void markLineInOneDirection_horizontalLine2_reverse() {
         solver.markLineInOneDirection(hLine2.reversed());
 
-
         // this line contains 7 and 1 as digits, so the following output is expected:
         for (int i = 0; i < 6; i++) {
             assertEquals(-1, hLine2.getBox(i).getMarkR());
         }
         for (int i = 6; i < 13; i++) {
-            assertEquals(0, hLine2.getBox(i).getMarkR());
+            assertEquals(1, hLine2.getBox(i).getMarkR());
         }
 
         assertEquals(-1, hLine2.getBox(13).getMarkR());
-        assertEquals(1, hLine2.getBox(14).getMarkR());
+        assertEquals(0, hLine2.getBox(14).getMarkR());
     }
 
     @Test
@@ -141,33 +140,47 @@ class SolverTest_On_Nonogram5 {
         // -> solved in version v0.7h (it was a very simple problem, see commit message)
         solver.strategy1(hLine8);
 
-        assertEquals(3, hLine8.getBox(13).getMarkR());
+        System.out.println(hLine8);
+
+        assertEquals(0, hLine8.getBox(14).getMarkR());
+        assertEquals(0, hLine8.getBox(13).getMarkR());
         assertEquals(-1, hLine8.getBox(12).getMarkR());
-        assertEquals(2, hLine8.getBox(11).getMarkR());
-        assertEquals(2, hLine8.getBox(10).getMarkR());
+        assertEquals(1, hLine8.getBox(11).getMarkR());
+        assertEquals(1, hLine8.getBox(10).getMarkR());
         assertEquals(-1, hLine8.getBox(9).getMarkR());
-        assertEquals(1, hLine8.getBox(8).getMarkR());
-        assertEquals(1, hLine8.getBox(7).getMarkR());
+        assertEquals(2, hLine8.getBox(8).getMarkR());
+        assertEquals(2, hLine8.getBox(7).getMarkR());
         assertEquals(-1, hLine8.getBox(6).getMarkR());
-        assertEquals(0, hLine8.getBox(5).getMarkR());
-        assertEquals(0, hLine8.getBox(4).getMarkR());
+        assertEquals(3, hLine8.getBox(5).getMarkR());
+        assertEquals(3, hLine8.getBox(4).getMarkR());
         assertEquals(-1, hLine8.getBox(3).getMarkR());
+        assertEquals(-1, hLine8.getBox(2).getMarkR());
+        assertEquals(-1, hLine8.getBox(1).getMarkR());
 
         solver.strategy1(vLine9);
         // running the solver again for hLine8, that should move the marks for number 2 / 1 / 0:
         solver.strategy1(hLine8);
-        assertEquals(3, hLine8.getBox(13).getMarkR());
+
+        System.out.print("MarkR in hLine8: ");
+        for (int i = hLine8.getBoxesSize() - 1; i >= 0; i--) {
+            System.out.print(i + ":" + hLine8.getBox(i).getMarkR() + " / ");
+        }
+        System.out.println();
+
+        assertEquals(0, hLine8.getBox(14).getMarkR());
+        assertEquals(0, hLine8.getBox(13).getMarkR());
         assertEquals(-1, hLine8.getBox(12).getMarkR());
         assertEquals(-1, hLine8.getBox(11).getMarkR());
-        assertEquals(2, hLine8.getBox(10).getMarkR());
-        assertEquals(2, hLine8.getBox(9).getMarkR());
+        assertEquals(1, hLine8.getBox(10).getMarkR());
+        assertEquals(1, hLine8.getBox(9).getMarkR());
         assertEquals(-1, hLine8.getBox(8).getMarkR());
-        assertEquals(1, hLine8.getBox(7).getMarkR());
-        assertEquals(1, hLine8.getBox(6).getMarkR());
+        assertEquals(2, hLine8.getBox(7).getMarkR());
+        assertEquals(2, hLine8.getBox(6).getMarkR());
         assertEquals(-1, hLine8.getBox(5).getMarkR());
-        assertEquals(0, hLine8.getBox(4).getMarkR());
-        assertEquals(0, hLine8.getBox(3).getMarkR());
+        assertEquals(3, hLine8.getBox(4).getMarkR());
+        assertEquals(3, hLine8.getBox(3).getMarkR());
         assertEquals(-1, hLine8.getBox(2).getMarkR());
+        assertEquals(-1, hLine8.getBox(1).getMarkR());
 
     }
 

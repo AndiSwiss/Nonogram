@@ -124,6 +124,11 @@ public class Line {
 
         Line reversed = new Line(reversedBoxes, reversedNumberLine, direction);
         reversed.lineIsReversed = true;
+
+        // copy all the other fields of this line:
+        reversed.lineNumber = lineNumber;
+        reversed.containsMarks = containsMarks;
+
         return reversed;
     }
 

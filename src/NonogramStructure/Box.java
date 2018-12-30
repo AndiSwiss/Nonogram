@@ -46,12 +46,10 @@ public class Box {
         this.markL = markL;
     }
 
-    // todo: correct this getter -> it must adopt to the new reversed logic!
     public int getMarkR() {
         return markR;
     }
 
-    // todo: correct this setter -> it must adopt to the new reversed logic!
     public void setMarkR(int markR) {
         this.markR = markR;
     }
@@ -64,12 +62,10 @@ public class Box {
         this.markT = markT;
     }
 
-    // todo: correct this getter -> it must adopt to the new reversed logic!
     public int getMarkB() {
         return markB;
     }
 
-    // todo: correct this setter -> it must adopt to the new reversed logic!
     public void setMarkB(int markB) {
         this.markB = markB;
     }
