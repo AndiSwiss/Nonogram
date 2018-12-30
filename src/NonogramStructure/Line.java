@@ -170,6 +170,28 @@ public class Line {
         }
     }
 
+    /**
+     * @return true, if the box has the same mark
+     */
+
+    public boolean boxHasSameOppositeMark(int boxNr) {
+        int forwardMark = getMarkForBox(boxNr);
+
+        if (forwardMark == -1) {
+            return false;
+        }
+
+        int backwardMark;
+        if (direction == Direction.HORIZONTAL) {
+            backwardMark = getBox(boxNr).getMarkR();
+        } else {
+            backwardMark = getBox(boxNr).getMarkB();
+        }
+
+        // remember: in the reversed line, the numberIndexes are also reversed:
+        return forwardMark == getNumbersSize() - backwardMark - 1;
+    }
+
 
     //-------------------//
     // Getters & Setters //
