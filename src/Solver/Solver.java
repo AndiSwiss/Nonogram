@@ -74,6 +74,11 @@ public class Solver {
      */
     public boolean markBoxesWhichHaveSameMarksInOppositeDirection(Line line) {
         boolean changedSomething = false;
+
+        // todo: change for the new logic!! Since the numberLine also gets reversed, the indexes are also reversed!
+        //  So in a line with the two number 5 and 2, the first number has index 0 in forward direction, but index 1 in
+        //  reversed direction -> so compare the number with the lowest index to that one with the highest index!
+
         // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):
         for (Box box : line.getBoxes()) {
             if (box.hasSameHorizontalMark() || box.hasSameVerticalMark()) {

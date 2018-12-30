@@ -10,13 +10,14 @@ public class Line {
     private Direction direction;
     private int lineNumber;
     private boolean containsMarks;
+    private boolean lineIsReversed;
 
     /**
      * Constructor
      *
-     * @param boxes     List<Box>
-     * @param numberLine   NumberLine
-     * @param direction Direction
+     * @param boxes      List<Box>
+     * @param numberLine NumberLine
+     * @param direction  Direction
      */
     public Line(List<Box> boxes, NumberLine numberLine, Direction direction) {
         this.boxes = boxes;
@@ -102,6 +103,71 @@ public class Line {
 
     public boolean areAllNumbersCrossedOut() {
         return numberLine.areAllCrossedOut();
+    }
+
+
+    /**
+     * @return the Line, but reversed. So the last position equals to the first position
+     */
+    public Line reversed() {
+        // boxes:
+        List<Box> reversedBoxes = new ArrayList<>();
+        for (Box b : boxes) {
+            reversedBoxes.add(0, b);
+        }
+        // numberLine:
+        List<Number> reversedNumbers = new ArrayList<>();
+        for (Number n : numberLine.getNumbers()) {
+            reversedNumbers.add(0, n);
+        }
+        NumberLine reversedNumberLine = new NumberLine(reversedNumbers);
+
+        Line reversed = new Line(reversedBoxes, reversedNumberLine, direction);
+        reversed.lineIsReversed = true;
+        return reversed;
+    }
+
+
+    /**
+     * @param boxNr box-nr
+     * @return The mark in the corresponding direction (horizontal/vertical and normal/reversed)
+     * -> markL/markR/markT/markB
+     */
+    public int getMarkForBox(int boxNr) {
+        if (direction == Direction.HORIZONTAL) {
+            if (!lineIsReversed) {
+                return getBox(boxNr).getMarkL();
+            } else {
+                return getBox(boxNr).getMarkR();
+            }
+        } else {
+            if (!lineIsReversed) {
+                return getBox(boxNr).getMarkT();
+            } else {
+                return getBox(boxNr).getMarkB();
+            }
+        }
+    }
+
+    /**
+     * @param boxNr box-nr
+     * @param mark  The mark to be set in the corresponding direction (horizontal/vertical and normal/reversed)
+     *              -> markL/markR/markT/markB
+     */
+    public void setMarkForBox(int boxNr, int mark) {
+        if (direction == Direction.HORIZONTAL) {
+            if (!lineIsReversed) {
+                getBox(boxNr).setMarkL(mark);
+            } else {
+                getBox(boxNr).setMarkR(mark);
+            }
+        } else {
+            if (!lineIsReversed) {
+                getBox(boxNr).setMarkT(mark);
+            } else {
+                getBox(boxNr).setMarkB(mark);
+            }
+        }
     }
 
 
