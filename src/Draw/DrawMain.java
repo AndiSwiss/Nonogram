@@ -4,7 +4,7 @@ import Data.InitialData;
 import Data.InputDataHandler;
 import Data.Position;
 import NonogramStructure.Nonogram;
-import Solver.Solver;
+import Solvers.Solver;
 import UiElements.UiAction;
 import UiElements.UiElement;
 import UiElements.UiElementList;
@@ -13,7 +13,9 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.8g (back on branch master)
+ * @version 0.8h
+ * <p>
+ * This is the main class, where the program can be started -> execute the main()-method to launch the application.
  */
 public class DrawMain extends PApplet {
 

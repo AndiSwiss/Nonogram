@@ -24,9 +24,10 @@ public class UiElementList {
 
         // Solver-UI:
         uiElements.add(new UiTextbox("emptySpace", ""));
-        uiElements.add(new UiTextbox("SolverTitle", "Solver:"));
+        uiElements.add(new UiTextbox("SolverTitle", "Solver.java, Strategy 1:"));
         uiElements.add(new UiClickableOption("solverHorizontalOnce", "Run horizontal solver once"));
         uiElements.add(new UiClickableOption("solverVerticalOnce", "Run vertical solver once"));
+        uiElements.add(new UiClickableOption("solverRunStrategy1AsLongAsPossible", "Run strategy1 as long as possible"));
         uiElements.add(new UiPopUpInvoker("solverOneHorizontalLine", "Solve one following horizontal..."));
         uiElements.add(new UiPopUpInvoker("solverOneVerticalLine", "Solve one following vertical line..."));
         uiElements.add(new UiSwitchableOption("showMarks", "Show marks"));

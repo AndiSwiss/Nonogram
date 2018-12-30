@@ -3,7 +3,7 @@ package Tests.Solver;
 import Data.InputDataHandler;
 import NonogramStructure.*;
 import NonogramStructure.Number;
-import Solver.Solver;
+import Solvers.Solver;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,8 +53,10 @@ class Nonogram4_strategyPics_Test {
 
         System.out.println(horiz3);
 
-        // no box should be filled, hence it should return false:
-        assertFalse(solver.strategy1(no.getHorizontalLine(3)));
+        // no box should be filled:
+        for (Box box : horiz3.getBoxes()) {
+            assertEquals(State.UNKNOWN, box.getState());
+        }
 
         assertEquals(horiz3, no.getHorizontalLine(3));
     }

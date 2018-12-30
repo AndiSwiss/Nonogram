@@ -1,10 +1,11 @@
 package Tests.Solver;
 
 import Data.InputDataHandler;
+import NonogramStructure.Box;
 import NonogramStructure.Line;
 import NonogramStructure.Nonogram;
 import NonogramStructure.State;
-import Solver.Solver;
+import Solvers.Solver;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,13 +21,14 @@ class SolverTest_On_Nonogram5 {
     private static Line hLine17; // horizontal line 17
     private static Line vLine9;  // vertical line 9
     private static Solver solver;
+    private static Nonogram no;
 
 
     @BeforeEach
     void setUp() {
         InputDataHandler data = new InputDataHandler();
         String fileName = "Examples/nonogram5.txt";
-        Nonogram no = data.readAllFileInputs(fileName);
+        no = data.readAllFileInputs(fileName);
         hLine2 = no.getHorizontalLine(2);
         hLine8 = no.getHorizontalLine(8);
         hLine15 = no.getHorizontalLine(15);
@@ -37,21 +39,68 @@ class SolverTest_On_Nonogram5 {
 
 
     @Test
-    @Disabled("Not Yet implemented")
-    void start() {
-        assertEquals(200, 15, "to be implemented");
+    void runStrategy1AsLongAsPossible() {
+        solver.runStrategy1AsLongAsPossible(no);
+
+        for (Line line : no.getHorizontalLines()) {
+            for (Box box : line.getBoxes()) {
+                if (box.getPosX() == 6 && box.getPosY() == 2) {
+                    System.out.println("checking box " + box);
+                    assertEquals(State.BLACK, box.getState());
+                } else if (box.getPosY() == 7 && box.getPosX() == 9) {
+                    assertEquals(State.BLACK, box.getState());
+                } else if (box.getPosY() == 8 && box.getPosX() == 9) {
+                    assertEquals(State.BLACK, box.getState());
+                } else if (box.getPosY() == 15 && ((box.getPosX() >= 1 && box.getPosX() <= 4) ||
+                        (box.getPosX() >= 7 && box.getPosX() <= 13))) {
+                    assertEquals(State.BLACK, box.getState());
+                } else if (box.getPosY() == 17 && ((box.getPosX() >= 2 && box.getPosX() <= 4) ||
+                        (box.getPosX() >= 8 && box.getPosX() <= 12))) {
+                    assertEquals(State.BLACK, box.getState());
+                } else {
+                    System.out.println("checking box " + box);
+                    assertEquals(State.UNKNOWN, box.getState());
+                }
+            }
+        }
+
+        // checking some marks, which should have been moved
     }
 
     @Test
-    @Disabled("Not Yet implemented")
     void strategy1AllHorizontal() {
-        assertEquals(200, 15, "to be implemented");
+        solver.strategy1AllHorizontal(no);
+
+        for (Line line : no.getHorizontalLines()) {
+            for (Box box : line.getBoxes()) {
+                if (box.getPosX() == 6 && box.getPosY() == 2) {
+                    assertEquals(State.BLACK, box.getState());
+                } else if (box.getPosY() == 15 && ((box.getPosX() >= 1 && box.getPosX() <= 4) ||
+                        (box.getPosX() >= 7 && box.getPosX() <= 13))) {
+                    assertEquals(State.BLACK, box.getState());
+                } else if (box.getPosY() == 17 && ((box.getPosX() >= 2 && box.getPosX() <= 4) ||
+                        (box.getPosX() >= 8 && box.getPosX() <= 12))) {
+                    assertEquals(State.BLACK, box.getState());
+                } else {
+                    assertEquals(State.UNKNOWN, box.getState());
+                }
+            }
+        }
     }
 
     @Test
-    @Disabled("Not Yet implemented")
     void strategy1AllVertical() {
-        assertEquals(200, 15, "to be implemented");
+        solver.strategy1AllVertical(no);
+
+        for (Line line : no.getVerticalLines()) {
+            for (Box box : line.getBoxes()) {
+                if (box.getPosX() == 9 && box.getPosY() == 8) {
+                    assertEquals(State.BLACK, box.getState());
+                } else {
+                    assertEquals(State.UNKNOWN, box.getState());
+                }
+            }
+        }
     }
 
     @Test

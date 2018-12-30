@@ -3,7 +3,7 @@ package Tests.Solver;
 import Data.InputDataHandler;
 import NonogramStructure.Line;
 import NonogramStructure.Nonogram;
-import Solver.Solver;
+import Solvers.Solver;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;

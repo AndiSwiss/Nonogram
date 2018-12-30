@@ -6,7 +6,7 @@ import Draw.DrawMain;
 import Draw.Drawer;
 import Data.Zone;
 import NonogramStructure.Nonogram;
-import Solver.Solver;
+import Solvers.Solver;
 
 public class UiAction {
 
@@ -101,6 +101,9 @@ public class UiAction {
                     break;
                 case "solverVerticalOnce":
                     solver.strategy1AllVertical(no);
+                    break;
+                case "solverRunStrategy1AsLongAsPossible":
+                    solver.runStrategy1AsLongAsPossible(no);
                     break;
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());

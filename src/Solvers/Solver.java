@@ -1,4 +1,4 @@
-package Solver;
+package Solvers;
 
 import NonogramStructure.*;
 import NonogramStructure.Number;
@@ -7,13 +7,17 @@ import java.util.List;
 
 public class Solver {
 
-    public void start(Nonogram no) {
+    public void runStrategy1AsLongAsPossible(Nonogram no) {
+        boolean changedSomething;
+        do {
+            boolean horSuccess = strategy1AllHorizontal(no);
+            boolean verSuccess = strategy1AllVertical(no);
 
-        boolean horSuccess = strategy1AllHorizontal(no);
-        boolean verSuccess = strategy1AllVertical(no);
+            System.out.println("Method Solver.runStrategy1AsLongAsPossible: strategy1AllHorizontal was " + (horSuccess ? "" : "not ") +
+                    "successful and strategy1AllVertical was " + (verSuccess ? "" : "not ") + "successful.");
+            changedSomething = horSuccess || verSuccess;
 
-        // todo: add a separate method which checks, whether a box has no marks AND is not in between the same
-        //  marking-number. If found, mark box State.WHITE
+        } while (changedSomething);
     }
 
     public boolean strategy1AllHorizontal(Nonogram no) {
@@ -44,22 +48,22 @@ public class Solver {
      * Strategy 1: look at the EMPTY line's numbers and try to figure out if you can draw some boxes:
      *
      * @param line Line
-     * @return true, if it changed a state of a box. False if not.
+     * @return true, if it changed a state of a box, or if it changed a mark
      */
     public boolean strategy1(Line line) {
 
-        markLine(line);
+        boolean changedMarks = markLine(line);
 
-        boolean changedSomething = markBoxesWhichHaveSameMarksInOppositeDirection(line);
+        boolean changedBoxStates = markBoxesWhichHaveSameMarksInOppositeDirection(line);
 
-        return changedSomething;
+        return changedBoxStates || changedMarks;
     }
 
     /**
      * @param line Line
      * @return True, if a new box was marked BLACK
      */
-    public boolean markBoxesWhichHaveSameMarksInOppositeDirection(Line line) {
+    public boolean markBoxesWhichHaveSameMarksInOppositeDirection(Line line){
         boolean changedSomething = false;
 
         // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):
@@ -84,21 +88,26 @@ public class Solver {
      * Note that -1 in a mark means: no mark. Any other integer stands for the index of the corresponding number.
      *
      * @param line Line
+     * @return True, if a mark was changed
      */
-    public void markLine(Line line) {
+    public boolean markLine(Line line) {
 
-        markLineInOneDirection(line);
+        boolean changedForwardMark = markLineInOneDirection(line);
 
         Line reversed = line.reversed();
-        markLineInOneDirection(reversed);
+        boolean changedBackwardMark = markLineInOneDirection(reversed);
 
         line.setContainsMarks(true);
+
+        return changedForwardMark || changedBackwardMark;
     }
 
-    public void markLineInOneDirection(Line line) {
+    public boolean markLineInOneDirection(Line line) {
+        boolean deletedAMark = false;
+
         List<Number> numbers = line.getNumbers();
 
-        System.out.println("---- Creating Marks in " + line.getDirection() + "line " + line.getLineNumber() +
+        System.out.println("---- Creating Marks in " + line.getDirection() + " line " + line.getLineNumber() +
                 ", isLineReversed=" + line.isLineReversed() + " ----");
         int position = 0;
 
@@ -162,7 +171,10 @@ public class Solver {
                 if (line.containsMarks()) {
                     // delete wrong marks:
                     for (int j = 0; j < newPosition; j++) {
-                        deleteAMarkIfItEqualsTheGivenNumberIndex(line, j, numberIndex);
+                        boolean currentlyDeleted = deleteAMarkIfItEqualsTheGivenNumberIndex(line, j, numberIndex);
+                        if (currentlyDeleted) {
+                            deletedAMark = true;
+                        }
                     }
                 }
 
@@ -175,8 +187,16 @@ public class Solver {
             System.out.println();
             // and move one space in between numbers:
             position++;
+
         }
+
+        // return, whether something was changed:
+        // for sure, in the first run, there was something changed:
+        boolean firstRun = !line.containsMarks();
+        // else, if there was a deleted mark while moving a mark; that would also be a change:
+        return firstRun || deletedAMark;
     }
+
 
     public boolean checkIfAlreadyPassedTheMark(Line line, int position, int numberIndex) {
         for (int i = 0; i <= position; i++) {
@@ -187,7 +207,7 @@ public class Solver {
         return false;
     }
 
-    public void deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, int position, int numberIndex) {
+    public boolean deleteAMarkIfItEqualsTheGivenNumberIndex(Line line, int position, int numberIndex) {
 
         if (line.getMarkForBox(position) == numberIndex) {
             // delete the mark (by setting it to minus 1):
@@ -195,7 +215,9 @@ public class Solver {
             System.out.println("Deleted a mark: " + line.getDirection() + " line-nr " + line.getLineNumber() +
                     ", position=" + position + ", numberIndex=" + numberIndex +
                     ". isLineReversed=" + line.isLineReversed());
+            return true;
         }
+        return false;
     }
 
 
