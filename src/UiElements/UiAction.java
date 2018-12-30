@@ -7,6 +7,7 @@ import Draw.Drawer;
 import Data.Zone;
 import NonogramStructure.Nonogram;
 import Solvers.Solver;
+import Solvers.Solver2;
 
 public class UiAction {
 
@@ -18,6 +19,7 @@ public class UiAction {
     private Nonogram no;
     private Nonogram solutionFile;
     private Solver solver;
+    private Solver2 solver2;
     private DrawBasicObjects basicObjects;
     private InitialData id;
 
@@ -31,6 +33,7 @@ public class UiAction {
         no = drawMain.getNo();
         solutionFile = drawMain.getSolutionFile();
         solver = drawMain.getSolver();
+        solver2 = drawMain.getSolver2();
 
         basicObjects = new DrawBasicObjects(drawMain, no);
         id = new InitialData();
@@ -104,6 +107,9 @@ public class UiAction {
                     break;
                 case "solverRunStrategy1AsLongAsPossible":
                     solver.runStrategy1AsLongAsPossible(no);
+                    break;
+                case "solverRunStrategy2AsLongAsPossible":
+                    solver2.runStrategy2AsLongAsPossible(no);
                     break;
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());

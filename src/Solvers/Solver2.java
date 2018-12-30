@@ -4,41 +4,42 @@ import NonogramStructure.Line;
 import NonogramStructure.Nonogram;
 import NonogramStructure.State;
 
+import java.util.List;
+
 public class Solver2 {
 
     public void runStrategy2AsLongAsPossible(Nonogram no) {
 
-        boolean changedSomething = false;
+        boolean changedSomething;
+        do {
+            boolean horSuccess = strategy2InOneDirection(no, true);
+            boolean verSuccess = strategy2InOneDirection(no, false);
 
-        while (changedSomething) {
-            // todo: include the new strategies!
-
-            // todo: include also boolean return, whether something was changed or not -> see Solver.runStrategy1AsLongAsPossible(..).
-
+            changedSomething = horSuccess || verSuccess;
             // todo: add a separate method which checks, whether a box has no marks AND is not in between the same
             //  marking-number. If found, mark box State.WHITE
-        }
+        } while (changedSomething);
     }
 
 
-    public void strategy2All(Nonogram no) {
+    private boolean strategy2InOneDirection(Nonogram no, boolean horizontal) {
 
-        // todo: create test for this!
-        // todo: include also boolean return, whether something was changed or not -> see Solver.runStrategy1AsLongAsPossible(..).
+        boolean changedForward = false;
+        boolean changedReversed = false;
 
-        for (Line hLine : no.getHorizontalLines()) {
-            moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(hLine);
+        List<Line> lines = horizontal ? no.getHorizontalLines() : no.getVerticalLines();
 
-            // and in reversed direction:
-            moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(hLine.reversed());
+        for (Line line : lines) {
+            changedForward = moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(line);
         }
 
-        for (Line vLine : no.getVerticalLines()) {
-            moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(vLine);
-
-            // and in reversed direction:
-            moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(vLine.reversed());
+        // reversed direction:
+        for (Line line : lines) {
+            changedReversed = moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(line.reversed());
         }
+
+        return changedForward || changedReversed;
+
     }
 
 
@@ -47,17 +48,18 @@ public class Solver2 {
      *
      * @param line Line
      */
-    public void moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(Line line) {
-
+    public boolean moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(Line line) {
+        boolean changedSomething = false;
         for (int i = line.getNumbersSize() - 1; i >= 0; i--) {
-            moveMarkForwardIfNonCoveredBlackBoxIsFoundAhead(line, i);
+            boolean changedNow = moveMarkForwardIfNonCoveredBlackBoxIsFoundAhead(line, i);
+            if (changedNow) {
+                changedSomething = true;
+            }
         }
+        return changedSomething;
     }
 
-    private void moveMarkForwardIfNonCoveredBlackBoxIsFoundAhead(Line line, int numberIndex) {
-        System.out.println("---- Started moveMarkForwardIfNonCoveredBlackBoxIsFoundAhead() in " + line.getDirection() +
-                " line " + line.getLineNumber() + ", isLineReversed=" + line.isLineReversed() +
-                ", numberIndex=" + numberIndex + " ----");
+    private boolean moveMarkForwardIfNonCoveredBlackBoxIsFoundAhead(Line line, int numberIndex) {
         // search and move to the position right after last box of that number
         int afterNumber = -1;
         for (int i = 0; i < line.getBoxesSize(); i++) {
@@ -67,7 +69,8 @@ public class Solver2 {
             }
         }
         if (afterNumber == -1) {
-            throw new IllegalArgumentException("Error: afterNumber was -1!");
+            throw new IllegalArgumentException("Error: marking of the number with numberIndex " + numberIndex +
+                    " was not found, hence afterNumber was -1!");
         }
 
         // check if a black box is ahead, until the next number is found (if there is one):
@@ -89,9 +92,11 @@ public class Solver2 {
         for (int pos = end; pos >= start; pos--) {
             if (line.getBox(pos).getState() == State.BLACK) {
                 moveMarkForward(line, numberIndex, afterNumber - 1, pos);
-                break;
+                // that's it, you can return:
+                return true;
             }
         }
+        return false;
     }
 
 
