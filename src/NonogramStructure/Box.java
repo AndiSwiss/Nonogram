@@ -3,8 +3,8 @@ package NonogramStructure;
 import java.util.Objects;
 
 public class Box {
-    private int posX;
-    private int posY;
+    private final int posX;
+    private final int posY;
     private State state;
 
     private int markL = -1;

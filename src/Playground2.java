@@ -1,4 +1,4 @@
-public class Playground2 {
+class Playground2 {
     public static void main(String[] args) {
         int[] numbers = {1, 43, 256, 9_999, 10_000, 333_333, 1_000_001};
 

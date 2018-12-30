@@ -7,7 +7,6 @@ import Draw.Drawer;
 import Data.Zone;
 import NonogramStructure.Nonogram;
 import Solvers.Solver;
-import Solvers.Solver2;
 
 public class UiAction {
 
@@ -19,9 +18,8 @@ public class UiAction {
     private Nonogram no;
     private Nonogram solutionFile;
     private Solver solver;
-    private Solver2 solver2;
     private DrawBasicObjects basicObjects;
-    private InitialData id;
+    private final InitialData id;
 
 
     public UiAction(DrawMain drawMain) {
@@ -33,7 +31,6 @@ public class UiAction {
         no = drawMain.getNo();
         solutionFile = drawMain.getSolutionFile();
         solver = drawMain.getSolver();
-        solver2 = drawMain.getSolver2();
 
         basicObjects = new DrawBasicObjects(drawMain, no);
         id = new InitialData();
@@ -69,7 +66,7 @@ public class UiAction {
                             drawer.reDrawUi();
                         } else {
                             System.out.println("Solution file not found!");
-                            basicObjects.drawText("ERROR: Solution file not found!", Zone.BOTTOM, 20, 8, 1);
+                            basicObjects.drawText("ERROR: Solution file not found!", Zone.BOTTOM, 14, 12, 1);
                         }
                         break;
                     case "drawAllZoneBoxes":
@@ -100,16 +97,19 @@ public class UiAction {
                     System.out.println("New boxSize is " + no.getBoxSize());
                     break;
                 case "solverHorizontalOnce":
-                    solver.strategy1AllHorizontal(no);
+                    solver.strategyInOneDirection(no, 1, true);
                     break;
                 case "solverVerticalOnce":
-                    solver.strategy1AllVertical(no);
+                    solver.strategyInOneDirection(no, 1, false);
                     break;
                 case "solverRunStrategy1AsLongAsPossible":
-                    solver.runStrategy1AsLongAsPossible(no);
+                    solver.runStrategyAsLongAsPossible(no, 1);
                     break;
                 case "solverRunStrategy2AsLongAsPossible":
-                    solver2.runStrategy2AsLongAsPossible(no);
+                    solver.runStrategyAsLongAsPossible(no, 2);
+                    break;
+                case "solverRunStrategy3AsLongAsPossible":
+                    solver.runStrategyAsLongAsPossible(no, 3);
                     break;
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());

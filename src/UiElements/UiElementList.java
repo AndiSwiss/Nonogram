@@ -14,6 +14,7 @@ public class UiElementList {
     public void buildUiElementList() {
         uiElements = new ArrayList<>();
 
+
         // File chooser:
         uiElements.add(new UiTextbox("fileChooserTitle", "Choose the file:"));
         uiElements.add(new UiFileChooser("Examples/nonogram1.txt", "Example 1"));
@@ -22,24 +23,24 @@ public class UiElementList {
         uiElements.add(new UiFileChooser("Examples/nonogram4.txt", "Example 4"));
         uiElements.add(new UiFileChooser("Examples/nonogram5.txt", "Example 5"));
 
-        // Solver-UI:
-        uiElements.add(new UiTextbox("emptySpace", ""));
-        uiElements.add(new UiTextbox("SolverTitle", "Solver:"));
-        uiElements.add(new UiClickableOption("solverHorizontalOnce", "Run horizontal solver1 once"));
-        uiElements.add(new UiClickableOption("solverVerticalOnce", "Run vertical solver1 once"));
-        uiElements.add(new UiClickableOption("solverRunStrategy1AsLongAsPossible", "Run strategy1 as long as possible"));
-        uiElements.add(new UiClickableOption("solverRunStrategy2AsLongAsPossible", "Run strategy2 as long as possible"));
-        uiElements.add(new UiPopUpInvoker("solverOneHorizontalLine", "Solve one following horizontal..."));
-        uiElements.add(new UiPopUpInvoker("solverOneVerticalLine", "Solve one following vertical line..."));
-        uiElements.add(new UiSwitchableOption("showMarks", "Show marks"));
-
         // Options:
+        uiElements.add(new UiTextbox("emptySpace", ""));
         uiElements.add(new UiTextbox("optionsTitle", "Options:"));
         uiElements.add(new UiSwitchableOption("drawSolution", "Draw the solution"));
         uiElements.add(new UiClickableOption("makeLarger", "Make larger"));
         uiElements.add(new UiClickableOption("makeSmaller", "Make smaller"));
         uiElements.add(new UiSwitchableOption("drawAllZoneBoxes", "Draw all zone boxes"));
 
+        // Solver-UI:
+        uiElements.add(new UiTextbox("SolverTitle", "Solver:"));
+        uiElements.add(new UiClickableOption("solverHorizontalOnce", "Run horizontal solver1 once"));
+        uiElements.add(new UiClickableOption("solverVerticalOnce", "Run vertical solver1 once"));
+        uiElements.add(new UiClickableOption("solverRunStrategy1AsLongAsPossible", "Run strategy1 as long as possible"));
+        uiElements.add(new UiClickableOption("solverRunStrategy2AsLongAsPossible", "Run strategy2 as long as possible"));
+        uiElements.add(new UiClickableOption("solverRunStrategy3AsLongAsPossible", "Run strategy3 as long as possible"));
+        uiElements.add(new UiPopUpInvoker("solverOneHorizontalLine", "Solve one following horizontal..."));
+        uiElements.add(new UiPopUpInvoker("solverOneVerticalLine", "Solve one following vertical line..."));
+        uiElements.add(new UiSwitchableOption("showMarks", "Show marks"));
     }
 
 
@@ -48,19 +49,22 @@ public class UiElementList {
         int xOffset = 0;
         int yOffset = 0;
 
+        int relSizeX = 15;
+
         for (int i = 0; i < uiElements.size(); i++) {
             UiElement ui = uiElements.get(i);
 
-            // position Options-UI-elements to the side:
-            if (ui.getName().equals("optionsTitle")) {
+            // position Solver-UI-elements to the side:
+            if (ui.getName().equals("SolverTitle")) {
                 // cancel out current y-value:
                 yOffset = -i;
                 // and move the right:
                 xOffset = 18;
+
+                // and make a bit larger:
+                relSizeX = 20;
             }
-
-            ui.updatePositionValues(new Position(Zone.BOTTOM, xOffset, i + yOffset, boxSize), 15, 1, boxSize);
-
+            ui.updatePositionValues(new Position(Zone.BOTTOM, xOffset, i + yOffset, boxSize), relSizeX, 1, boxSize);
         }
     }
 

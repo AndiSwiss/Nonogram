@@ -40,7 +40,7 @@ class SolverTest_On_Nonogram5 {
 
     @Test
     void runStrategy1AsLongAsPossible() {
-        solver.runStrategy1AsLongAsPossible(no);
+        solver.runStrategyAsLongAsPossible(no, 1);
 
         for (Line line : no.getHorizontalLines()) {
             for (Box box : line.getBoxes()) {
@@ -69,7 +69,7 @@ class SolverTest_On_Nonogram5 {
 
     @Test
     void strategy1AllHorizontal() {
-        solver.strategy1AllHorizontal(no);
+        solver.strategyInOneDirection(no, 1, true);
 
         for (Line line : no.getHorizontalLines()) {
             for (Box box : line.getBoxes()) {
@@ -90,7 +90,7 @@ class SolverTest_On_Nonogram5 {
 
     @Test
     void strategy1AllVertical() {
-        solver.strategy1AllVertical(no);
+        solver.strategyInOneDirection(no, 1, false);
 
         for (Line line : no.getVerticalLines()) {
             for (Box box : line.getBoxes()) {

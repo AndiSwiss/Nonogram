@@ -85,7 +85,7 @@ class Nonogram4_strategyPics_Test {
             horiz17.getBox(8 + i).setState(State.BLACK);
         }
 
-        solver.strategy1AllHorizontal(no);
+        solver.strategyInOneDirection(no, 1, true);
         // print them:
         for (Line hLine : no.getHorizontalLines()) {
             System.out.println(hLine);
@@ -115,7 +115,7 @@ class Nonogram4_strategyPics_Test {
         Line vertical9 = new Line(9, 20, Direction.VERTICAL);
         vertical9.getBox(8).setState(State.BLACK);
 
-        solver.strategy1AllVertical(no);
+        solver.strategyInOneDirection(no, 1, false);
         // print them:
         for (Line vLine : no.getVerticalLines()) {
             System.out.println(vLine);

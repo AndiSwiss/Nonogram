@@ -7,7 +7,7 @@ import Data.Zone;
 class PopUp {
 
     private DrawBasicObjects basicObjects;
-    private InitialData id;
+    private final InitialData id;
     private int boxSize;
 
     PopUp(DrawBasicObjects basicObjects, int boxSize) {

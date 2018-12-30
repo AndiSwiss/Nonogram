@@ -12,7 +12,7 @@ import UiElements.UiTextbox;
 import processing.core.PApplet;
 
 public class Drawer {
-    private InitialData id;
+    private final InitialData id;
     private PApplet p;
     private Nonogram no;
     private Nonogram solutionFile;
@@ -109,7 +109,7 @@ public class Drawer {
     /**
      * Draws a nonogram (the nonogram or the solutionFile)
      */
-    public void drawNonogram(Nonogram nonogram) {
+    private void drawNonogram(Nonogram nonogram) {
         for (int y = 0; y < nonogram.getVerticalBoxesCount(); y++) {
             for (int x = 0; x < nonogram.getHorizontalBoxesCount(); x++) {
                 basicObjects.drawBox(nonogram.getBox(x, y));

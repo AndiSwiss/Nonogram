@@ -10,20 +10,19 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class SolverTest2_On_Nonogram5 {
+class SolverTest2_On_Nonogram5 {
     private static Line hLine15;  // horizontal line 2
     private static Line hLine17;  // horizontal line 2
     private static Line vLine9;  // horizontal line 2
     private static Solver solver;
     private static Solver2 solver2;
-    private static Nonogram no;
 
 
     @BeforeEach
     void setUp() {
         InputDataHandler data = new InputDataHandler();
         String fileName = "Examples/nonogram5.txt";
-        no = data.readAllFileInputs(fileName);
+        Nonogram no = data.readAllFileInputs(fileName);
         hLine15 = no.getHorizontalLine(15);
         hLine17 = no.getHorizontalLine(17);
         vLine9 = no.getVerticalLine(9);

@@ -1,47 +1,14 @@
 package Solvers;
 
 import NonogramStructure.Line;
-import NonogramStructure.Nonogram;
 import NonogramStructure.State;
 
-import java.util.List;
 
 public class Solver2 {
 
-    public void runStrategy2AsLongAsPossible(Nonogram no) {
-
-        boolean changedSomething;
-        do {
-            boolean horSuccess = strategy2InOneDirection(no, true);
-            boolean verSuccess = strategy2InOneDirection(no, false);
-
-            changedSomething = horSuccess || verSuccess;
-            // todo: add a separate method which checks, whether a box has no marks AND is not in between the same
-            //  marking-number. If found, mark box State.WHITE
-        } while (changedSomething);
-    }
-
-
-    private boolean strategy2InOneDirection(Nonogram no, boolean horizontal) {
-
-        boolean changedForward = false;
-        boolean changedReversed = false;
-
-        List<Line> lines = horizontal ? no.getHorizontalLines() : no.getVerticalLines();
-
-        for (Line line : lines) {
-            changedForward = moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(line);
-        }
-
-        // reversed direction:
-        for (Line line : lines) {
-            changedReversed = moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(line.reversed());
-        }
-
-        return changedForward || changedReversed;
-
-    }
-
+    //------------------------------------------------------------------------------------//
+    // Strategy 2 - calling of this strategy works via Solver.strategyInOneDirection(...) //
+    //------------------------------------------------------------------------------------//
 
     /**
      * For example usage -> see test SolverTest2_On_Nonogram5

@@ -3,7 +3,7 @@
  * The Label doesn't represent a jump mark, instead it gives a certain loop a name, so it can be referenced in
  * the 'break' and the 'continue' statements!
  */
-public class PlaygroundLabels {
+class PlaygroundLabels {
     public static void main(String[] args) {
         OuterLoop:
         for (int i = 0; i < 7; i++) {

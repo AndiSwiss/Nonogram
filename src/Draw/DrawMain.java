@@ -5,7 +5,6 @@ import Data.InputDataHandler;
 import Data.Position;
 import NonogramStructure.Nonogram;
 import Solvers.Solver;
-import Solvers.Solver2;
 import UiElements.UiAction;
 import UiElements.UiElement;
 import UiElements.UiElementList;
@@ -14,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.9a
+ * @version 0.9b
  * <p>
  * This is the main class, where the program can be started -> execute the main()-method to launch the application.
  */
@@ -25,7 +24,6 @@ public class DrawMain extends PApplet {
     private Nonogram solutionFile;
     private UiElementList ul;
     private Solver solver;
-    private Solver2 solver2;
     private Drawer drawer;
     private UiAction uiAction;
 
@@ -45,7 +43,6 @@ public class DrawMain extends PApplet {
         id = new InitialData();
         ul = new UiElementList();
         solver = new Solver();
-        solver2 = new Solver2();
 
         size(id.myWidth, id.myHeight);
         System.out.printf("width: %s, height: %s\n", id.myWidth, id.myHeight);
@@ -154,10 +151,6 @@ public class DrawMain extends PApplet {
 
     public Solver getSolver() {
         return solver;
-    }
-
-    public Solver2 getSolver2() {
-        return solver2;
     }
 
     public Drawer getDrawer() {

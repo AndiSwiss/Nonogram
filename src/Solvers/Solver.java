@@ -7,42 +7,89 @@ import java.util.List;
 
 public class Solver {
 
-    public void runStrategy1AsLongAsPossible(Nonogram no) {
+    //----------------------------------------------//
+    // For all strategies in the different solvers! //
+    //----------------------------------------------//
+    public void runStrategyAsLongAsPossible(Nonogram no, int strategyNr) {
         boolean changedSomething;
         do {
-            boolean horSuccess = strategy1AllHorizontal(no);
-            boolean verSuccess = strategy1AllVertical(no);
+            boolean horSuccess = strategyInOneDirection(no, strategyNr, true);
+            boolean verSuccess = strategyInOneDirection(no, strategyNr, false);
 
-            System.out.println("Method Solver.runStrategy1AsLongAsPossible: strategy1AllHorizontal was " + (horSuccess ? "" : "not ") +
-                    "successful and strategy1AllVertical was " + (verSuccess ? "" : "not ") + "successful.");
+            System.out.println("Method runStrategyAsLongAsPossible (strategy" + strategyNr + "): " +
+                    " horizontally was " + (horSuccess ? "" : "not ") + "successful and vertically was " +
+                    (verSuccess ? "" : "not ") + "successful.");
             changedSomething = horSuccess || verSuccess;
 
         } while (changedSomething);
     }
 
-    public boolean strategy1AllHorizontal(Nonogram no) {
-        boolean changedSomething = false;
+    /**
+     * Here is the actual chooser of the strategy. <br>
+     * Add any additional strategies inside the switch-statement in this method.
+     *
+     * @param no         Nonogram
+     * @param strategyNr nr of the strategy (strategy1 is in Solver, strategy2 is in Solver2, strategy3 in Solver3, ...)
+     * @param horizontal true for horizontal, false for vertical
+     * @return true if something was changed
+     */
+    public boolean strategyInOneDirection(Nonogram no, int strategyNr, boolean horizontal) {
 
-        for (Line hLine : no.getHorizontalLines()) {
-            boolean change = strategy1(hLine);
-            if (change) {
-                changedSomething = true;
+        //-----------------//
+        // pre-conditions: //
+        //-----------------//
+        if (strategyNr == 2) {
+            // strategy2 can only run, after strategy1 was run at least once and placed some marks:
+            // check, if a line contains marks:
+            if (!no.getHorizontalLine(1).containsMarks()) {
+                System.out.println("\n|-------------------------------------------------------|");
+                System.out.println("| Error: please run strategy1 before running strategy2! |");
+                System.out.println("|-------------------------------------------------------|");
+                return false;
             }
         }
-        return changedSomething;
-    }
 
-    public boolean strategy1AllVertical(Nonogram no) {
-        boolean changedSomething = false;
+        boolean changed = false;
 
-        for (Line vLine : no.getVerticalLines()) {
-            boolean change = strategy1(vLine);
-            if (change) {
-                changedSomething = true;
+        List<Line> lines = horizontal ? no.getHorizontalLines() : no.getVerticalLines();
+
+        for (Line line : lines) {
+            switch (strategyNr) {
+                case 1:
+                    boolean changedNow = strategy1(line);
+                    if (changedNow) {
+                        changed = true;
+                    }
+                    break;
+                case 2:
+                    Solver2 solver2 = new Solver2();
+                    boolean changedForward2 = solver2.moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(line);
+                    // reversed direction:
+                    boolean changedReversed2 = solver2.moveMarksForwardToCoverAllBlackBoxesWhichAreAhead(line.reversed());
+                    if (changedForward2 || changedReversed2) {
+                        changed = true;
+                    }
+                    break;
+                case 3:
+                    Solver3 solver3 = new Solver3();
+                    boolean changedForward3 = solver3.markABoxWhiteIfNotCoveredByAMarking(line);
+                    // reversed direction:
+                    boolean changedReversed3 = solver3.markABoxWhiteIfNotCoveredByAMarking(line.reversed());
+                    if (changedForward3 || changedReversed3) {
+                        changed = true;
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Undefined strategyNr: " + strategyNr);
             }
         }
-        return changedSomething;
+        return changed;
     }
+
+
+    //------------//
+    // Strategy 1 //
+    //------------//
 
     /**
      * Strategy 1: look at the EMPTY line's numbers and try to figure out if you can draw some boxes:
@@ -63,7 +110,7 @@ public class Solver {
      * @param line Line
      * @return True, if a new box was marked BLACK
      */
-    public boolean markBoxesWhichHaveSameMarksInOppositeDirection(Line line){
+    public boolean markBoxesWhichHaveSameMarksInOppositeDirection(Line line) {
         boolean changedSomething = false;
 
         // check, if a box has the same mark in markL and markR (or markT and markB in VERTICAL lines):

@@ -8,7 +8,7 @@ import NonogramStructure.Nonogram;
 import processing.core.PApplet;
 
 public class DrawBasicObjects {
-    private InitialData id;
+    private final InitialData id;
     private PApplet p;
     private Nonogram no;
 

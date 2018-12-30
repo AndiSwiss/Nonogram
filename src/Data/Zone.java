@@ -116,7 +116,7 @@ public enum Zone {
         }
     }
 
-    public String getName() {
+    private String getName() {
         return name;
     }
 

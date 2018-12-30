@@ -22,7 +22,7 @@ public class Nonogram {
     private int maxTopNumbers;
     private int maxSideNumbers;
 
-    public int boxSize;
+    private int boxSize;
 
 
     /**
@@ -146,7 +146,7 @@ public class Nonogram {
         return result;
     }
 
-    public NumberLine getTopNumberLine(int i) {
+    private NumberLine getTopNumberLine(int i) {
         return verticalLines.get(i).getNumberLine();
     }
 
@@ -156,10 +156,6 @@ public class Nonogram {
             result.add(line.getNumberLine());
         }
         return result;
-    }
-
-    public NumberLine getSideNumberLine(int i) {
-        return horizontalLines.get(i).getNumberLine();
     }
 
 

@@ -24,7 +24,7 @@ public class InputDataHandler {
     public Nonogram readAllFileInputs(String fileName) {
 
         FileHelper fh = new FileHelper();
-        List<String> input = null;
+        List<String> input;
         try {
             input = fh.getStringsFromAFile(fileName);
 
@@ -121,7 +121,7 @@ public class InputDataHandler {
     public Nonogram readSolutionFile(String fileName, int boxSize) {
         fileName = fileName.replace(".txt", "_solution.txt");
         FileHelper fh = new FileHelper();
-        List<String> solutionStrings = null;
+        List<String> solutionStrings;
         try {
             solutionStrings = fh.getStringsFromAFile(fileName);
             // read the topNumbers and sideNumbers from the file:
