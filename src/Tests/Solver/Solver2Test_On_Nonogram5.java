@@ -10,10 +10,10 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class SolverTest2_On_Nonogram5 {
-    private static Line hLine15;  // horizontal line 2
-    private static Line hLine17;  // horizontal line 2
-    private static Line vLine9;  // horizontal line 2
+class Solver2Test_On_Nonogram5 {
+    private static Line hLine15;
+    private static Line hLine17;
+    private static Line vLine9;
     private static Solver solver;
     private static Solver2 solver2;
 
