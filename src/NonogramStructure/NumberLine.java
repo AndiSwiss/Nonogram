@@ -50,8 +50,6 @@ public class NumberLine {
     }
 
 
-    // todo: check these equals-methods with some good test-cases!
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

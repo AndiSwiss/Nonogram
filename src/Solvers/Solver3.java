@@ -9,8 +9,6 @@ public class Solver3 {
     //------------------------------------------------------------------------------------//
     // Strategy 3 - calling of this strategy works via Solver.strategyInOneDirection(...) //
     //------------------------------------------------------------------------------------//
-
-
     /**
      * checks, whether a box has no marks AND is not in between the same marking-number. If found, mark box State.WHITE
      *

@@ -72,10 +72,8 @@ public class Solver {
                     break;
                 case 3:
                     Solver3 solver3 = new Solver3();
-                    boolean changedForward3 = solver3.markABoxWhiteIfNotCoveredByAMarking(line);
-                    // reversed direction:
-                    boolean changedReversed3 = solver3.markABoxWhiteIfNotCoveredByAMarking(line.reversed());
-                    if (changedForward3 || changedReversed3) {
+                    boolean changedNow3 = solver3.markABoxWhiteIfNotCoveredByAMarking(line);
+                    if (changedNow3) {
                         changed = true;
                     }
                     break;

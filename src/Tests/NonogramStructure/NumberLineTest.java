@@ -42,4 +42,34 @@ class NumberLineTest {
         System.out.println(numberLine);
         assertEquals("[\u03365, 7, 14]", numberLine.toString());
     }
+
+    @Test
+    void equals() {
+        List<Number> numberList2 = new ArrayList<>();
+        numberList2.add(new Number(7));
+        numberList2.add(new Number(14));
+        numberList2.add(new Number(5));
+
+        NumberLine numberLine2 = new NumberLine(numberList2);
+
+        assertNotEquals(numberLine, numberLine2);
+
+        // sorting the above arrayList, so it will be in the same order like numberLine:
+        numberList2.sort((o1, o2) -> {
+            if (o1.getN() == o2.getN()) {
+                return 0;
+            }
+            return o1.getN() < o2.getN() ? -1 : 1;
+        });
+        numberLine2 = new NumberLine(numberList2);
+
+        assertEquals(numberLine, numberLine2);
+
+        numberLine2.get(2).crossOut();
+        assertNotEquals(numberLine, numberLine2);
+
+        numberLine.get(2).crossOut();
+        System.out.printf("numberLine1: %s, numberLine2: %s\n", numberLine, numberLine2);
+        assertEquals(numberLine, numberLine2);
+    }
 }
