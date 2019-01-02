@@ -277,6 +277,7 @@ public class Solver {
 
             position++;
         }
+        System.out.println();
         return position;
     }
 
