@@ -175,6 +175,40 @@ public class Line {
         }
     }
 
+
+    /**
+     * @param numberIndex numberIndex of the number in question
+     * @return The position of the first possible occurrence of this number. Returns -1, if the number was not found.
+     */
+    public int getFirstPossiblePositionForNumber(int numberIndex) {
+        for (int i = 0; i < getBoxesSize(); i++) {
+            if (getMarkForBox(i) == numberIndex) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * @param numberIndex numberIndex of the number in question
+     * @return The position of the last possible occurrence of this number. Returns -1, if the number was not found.
+     */
+    public int getLastPossiblePositionForNumber(int numberIndex) {
+        Line reversed = reversed();
+        for (int i = 0; i < getBoxesSize(); i++) {
+            // for the reversed logic:
+            int reversedNumberIndex = getNumbersSize() - numberIndex - 1;
+
+            if (reversed.getMarkForBox(i) == reversedNumberIndex) {
+                // and reverse the found box again:
+                return getBoxesSize() - i - 1;
+            }
+        }
+        return -1;
+    }
+
+
     /**
      * @return true, if the box has the same mark
      */

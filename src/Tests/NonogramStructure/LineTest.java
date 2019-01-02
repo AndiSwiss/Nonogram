@@ -174,4 +174,16 @@ class LineTest {
         line.reversed().setMarkForBox(2, 3);
         assertEquals(3, line.getBox(7).getMarkB());
     }
+
+    @Test
+    void getFirstPossiblePositionForNumber() {
+        assertEquals(0, line2.getFirstPossiblePositionForNumber(0));
+        assertEquals(7, line2.getFirstPossiblePositionForNumber(1));
+    }
+
+    @Test
+    void getLastPossiblePositionForNumber() {
+        assertEquals(5, line2.getLastPossiblePositionForNumber(0));
+        assertEquals(9, line2.getLastPossiblePositionForNumber(1));
+    }
 }
