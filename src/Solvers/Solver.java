@@ -7,11 +7,37 @@ import java.util.List;
 
 public class Solver {
 
+    //----------------------------------------------------------------------//
+    // General solver - runs all strategies as long as they solve something //
+    //----------------------------------------------------------------------//
+    public void runAllStrategiesAsLongAsPossible(Nonogram no) {
+        boolean changedSomething;
+        do {
+            changedSomething = false;
+            int strategyNr = 1;
+            boolean invalidStrategyNr = false;
+            do {
+                boolean success = runStrategyAsLongAsPossible(no, strategyNr);
+                if (!changedSomething) {
+                    changedSomething = success;
+                }
+
+                strategyNr++;
+                // todo: check for invalid strategy number!
+                //  best do it with checking for a thrown error.
+
+
+            } while (!invalidStrategyNr);
+        } while (changedSomething);
+    }
+
+
     //----------------------------------------------//
     // For all strategies in the different solvers! //
     //----------------------------------------------//
-    public void runStrategyAsLongAsPossible(Nonogram no, int strategyNr) {
+    public boolean runStrategyAsLongAsPossible(Nonogram no, int strategyNr) {
         boolean changedSomething;
+        boolean changedAnythingAtAll = false;
         do {
             boolean horSuccess = strategyInOneDirection(no, strategyNr, true);
             boolean verSuccess = strategyInOneDirection(no, strategyNr, false);
@@ -21,7 +47,13 @@ public class Solver {
                     (verSuccess ? "" : "not ") + "successful.");
             changedSomething = horSuccess || verSuccess;
 
+            if (!changedAnythingAtAll) {
+                changedAnythingAtAll = changedSomething;
+            }
+
         } while (changedSomething);
+
+        return changedAnythingAtAll;
     }
 
     /**

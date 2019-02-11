@@ -13,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * @author Andreas Ambühl
- * @version 0.9g
+ * @version 0.9h
  * <p>
  * This is the main class, where the program can be started -> execute the main()-method to launch the application.
  */
