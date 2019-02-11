@@ -22,6 +22,7 @@ public class UiElementList {
         uiElements.add(new UiFileChooser("Examples/nonogram3.txt", "Example 3"));
         uiElements.add(new UiFileChooser("Examples/nonogram4.txt", "Example 4"));
         uiElements.add(new UiFileChooser("Examples/nonogram5.txt", "Example 5"));
+        uiElements.add(new UiPopUpInvoker("fromNonogramLibrary", "From nonogram library..."));
 
         // Options:
         uiElements.add(new UiTextbox("emptySpace", ""));

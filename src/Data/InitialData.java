@@ -1,6 +1,9 @@
 package Data;
 
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Write all the initial data here. <br>
  * An instance of this gets created in Nonogram and saved there as a private variable. <br>
@@ -37,7 +40,17 @@ public class InitialData {
     public final int footerHeight = 1;
     public final String footerText = "© 2018 by Andreas Ambühl";
 
+
+    // path to the nonogram library:
+    private final String current = System.getProperty("user.dir");
+    public final Path pathToNonogramLibrary = Paths
+            .get(current)
+            .getParent()
+            .resolve("NonogramLibrary")
+            .resolve("converted-files");
+
     // various:
     public final String initialFileToOpen = "nonogram5";
+
 
 }

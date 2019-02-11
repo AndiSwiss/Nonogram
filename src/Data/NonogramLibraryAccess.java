@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class AccessNonogramLibrary {
+public class NonogramLibraryAccess {
     public List<Path> getListOfNonogramsInLibrary(Path pathToLibrary) {
         // p. 337: get list of files in a directory, lambda-version:
         // note: that stream is not sorted!

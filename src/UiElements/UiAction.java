@@ -1,6 +1,7 @@
 package UiElements;
 
 import Data.InitialData;
+import Data.NonogramLibraryAccess;
 import Draw.DrawBasicObjects;
 import Draw.DrawMain;
 import Draw.Drawer;
@@ -8,10 +9,13 @@ import Data.Zone;
 import NonogramStructure.Nonogram;
 import Solvers.Solver;
 
+import java.nio.file.Path;
+import java.util.List;
+
 public class UiAction {
 
     private String popUpIsActiveFor;
-    private int lineNumberForActionForKeyPressed;
+    private int inputFromPopUp;
     private UiElementList ul;
     private Drawer drawer;
     private DrawMain drawMain;
@@ -41,15 +45,7 @@ public class UiAction {
 
         if (ui instanceof UiFileChooser) {
 
-            // deselect all elements of this group:
-            for (UiElement uiElement : ul.getUiElements()) {
-                if (uiElement instanceof UiFileChooser) {
-                    uiElement.setSelected(false);
-                }
-            }
-
-            // select the active element:
-            ui.setSelected(true);
+            selectOnlyActiveFileChooserAndDeselectOthers(ui);
 
             // load the chosen example:
             String fileName = ui.getName();
@@ -121,18 +117,23 @@ public class UiAction {
         }
 
         if (ui instanceof UiPopUpInvoker) {
+            String message;
             switch (ui.getName()) {
                 case "solverOneHorizontalLine":
-                    drawer.drawTextEntryPopUp("Enter horizontal line-number:");
-                    popUpIsActiveFor = "solverOneHorizontalLine";
-                    //initialize the lineNumber:
-                    lineNumberForActionForKeyPressed = 0;
+                    message = "Enter horizontal line-number:";
+                    callPopUpFromInvoker(ui, message);
                     break;
                 case "solverOneVerticalLine":
-                    drawer.drawTextEntryPopUp("Enter vertical line-number:");
-                    popUpIsActiveFor = "solverOneVerticalLine";
-                    //initialize the lineNumber:
-                    lineNumberForActionForKeyPressed = 0;
+                    message = "Enter vertical line-number:";
+                    callPopUpFromInvoker(ui, message);
+                    break;
+                case "fromNonogramLibrary":
+                    selectOnlyActiveFileChooserAndDeselectOthers(ui);
+                    // calculate amount of nonograms in the library:
+                    Path pathToLibrary = id.pathToNonogramLibrary;
+                    int nonogramsInLibrary = new NonogramLibraryAccess().getListOfNonogramsInLibrary(pathToLibrary).size();
+                    message = nonogramsInLibrary + " nonograms found. Enter nr:";
+                    callPopUpFromInvoker(ui, message);
                     break;
                 default:
                     throw new IllegalArgumentException("unknown UiPopUpInvoker with name " + ui.getName());
@@ -140,19 +141,50 @@ public class UiAction {
         }
     }
 
-    public void actionForKeyPressed(char key) {
+    /**
+     * Helper-Method for actionForUiElement
+     * @param ui UiElement
+     */
+    private void selectOnlyActiveFileChooserAndDeselectOthers(UiElement ui) {
+        // deselect all elements of the UiFileChooser group:
+        for (UiElement uiElement : ul.getUiElements()) {
+            if (uiElement instanceof UiFileChooser) {
+                uiElement.setSelected(false);
+            }
+        }
+        // also deselect the nonogram-library-file-chooser:
+        if (ui.getName().equals("fromNonogramLibrary")) {
+            ui.setSelected(false);
+        }
 
+        // select the active element:
+        ui.setSelected(true);
+    }
+
+    /**
+     * Helper-Method for actionForUiElement (if ui instanceof UiPopUpInvoker)
+     * @param ui UiElement
+     * @param message message for the PopUp-Window
+     */
+    private void callPopUpFromInvoker(UiElement ui, String message) {
+        drawer.drawTextEntryPopUp(message);
+        popUpIsActiveFor = ui.getName();
+        //initialize the input:
+        inputFromPopUp = 0;
+    }
+
+    public void actionForKeyPressed(char key) {
         if (popUpIsActiveFor != null) {
 
             if (key >= '0' && key <= '9') {
                 int number = key - '0';
-                lineNumberForActionForKeyPressed *= 10;
-                lineNumberForActionForKeyPressed += number;
+                inputFromPopUp *= 10;
+                inputFromPopUp += number;
 
 
                 // Show the entered number in the UI.
                 // By looking at the String of the number, I can see the amount of digits it has. I can use that as the x-value:
-                int x = String.valueOf(lineNumberForActionForKeyPressed).length();
+                int x = String.valueOf(inputFromPopUp).length();
                 basicObjects.drawText("" + number, Zone.POPUP, 16 + (x * 0.6), 1, 1);
 
                 checkIfLineNumberIsTooBigAndShowMessageAndResetEnteredLineNumber();
@@ -162,9 +194,22 @@ public class UiAction {
             if (key == 10) {
                 // call the corresponding uiAction...
                 if (popUpIsActiveFor.equals("solverOneHorizontalLine")) {
-                    solver.strategy1(no.getHorizontalLine(lineNumberForActionForKeyPressed));
+                    solver.strategy1(no.getHorizontalLine(inputFromPopUp));
                 } else if (popUpIsActiveFor.equals("solverOneVerticalLine")) {
-                    solver.strategy1(no.getVerticalLine(lineNumberForActionForKeyPressed));
+                    solver.strategy1(no.getVerticalLine(inputFromPopUp));
+                } else if (popUpIsActiveFor.equals("fromNonogramLibrary")) {
+                    // load the chosen example:
+                    Path pathToLibrary = id.pathToNonogramLibrary;
+                    List<Path> nonogramPaths = new NonogramLibraryAccess().getListOfNonogramsInLibrary(pathToLibrary);
+                    if (inputFromPopUp > 0 && inputFromPopUp < nonogramPaths.size() + 1) {
+                        Path fileName = nonogramPaths.get(inputFromPopUp + 1);
+                        // todo: change "loadNewExample" to accept a Path instead of a String!! -> there will be a lot to change!!
+                        drawMain.loadNewExample(fileName);
+
+                    } else {
+                        System.out.println("Invalid input: " + inputFromPopUp + " (Should be greater than 0 and "
+                            + "smaller or equal than " + nonogramPaths.size());
+                    }
                 }
                 // resetting:
                 popUpIsActiveFor = null;
@@ -211,9 +256,9 @@ public class UiAction {
         boolean horizontal = popUpIsActiveFor.equals("solverOneHorizontalLine");
         boolean ok;
         if (horizontal) {
-            ok = lineNumberForActionForKeyPressed < no.getVerticalBoxesCount();
+            ok = inputFromPopUp < no.getVerticalBoxesCount();
         } else {
-            ok = lineNumberForActionForKeyPressed < no.getHorizontalBoxesCount();
+            ok = inputFromPopUp < no.getHorizontalBoxesCount();
         }
 
         // redraw original popUp-box, show an error message and reset the entered values:
@@ -225,11 +270,11 @@ public class UiAction {
             }
 
             // error message:
-            String message = "'" + lineNumberForActionForKeyPressed + "' is not a valid LineNumber, try again";
+            String message = "'" + inputFromPopUp + "' is not a valid LineNumber, try again";
             basicObjects.drawText(message, Zone.POPUP, 8, 2, 0.8, id.cDarkGrey2);
 
             // init values:
-            lineNumberForActionForKeyPressed = 0;
+            inputFromPopUp = 0;
         }
     }
 }
