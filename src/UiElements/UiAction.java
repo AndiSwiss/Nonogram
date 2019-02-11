@@ -111,6 +111,9 @@ public class UiAction {
                 case "solverRunStrategy3AsLongAsPossible":
                     solver.runStrategyAsLongAsPossible(no, 3);
                     break;
+                case "solveNonogram":
+                    solver.runAllStrategiesAsLongAsPossible(no);
+                    break;
                 default:
                     throw new IllegalArgumentException("unknown UiSwitchableOption with name " + ui.getName());
             }

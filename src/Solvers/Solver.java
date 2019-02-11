@@ -17,16 +17,17 @@ public class Solver {
             int strategyNr = 1;
             boolean invalidStrategyNr = false;
             do {
-                boolean success = runStrategyAsLongAsPossible(no, strategyNr);
-                if (!changedSomething) {
-                    changedSomething = success;
+                boolean success = false;
+                try {
+                    success = runStrategyAsLongAsPossible(no, strategyNr);
+                    if (!changedSomething) {
+                        changedSomething = success;
+                    }
+                } catch (IllegalArgumentException e) {
+                    // catch error if strategy number is invalid to end the loop:
+                    invalidStrategyNr = true;
                 }
-
                 strategyNr++;
-                // todo: check for invalid strategy number!
-                //  best do it with checking for a thrown error.
-
-
             } while (!invalidStrategyNr);
         } while (changedSomething);
     }
@@ -35,7 +36,14 @@ public class Solver {
     //----------------------------------------------//
     // For all strategies in the different solvers! //
     //----------------------------------------------//
-    public boolean runStrategyAsLongAsPossible(Nonogram no, int strategyNr) {
+
+    /**
+     * @param no         Nonogram
+     * @param strategyNr Strategy number
+     * @return true if something was changed
+     * @throws IllegalArgumentException If given strategyNr is invalid
+     */
+    public boolean runStrategyAsLongAsPossible(Nonogram no, int strategyNr) throws IllegalArgumentException {
         boolean changedSomething;
         boolean changedAnythingAtAll = false;
         do {
@@ -64,8 +72,9 @@ public class Solver {
      * @param strategyNr nr of the strategy (strategy1 is in Solver, strategy2 is in Solver2, strategy3 in Solver3, ...)
      * @param horizontal true for horizontal, false for vertical
      * @return true if something was changed
+     * @throws IllegalArgumentException If given strategyNr is invalid
      */
-    public boolean strategyInOneDirection(Nonogram no, int strategyNr, boolean horizontal) {
+    public boolean strategyInOneDirection(Nonogram no, int strategyNr, boolean horizontal) throws IllegalArgumentException {
 
         //-----------------//
         // pre-conditions: //

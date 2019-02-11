@@ -33,6 +33,7 @@ public class UiElementList {
 
         // Solver-UI:
         uiElements.add(new UiTextbox("SolverTitle", "Solver:"));
+        uiElements.add(new UiClickableOption("solveNonogram", "Solve the WHOLE nonogram"));
         uiElements.add(new UiClickableOption("solverHorizontalOnce", "Run horizontal solver1 once"));
         uiElements.add(new UiClickableOption("solverVerticalOnce", "Run vertical solver1 once"));
         uiElements.add(new UiClickableOption("solverRunStrategy1AsLongAsPossible", "Run strategy1 as long as possible"));
