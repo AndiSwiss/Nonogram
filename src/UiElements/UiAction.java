@@ -42,6 +42,7 @@ public class UiAction {
 
     public void actionForUiElement(UiElement ui) {
 
+        // todo: deactivate (all or most of the) following methods, if (popUpIsActiveFor != null)
 
         if (ui instanceof UiFileChooser) {
 
@@ -202,10 +203,8 @@ public class UiAction {
                     Path pathToLibrary = id.pathToNonogramLibrary;
                     List<Path> nonogramPaths = new NonogramLibraryAccess().getListOfNonogramsInLibrary(pathToLibrary);
                     if (inputFromPopUp > 0 && inputFromPopUp < nonogramPaths.size() + 1) {
-                        Path filePath = nonogramPaths.get(inputFromPopUp + 1);
-                        // todo: change "loadNewExample" to accept a Path instead of a String!! -> there will be a lot to change!!
+                        Path filePath = nonogramPaths.get(inputFromPopUp - 1);
                         drawMain.loadNewExample(filePath);
-
                     } else {
                         System.out.println("Invalid input: " + inputFromPopUp + " (Should be greater than 0 and "
                             + "smaller or equal than " + nonogramPaths.size());

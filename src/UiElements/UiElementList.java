@@ -17,11 +17,11 @@ public class UiElementList {
 
         // File chooser:
         uiElements.add(new UiTextbox("fileChooserTitle", "Choose the file:"));
-        uiElements.add(new UiFileChooser("Examples/nonogram1.txt", "Example 1"));
-        uiElements.add(new UiFileChooser("Examples/nonogram2.txt", "Example 2"));
-        uiElements.add(new UiFileChooser("Examples/nonogram3.txt", "Example 3"));
-        uiElements.add(new UiFileChooser("Examples/nonogram4.txt", "Example 4"));
-        uiElements.add(new UiFileChooser("Examples/nonogram5.txt", "Example 5"));
+        uiElements.add(new UiFileChooser("nonogram1.txt", "Example 1"));
+        uiElements.add(new UiFileChooser("nonogram2.txt", "Example 2"));
+        uiElements.add(new UiFileChooser("nonogram3.txt", "Example 3"));
+        uiElements.add(new UiFileChooser("nonogram4.txt", "Example 4"));
+        uiElements.add(new UiFileChooser("nonogram5.txt", "Example 5"));
         uiElements.add(new UiPopUpInvoker("fromNonogramLibrary", "From nonogram library..."));
 
         // Options:

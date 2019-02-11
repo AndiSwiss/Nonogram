@@ -22,7 +22,7 @@ class NonogramTest {
         System.out.println("NonogramTest.test_toString():");
         System.out.println(no.toString());
 
-        String expected = "Nonogram{title='Examples/nonogram1_solution.txt', horizontalBoxesCount=15, verticalBoxesCount=20, maxTopNumbers=4, maxSideNumbers=4, boxSize=20}\n" +
+        String expected = "Nonogram{title='nonogram1_solution.txt', horizontalBoxesCount=15, verticalBoxesCount=20, maxTopNumbers=4, maxSideNumbers=4, boxSize=20}\n" +
                 "                            3 |    ▋▋▋        | lineNr=0, dir=HORIZONTAL\n" +
                 "                         3  2 |    ▋▋▋     ▋▋ | lineNr=1, dir=HORIZONTAL\n" +
                 "                      7  1  1 |  ▋▋▋▋▋▋▋  ▋  ▋| lineNr=2, dir=HORIZONTAL\n" +

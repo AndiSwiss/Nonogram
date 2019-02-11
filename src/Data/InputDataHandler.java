@@ -5,7 +5,6 @@ import Helpers.StringHelper;
 import NonogramStructure.*;
 import NonogramStructure.Number;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,6 +40,9 @@ public class InputDataHandler {
                 }
             }
 
+            // todo: don't read anymore the boxSize from the file. Instead make boxSize dynamically calculated
+            //  with a fixed maximum size (set in InitialData). Minimum size should be variable by the size of the chosen
+            //  example -> make it kinda scale to fit!
             // reading the boxSize from the file:
             int boxSize = 0;
             for (String line : input) {

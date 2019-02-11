@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 /**
  * @author Andreas Ambühl
- * @version 1.0.1c
+ * @version 1.1
  * <p>
  * This is the main class, where the program can be started -> execute the main()-method to launch the application.
  */
@@ -77,6 +77,10 @@ public class DrawMain extends PApplet {
 
         drawer = new Drawer(this, no, solutionFile, ul);
         drawer.reDrawUi();
+
+        // todo: think about the place of the following line, because this method (loadNewExample) is also used in
+        //  two places inside UiAction -> so that is creating a funny stack?? Maybe that is why the examples of the
+        //  nonogram library are not drawn instantly after loading ?!?
         uiAction = new UiAction(this);
 
     }
@@ -97,6 +101,7 @@ public class DrawMain extends PApplet {
 
     @Override
     public void mouseReleased() {
+
         // check if mousePressedX and ..Y are still in the same UI-Element as mouseReleased:
 
         // check, if mousePressed was on an UI-Element, and which one:
