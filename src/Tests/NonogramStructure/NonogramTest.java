@@ -1,8 +1,11 @@
 package Tests.NonogramStructure;
 
+import Data.InitialData;
 import Data.InputDataHandler;
 import NonogramStructure.Nonogram;
 import org.junit.jupiter.api.Test;
+
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,10 +13,10 @@ class NonogramTest {
 
     @Test
     void toString_wholeNonogram() {
-        String fileName = "Examples/nonogram1.txt";
+        Path filePath = new InitialData().pathToExamples.resolve("nonogram1.txt");
         InputDataHandler data = new InputDataHandler();
 
-        Nonogram no = data.readSolutionFile(fileName, 20);
+        Nonogram no = data.readSolutionFile(filePath, 20);
 
         System.out.println("\n-----------------------------");
         System.out.println("NonogramTest.test_toString():");

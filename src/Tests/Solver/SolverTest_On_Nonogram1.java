@@ -1,10 +1,13 @@
 package Tests.Solver;
 
+import Data.InitialData;
 import Data.InputDataHandler;
 import NonogramStructure.Line;
 import NonogramStructure.Nonogram;
 import Solvers.Solver;
 import org.junit.jupiter.api.*;
+
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +21,8 @@ class SolverTest_On_Nonogram1 {
     @BeforeEach
     void setUp() {
         InputDataHandler data = new InputDataHandler();
-        String fileName = "Examples/nonogram1.txt";
-        Nonogram no = data.readAllFileInputs(fileName);
+        Path filePath = new InitialData().pathToExamples.resolve("nonogram1.txt");
+        Nonogram no = data.readAllFileInputs(filePath);
         hLine9 = no.getHorizontalLine(9);
         vLine7 = no.getVerticalLine(7);
         vLine8 = no.getVerticalLine(8);

@@ -6,6 +6,8 @@ import NonogramStructure.*;
 import NonogramStructure.Number;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +19,16 @@ public class InputDataHandler {
     /**
      * Reads all the input-data from the file and stores in Nonogram
      *
-     * @param fileName FileName including the relative path (/Examples/...)
+     * @param filePath Path to the file
      * @return Nonogram, freshly constructed or throws a FileNotFoundException-error, if the specified file was not found
      *
      */
-    public Nonogram readAllFileInputs(String fileName) {
+    public Nonogram readAllFileInputs(Path filePath) {
 
         FileHelper fh = new FileHelper();
         List<String> input;
         try {
-            input = fh.getStringsFromAFile(fileName);
+            input = fh.getStringsFromAFile(filePath);
 
             String title = null;
             // reading the title form the file, if set:
@@ -55,7 +57,7 @@ public class InputDataHandler {
 
 
             return new Nonogram(title, topNumbers, sideNumbers, boxSize);
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -115,20 +117,23 @@ public class InputDataHandler {
     /**
      * Reads the solution file.
      *
-     * @param fileName file to read. The appendix ".txt" gets automatically replaced by "_solution.txt"
+     * @param filePath file to read. The appendix ".txt" gets automatically replaced by "_solution.txt"
      * @return Nonogram. It returns null, if no solution was found at the specified location!
      */
-    public Nonogram readSolutionFile(String fileName, int boxSize) {
-        fileName = fileName.replace(".txt", "_solution.txt");
+    public Nonogram readSolutionFile(Path filePath, int boxSize) {
+        // reconstruct the path for the solution-file:
+        String fileName = filePath.getFileName().toString().replace(".txt", "_solution.txt");
+        filePath = filePath.resolveSibling(fileName);
+
         FileHelper fh = new FileHelper();
         List<String> solutionStrings;
         try {
-            solutionStrings = fh.getStringsFromAFile(fileName);
+            solutionStrings = fh.getStringsFromAFile(filePath);
             // read the topNumbers and sideNumbers from the file:
             List<NumberLine> sideNumbersFromSolution = readSideNumbersFromSolution(solutionStrings);
             List<NumberLine> topNumbersFromSolution = readTopNumbersFromSolution(solutionStrings);
 
-            Nonogram solution = new Nonogram(fileName, topNumbersFromSolution, sideNumbersFromSolution, boxSize);
+            Nonogram solution = new Nonogram(filePath.getFileName().toString(), topNumbersFromSolution, sideNumbersFromSolution, boxSize);
 
             // read the solution and set the boxes in the Nonogram appropriately:
             List<Line> horizontalLines = solution.getHorizontalLines();
@@ -148,7 +153,7 @@ public class InputDataHandler {
 
             return solution;
 
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             return null;
         }
     }

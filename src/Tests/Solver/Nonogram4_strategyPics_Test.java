@@ -1,10 +1,13 @@
 package Tests.Solver;
 
+import Data.InitialData;
 import Data.InputDataHandler;
 import NonogramStructure.*;
 import NonogramStructure.Number;
 import Solvers.Solver;
 import org.junit.jupiter.api.*;
+
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,8 +23,8 @@ class Nonogram4_strategyPics_Test {
     @BeforeEach
     void setUp() {
         InputDataHandler data = new InputDataHandler();
-        String fileName = "Examples/nonogram5.txt";
-        no = data.readAllFileInputs(fileName);
+        Path filePath = new InitialData().pathToExamples.resolve("nonogram5.txt");
+        no = data.readAllFileInputs(filePath);
         solver = new Solver();
     }
 

@@ -2,6 +2,8 @@ package Helpers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,14 +12,13 @@ public class FileHelper {
 
 
     /**
-     * @param fileName FileName and path to read from
+     * @param filePath Path of the file to read from
      * @return List<String> List of the Lines of the file
      */
-    public List<String> getStringsFromAFile(String fileName) throws FileNotFoundException {
+    public List<String> getStringsFromAFile(Path filePath) throws IOException {
         List<String> input;
         input = new ArrayList<>();
-        File file = new File(fileName);
-        Scanner sc = new Scanner(file);
+        Scanner sc = new Scanner(filePath);
         while (sc.hasNext()) {
             input.add(sc.nextLine());
         }

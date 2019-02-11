@@ -41,8 +41,11 @@ public class InitialData {
     public final String footerText = "© 2018 by Andreas Ambühl";
 
 
-    // path to the nonogram library:
+    // path to the internal nonogram examples:
     private final String current = System.getProperty("user.dir");
+    public final Path pathToExamples = Paths.get(current, "Examples");
+
+    // path to the nonogram library:
     public final Path pathToNonogramLibrary = Paths
             .get(current)
             .getParent()

@@ -10,10 +10,12 @@ import UiElements.UiElement;
 import UiElements.UiElementList;
 import processing.core.PApplet;
 
+import java.nio.file.Path;
+
 
 /**
  * @author Andreas Ambühl
- * @version 1.0.1b
+ * @version 1.0.1c
  * <p>
  * This is the main class, where the program can be started -> execute the main()-method to launch the application.
  */
@@ -50,15 +52,15 @@ public class DrawMain extends PApplet {
 
         ul.buildUiElementList();
 
-        String fileName = "Examples/" + id.initialFileToOpen + ".txt";
+        Path filePath = id.pathToExamples.resolve(id.initialFileToOpen + ".txt");
         // set the chosen example-Ui to selected:
         ul.getUiElements().stream()
                 .filter(ui -> ui.getName().contains(id.initialFileToOpen))
                 .forEach(ui -> ui.setSelected(true));
-        loadNewExample(fileName);
+        loadNewExample(filePath);
     }
 
-    public void loadNewExample(String fileName) {
+    public void loadNewExample(Path filePath) {
 
         // reset the drawSolution-Ui to 'not selected':
         ul.getUiElements().stream()
@@ -66,8 +68,8 @@ public class DrawMain extends PApplet {
                 .forEach(ui -> ui.setSelected(false));
 
         InputDataHandler data = new InputDataHandler();
-        no = data.readAllFileInputs(fileName);
-        solutionFile = data.readSolutionFile(fileName, no.getBoxSize());
+        no = data.readAllFileInputs(filePath);
+        solutionFile = data.readSolutionFile(filePath, no.getBoxSize());
 
         if (solutionFile != null) {
             data.checkIfInputMatchesSolution(no, solutionFile);

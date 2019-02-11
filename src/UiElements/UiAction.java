@@ -48,8 +48,8 @@ public class UiAction {
             selectOnlyActiveFileChooserAndDeselectOthers(ui);
 
             // load the chosen example:
-            String fileName = ui.getName();
-            drawMain.loadNewExample(fileName);
+            Path filePath = id.pathToExamples.resolve(ui.getName());
+            drawMain.loadNewExample(filePath);
         }
 
 
@@ -202,9 +202,9 @@ public class UiAction {
                     Path pathToLibrary = id.pathToNonogramLibrary;
                     List<Path> nonogramPaths = new NonogramLibraryAccess().getListOfNonogramsInLibrary(pathToLibrary);
                     if (inputFromPopUp > 0 && inputFromPopUp < nonogramPaths.size() + 1) {
-                        Path fileName = nonogramPaths.get(inputFromPopUp + 1);
+                        Path filePath = nonogramPaths.get(inputFromPopUp + 1);
                         // todo: change "loadNewExample" to accept a Path instead of a String!! -> there will be a lot to change!!
-                        drawMain.loadNewExample(fileName);
+                        drawMain.loadNewExample(filePath);
 
                     } else {
                         System.out.println("Invalid input: " + inputFromPopUp + " (Should be greater than 0 and "
